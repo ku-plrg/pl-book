@@ -15,7 +15,10 @@ def interp(expr: Expr): BigInt = expr match
 Inline math: \\( \vdash e \Rightarrow n \\).
 
 \\[
-\frac{\vdash e_1 \Rightarrow n_1 \qquad \vdash e_2 \Rightarrow n_2}
-     {\vdash e_1 + e_2 \Rightarrow n_1 + n_2}
-\;\textsf{Add}
+\begin{prooftree}
+\AxiomC{$\vdash e_1 \Rightarrow n_1$}
+\AxiomC{$\vdash e_2 \Rightarrow n_2$}
+\LeftLabel{$\texttt{Add}$}
+\BinaryInfC{$\vdash e_1 + e_2 \Rightarrow n_1 + n_2$}
+\end{prooftree}
 \\]

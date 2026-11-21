@@ -6,7 +6,11 @@ src = "src"
 
 [output.html]
 site-url = "/pl-book/ko/"
-git-repository-url = "https://github.com/ku-plrg/pl-book"
-edit-url-template = "https://github.com/ku-plrg/pl-book/edit/main/ko/{path}"
-mathjax-support = true
-additional-js = ["lang.js"]
+additional-js = ["lang.js", "mathjax.js"]
+additional-css = ["style.css"]
+default-theme = "light"
+preferred-dark-theme = "navy"
+smart-punctuation = false
+
+[output.html.print]
+enable = false

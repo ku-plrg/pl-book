@@ -1,0 +1,71 @@
+/* Shared additions to the default mdBook theme (both en/ and ko/).
+   Keep the default look; only bring in the PLRG homepage colors and logo. */
+
+/* Homepage colors (light) */
+.light, .rust {
+  --links: #2f4fb8;
+  --sidebar-active: #2a408e;
+}
+/* Homepage colors (dark) */
+.navy, .coal, .ayu {
+  --links: #9db1f7;
+  --sidebar-active: #7d97f2;
+}
+
+/* Theme picker is hidden (print and edit buttons are off in book.toml). */
+#mdbook-theme-toggle,
+#mdbook-theme-list { display: none !important; }
+
+/* Korean: do not break words in the middle */
+html[lang="ko"] { word-break: keep-all; }
+
+/* Part titles in the sidebar */
+.sidebar .chapter li.part-title { margin-top: 1.2em; font-weight: 700; opacity: 0.75; }
+
+/* Top bar: PLRG logo and language switch (added by lang.js) */
+.right-buttons { display: flex; align-items: center; }
+.plrg-logo { display: inline-flex; align-items: center; margin: 0 0.4em 0 0.6em; vertical-align: middle; }
+.plrg-logo img { height: 1.6em; }
+.navy .plrg-logo img, .coal .plrg-logo img, .ayu .plrg-logo img { filter: brightness(1.8) saturate(0.8); }
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  height: 1.9em;
+  margin: 0 0.5em;
+  padding: 0 0.7em;
+  border: 1px solid var(--icons);
+  border-radius: 999px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--icons) !important;
+  text-decoration: none !important;
+}
+.lang-switch:hover { color: var(--icons-hover) !important; border-color: var(--icons-hover); }
+.lang-switch svg { width: 1.05em; height: 1.05em; fill: none; stroke: currentColor; stroke-width: 1.8; }
+
+.theme-switch {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2em; height: 2em; margin: 0 0.2em; padding: 0;
+  border: none; background: none; cursor: pointer;
+  color: var(--icons); font-size: 1.3rem;
+}
+.theme-switch:hover { color: var(--icons-hover); }
+.theme-switch svg { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+
+/* glossary anchors: keep the target below the sticky menu bar */
+[id^="g-"] { scroll-margin-top: calc(var(--menu-bar-height, 50px) + 16px); }
+
+/* language map in the introduction: whole boxes are clickable */
+svg.lang-map a { cursor: pointer; }
+svg.lang-map a rect { transition: fill 0.15s, stroke 0.15s; }
+svg.lang-map a rect[fill="none"] { fill: transparent; }
+svg.lang-map a:hover rect { stroke: var(--links); stroke-width: 2.4; fill: color-mix(in srgb, var(--links) 12%, transparent); }
+svg.lang-map a:hover rect[fill="#2a408e"] { fill: #2a408e; filter: brightness(1.35); }
+svg.lang-map a, svg.lang-map a:hover, svg.lang-map a text { text-decoration: none !important; }
+.light, .rust { --proj: #b35c00; }
+.navy, .coal, .ayu { --proj: #f2a65a; }
+svg.lang-map a, svg.lang-map a:link, svg.lang-map a:visited { color: var(--fg) !important; }
+svg.lang-map .proj, svg.lang-map a.proj:link, svg.lang-map a.proj:visited { color: var(--proj) !important; }
+svg.lang-map a.proj:hover rect { stroke: var(--proj); fill: color-mix(in srgb, var(--proj) 12%, transparent); }

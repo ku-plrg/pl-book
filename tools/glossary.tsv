@@ -1,0 +1,332 @@
+A-정규형	A-normal form (ANF)
+추상 도메인	abstract domain
+추상 문법	abstract syntax
+추상 문법 트리	abstract syntax tree (AST)
+누산기	accumulator
+임시 다형성	ad-hoc polymorphism
+주소	address
+앨런 튜링	Alan Turing
+대수적 데이터 타입	algebraic data type
+알고리즘적	algorithmic
+별칭	aliasing
+할당	allocation
+알론조 처치	Alonzo Church
+알파 이름 바꾸기	alpha renaming
+모호성	ambiguity
+분석기	analyzer
+익명 함수	anonymous function
+인자	argument
+산술 비교 연산자	arithmetic comparison operator
+인자 개수	arity
+화살표 타입	arrow type
+대입	assignment
+결합 방향	associativity
+자동 메모리 관리	automatic memory management
+공리	axiom
+공리 의미	axiomatic semantics
+기저 사례	base case
+큰 걸음 의미	big-step operational semantics
+묶는 자리	binder
+묶는 출현	binding occurrence
+함수 몸통	function body, body
+불	boolean
+부트스트래핑	bootstrapping
+최하위 타입	bottom type
+묶인 식별자	bound identifier
+묶인 출현	bound occurrence
+상자	box
+호출 위치	call site
+이름에 의한 호출	call-by-name
+필요에 의한 호출	call-by-need
+참조에 의한 호출	call-by-reference
+값에 의한 호출	call-by-value
+포획	capture
+포획 회피 치환	capture-avoiding substitution
+데카르트 곱	Cartesian product
+처치 불리언	Church boolean
+처치 인코딩	Church encoding
+처치 수	Church numeral
+처치-튜링 논제	Church-Turing thesis
+클로저	closure
+조합자	combinator
+공통 부분식 제거	common subexpression elimination
+컴파일러	compiler
+완전성	completeness
+결론	conclusion
+구체 문법	concrete syntax
+동시 GC	concurrent GC
+조건문	conditional
+조건식	conditional expression
+상수 접기	constant folding
+생성자	constructor
+생성자 값	constructor value
+컨티뉴에이션	continuation
+컨티뉴에이션 값	continuation value
+컨티뉴에이션 전달 방식	continuation-passing style (CPS)
+반변	contravariant
+제어 흐름	control flow
+제어문	control statement
+복사	copying
+복사 GC	copying GC
+코루틴	coroutine
+공변	covariant
+현재 컨티뉴에이션	current continuation
+커링	currying
+죽은 코드 제거	dead code elimination
+표시 의미	denotational semantics
+유도	derivation
+유도 트리	derivation tree
+설탕 제거	desugaring
+직접 방식	direct style
+정의역	domain
+이중 해제	double free
+동적 분석	dynamic analysis
+동적 계획법	dynamic programming
+동적 스코핑	dynamic scoping
+동적 타입 언어	dynamically-typed language
+즉시 계산	eager evaluation
+환경	environment
+환경 팩토리	environment factory
+탈출 분석	escape analysis
+계산 순서	evaluation order
+계산 전략	evaluation strategy
+예외	exception
+식	expression
+식 값	expression value
+표현력	expressive power
+확장 배커스-나우르 표기법	extended Backus-Naur form (EBNF)
+거짓 경보	false alarm
+거짓 음성	false negative
+거짓 양성	false positive
+필드	field
+필드 접근	field access
+유한 부분 함수	finite partial function
+일급 시민	first-class citizen
+일급 컨티뉴에이션	first-class continuation
+일급 함수	first-class function
+일급 값	first-class value
+1차 함수	first-order function
+1차 표현	first-order representation
+고정점	fixed point
+고정점 조합자	fixed-point combinator
+for 컴프리헨션	for comprehension
+형식 의미	formal semantics
+전달 포인터	forwarding pointer
+단편화	fragmentation
+자유 식별자	free identifier
+빈 칸 목록	free list
+자유 타입 변수	free type variable
+새 타입 변수	fresh type variable
+새 변수	fresh variable
+함수 적용	function application
+함수 환경	function environment
+함수형 프로그래밍	functional programming
+쓰레기 수집	garbage collection
+범용	general-purpose
+타입 일반화	generalization
+세대별 GC	generational GC
+생성기	generator
+제네릭 데이터 타입	generic data type
+제네릭 함수	generic function
+그래프 색칠	graph coloring
+가드	guard
+힙	heap
+힙 포인터	heap pointer
+보조 함수	helper function
+고차 함수	higher-order function
+식별자	identifier
+불변	immutable
+변경 불가능한 변수	immutable variable
+명령형 언어	imperative language
+암묵적 변환	implicit conversion
+순수하지 않은	impure
+귀납법	induction
+귀납 가정	induction hypothesis
+귀납적 자료 구조	inductive data structure
+추론 규칙	inference rule
+무한 자료 구조	infinite data structure
+무한 루프	infinite loop
+인스턴스화	instantiation
+중간 표현	intermediate representation (IR)
+인터프리터	interpreter
+호출	invoke
+판단	judgment
+레이블	label
+람다 계산	lambda calculus
+람다 함수	lambda function
+지연 계산	lazy evaluation
+지연 값	lazy value
+왼쪽 재귀	left recursion
+왼쪽 결합	left-associative
+let-다형성	let-polymorphism
+어휘적 스코핑	lexical scoping
+반복문	loop
+수동 메모리 관리	manual memory management
+표시하고 쓸기	mark-and-sweep
+표시하고 쓸기 GC	mark-and-sweep GC
+매치 경우	match case
+메모이제이션	memoization
+메모리	memory, store
+메모리 칸	memory cell
+메모리 누수	memory leak
+메모리 관리	memory management
+메타변수	metavariable
+빠진 경우	missing case
+단형	monomorphic
+변경 가능한 자료 구조	mutable data structure
+변경 가능한 변수	mutable variable
+변경	mutation
+자연 의미	natural semantics
+비엄격	non-strict
+비단말 기호	nonterminal
+객체 지향 프로그래밍	object-oriented programming
+출현 검사	occurrence checking
+연산 의미	operational semantics
+선택적 타입 표기	optional type annotation
+오버로딩	overloading
+소유권	ownership
+매개변수	parameter
+매개변수 다형성	parametric polymorphism
+파서	parser
+파서 조합기	parser combinator
+파싱 표현 문법	parsing expression grammar (PEG)
+부분 함수	partial function
+패턴 매칭	pattern matching
+순열	permutation
+다형 타입	polymorphic type
+다형성	polymorphism
+우선순위	precedence
+전제	premise
+출력	print
+곱 타입	product type
+순수	pure
+순수 함수	pure function
+순수 함수형	purely functional
+레코드	record
+레코드 타입	record type
+레코드 값	record value
+재귀	recursion
+재귀 사례	recursive case
+재귀 함수	recursive function
+재귀 타입	recursive type
+환원 과정	reduction sequence
+참조 횟수 세기	reference counting
+참조 순환	reference cycle
+반사 전이 폐포	reflexive-transitive closure
+반사성	reflexivity
+레지스터	register
+레지스터 할당	register allocation
+대표 타입	representative type
+반환 타입	return type
+오른쪽 결합	right-associative
+실행 중 오류	run-time error
+스코프	scope
+의미 동등성	semantic equivalence
+의미	semantics
+순차 실행	sequence
+가려진 식별자	shadowed identifier
+섀도잉	shadowing
+가리는 식별자	shadowing identifier
+단락 계산	short-circuit evaluation
+부수 효과	side effect
+작은 걸음 의미	small-step operational semantics
+작은 걸음 관계	small-step relation
+해	solution
+건전성	soundness
+원본 언어	source language
+스택	stack
+스택 프레임	stack frame
+스택 오버플로	stack overflow
+상태	state
+문장	statement
+정적 분석	static analysis
+정적 스코핑	static scoping
+정적 타입	statically typed
+정적 타입 언어	statically-typed language
+스트림 처리	stream processing
+엄격한 계산	strict evaluation
+치환	substitution
+포섭	subsumption
+서브타입	subtype
+서브타입 다형성	subtype polymorphism
+서브타입 관계	subtype relation
+합 타입	sum type
+슈퍼타입	supertype
+삼단논법	syllogism
+문법 설탕	syntactic sugar
+문법	syntax
+꼬리표	tag
+꼬리표 붙은 합집합	tagged union
+꼬리 호출	tail call
+꼬리 위치	tail position
+꼬리 재귀	tail recursion
+꼬리 호출 최적화	tail-call optimization
+목표 언어	target language
+단말 기호	terminal
+남은 계산	the rest of the computation
+토큰	token
+최상위 타입	top type
+모두 진짜	TP
+추적 GC	tracing GC
+추이성	transitivity
+나무	tree
+진짜 경보	true alarm
+참 양성	true positive
+튜링 기계	Turing machine
+두 공간	two-space
+두 공간 GC	two-space GC
+타입	type
+타입 추상화	type abstraction
+타입 추상화 값	type abstraction value
+타입 표기	type annotation
+타입 적용	type application
+타입 인자	type argument
+타입 검사기	type checker
+타입 검사	type checking
+타입 클래스	type class
+타입 제약	type constraint
+타입 환경	type environment
+타입의 동등성	type equivalence
+타입 오류	type error
+타입 추론	type inference
+타입 인스턴스화	type instantiation
+타입 이름	type name
+타입 매개변수	type parameter
+타입 해소	type resolving
+타입 스킴	type scheme
+타입 안전성	type soundness
+타입 시스템	type system
+타입 단일화	unification
+타입 변수	type variable
+타입 있는 언어	typed language
+타입 유도 트리	typing derivation tree
+타입 규칙	typing rule
+합집합 타입	union type
+해제 후 사용	use after free (UAF)
+값 스택	value stack
+변수 포획	variable capture
+배리언트	variant
+배리언트 값	variant value
+즉 잘 형성된	well-formed
+잘 형성된 타입	well-formed type
+올바른 형태	well-formedness
+Y 조합자	Y combinator
+Z 조합자	Z combinator
+β-동치	β-equivalence
+η-확장	η-expansion
+η-축약	η-reduction
+검증	verification
+정적 분석기	static analyzer
+메서드	method
+쌍	pair
+맵	map
+집합	set
+뿌리	root
+도달할 수 없는	unreachable
+최상위	top level
+타입 동등성	type equivalence
+스코프 식	scope expression
+증명 가능하다	provable
+타입이 맞는	well-typed
+람다 끌어올리기	lambda lifting
+클로저 변환	closure conversion
