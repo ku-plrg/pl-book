@@ -1,0 +1,12 @@
+[book]
+title = "프로그래밍 언어"
+authors = ["Jihyeok Park"]
+language = "ko"
+src = "src"
+
+[output.html]
+site-url = "/pl-book/ko/"
+git-repository-url = "https://github.com/ku-plrg/pl-book"
+edit-url-template = "https://github.com/ku-plrg/pl-book/edit/main/ko/{path}"
+mathjax-support = true
+additional-js = ["lang.js"]
