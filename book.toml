@@ -1,0 +1,11 @@
+[book]
+title = "Programming Languages"
+authors = ["Jihyeok Park"]
+language = "en"
+src = "src"
+
+[output.html]
+site-url = "/pl-book/"
+git-repository-url = "https://github.com/ku-plrg/pl-book"
+edit-url-template = "https://github.com/ku-plrg/pl-book/edit/main/{path}"
+mathjax-support = true
