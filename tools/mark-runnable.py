@@ -24,7 +24,12 @@ const vm = require("vm"), fs = require("fs");
 const ctx = {}; ctx.globalThis = ctx; vm.createContext(ctx);
 vm.runInContext(fs.readFileSync(process.argv[1], "utf8") + ";globalThis.__I = interp;", ctx);
 const jobs = JSON.parse(fs.readFileSync(0, "utf8"));
-console.log(JSON.stringify(jobs.map(([l, c]) => { try { return String(ctx.__I[l](c)); } catch (e) { return "EXC " + e; } })));
+// each block gets 3 seconds: non-terminating programs (exercises about divergence) time out
+console.log(JSON.stringify(jobs.map(([l, c]) => {
+  ctx.__l = l; ctx.__c = c;
+  try { return String(vm.runInContext("__I[__l](__c)", ctx, { timeout: 3000 })); }
+  catch (e) { return String(e).includes("timed out") ? "TIMEOUT" : "EXC " + e; }
+})));
 '''
 
 def strip(code):
@@ -58,7 +63,7 @@ def main():
     results = json.loads(out)
     runnable = set()
     for k, r in zip(idx, results):
-        if not (r.startswith('[PLError] parse error') or r.startswith('EXC')):
+        if not (r == 'TIMEOUT' or r.startswith('[PLError] parse error') or r.startswith('EXC')):
             runnable.add(k)
     print(f'{len(found)} blocks, {len(runnable)} runnable')
     if len(sys.argv) > 1 and sys.argv[1] == 'verbose':

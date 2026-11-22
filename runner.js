@@ -147,12 +147,19 @@
     out.className = "run-output";
     out.hidden = true;
     let getCode = () => initial;
+    let ed = null;
     const btn = runButton(() => run(name, getCode(), out));
-    head.append(btn);
+    btn.insertAdjacentText("beforeend", " 실행");
+    const reset = document.createElement("button");
+    reset.className = "reset-button";
+    reset.textContent = "처음으로";
+    reset.title = "예제 코드로 되돌리기";
+    reset.addEventListener("click", () => { if (ed) ed.setCode(initial); out.hidden = true; });
+    head.append(reset, btn);
     div.append(head, host, out);
     loadEditor().then((PLEditor) => {
       host.innerHTML = "";
-      const ed = PLEditor.create(host, name, initial, { onRun: () => btn.click(), lineNumbers: true });
+      ed = PLEditor.create(host, name, initial, { onRun: () => btn.click(), lineNumbers: true });
       getCode = ed.getCode;
     }).catch(() => {});
   }

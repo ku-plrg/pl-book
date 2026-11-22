@@ -1184,6 +1184,156 @@ public static <T> void copy(List<? super T> dest, List<? extends T> src)
    - \\(K[A] = \forall X <: \top.(X \to A) \to X\\)
 6. \\(\mathsf{BTFAE}\\)에 이름 붙은 타입 생성자 정의 `type F[+A] = τ; e`(변성 표시는 `+`, `-`, 없음)를 더한다고 합시다. 선언된 변성이 \\(\tau\\)와 맞는지 검사하는 규칙을 쓰고, 이 정의를 쓰는 곳에서 \\(\texttt{S-Ctor}\\)로 비교해도 안전한 이유를 변성 보조 정리로 설명하세요. 강의 프로젝트 `mini-scala`의 `enum` 검사를 구현했다면 그 코드와 비교해 보세요.
 
+7. <a id="ex-bounded-polymorphism-7"></a>★★★ \\(\mathsf{BTFAE}\\)의 타입 시스템을 다음 규칙 틀의 빈칸 (A)~(H)를 채워 완성한다고 합시다. 다만 다형 타입 사이의 서브타입 규칙은 이 장의 \\(\texttt{S-All}\\)과 달리 두 경계 \\(\tau_1\\), \\(\tau_1'\\)이 다를 수도 있는 꼴로 둡니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\texttt{(A)}$}
+   \UnaryInfC{$\Gamma \vdash \\{x_1 : \tau_1, \ldots, x_n : \tau_n\\}$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{$\texttt{(B)}$}
+   \UnaryInfC{$\Gamma \vdash \forall\alpha <: \tau_1.\tau_2$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{$\texttt{(C)}$}
+   \LeftLabel{$\texttt{S-TVar}$}
+   \UnaryInfC{$\Gamma \vdash \alpha <: \tau$}
+   \end{prooftree}
+   \\]
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\texttt{(D)}$}
+   \UnaryInfC{$\Gamma \vdash \forall\alpha <: \tau_1.\tau_2 <: \forall\alpha <: \tau_1'.\tau_2'$}
+   \end{prooftree}
+   \\]
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\texttt{(E)}$}
+   \LeftLabel{$\tau\texttt{-TypeAbs}$}
+   \UnaryInfC{$\Gamma \vdash \forall\alpha <: \tau_1.e : \texttt{(F)}$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{$\texttt{(G)}$}
+   \LeftLabel{$\tau\texttt{-TypeApp}$}
+   \UnaryInfC{$\Gamma \vdash e[\tau] : \texttt{(H)}$}
+   \end{prooftree}
+   \\]
+
+   완성한 타입 시스템에서 다음 식은 타입 검사를 통과해야 합니다.
+
+   ```btfae
+   /* BTFAE */
+   val f = forall[A <: {a: Top}] (x: A) => x.a;
+   val x = f[{a: Number => Number, b: Number}]({a = (z: Number) => z + 1, b = 2});
+   val y = f[{a: Number}]({a = 2});
+   val g = (z: [A <: Number](A => Number)) => z[Number];
+   g(forall[A <: Top] (z: A) => z)
+   ```
+
+   반면 다음 여섯 식은 모두 타입 검사를 통과하지 못해야 합니다.
+
+   ```btfae
+   /* BTFAE */
+   (x: [A <: B] A) => x
+   (x: [A <: Number] A) => x[B]
+   (x: {a: A}) => x
+   forall[A <: B] 42
+   forall[A <: Number] forall[A <: Number] 42
+   val f = (x: [A <: Top] Number) => x; f(forall[A <: Number] 42)
+   ```
+
+   <details><summary>힌트</summary>
+
+   마지막 줄의 `g(...)`가 통과하려면 \\(\forall A <: \top.A \to A\\)가 \\(\forall A <: \mathtt{num}.A \to \mathtt{num}\\)의 서브타입이어야 합니다. 경계가 다르니 커널 규칙으로는 안 됩니다. 이때 두 경계를 어느 방향으로 비교해야 하는지, 몸통은 어느 경계를 가정하고 비교해야 하는지 생각해 보세요. 거부되어야 하는 여섯 식은 각각 어떤 전제 하나가 막아야 하는지 짝지어 보세요.
+
+   </details>
+
+   [해답 →](./answers-3.md#ans-bounded-polymorphism-7)
+
+8. <a id="ex-bounded-polymorphism-8"></a>★★★ 배열과 구간 타입(interval type)을 가진 다음 타입 있는 언어를 생각해 봅시다. 구간 타입 \\([l, h]\\)는 \\(l\\) 이상 \\(h\\) 이하의 정수들의 타입이고, \\(\langle\tau\rangle[e_1, \ldots, e_n]\\)은 원소 타입이 \\(\tau\\)인 배열을 만들며, 그 타입 \\(\langle\tau\rangle[n]\\)은 길이 \\(n\\)까지 기억합니다. \\(e_1[e_2]\\)는 배열의 원소를 읽습니다.
+
+   \\[
+   \begin{array}{lrcl}
+   \text{Expressions} & \mathbb{E} \ni e & ::= & n \mid e + e \mid \mathtt{val}\ x [: \tau]^{?} = e;\ e \mid x \\\\
+   & & \mid & \lambda x\texttt{:}\tau.e \mid e(e) \mid \langle\tau\rangle[e, \ldots, e] \mid e[e] \\\\
+   \text{Types} & \mathbb{T} \ni \tau & ::= & \mathtt{num} \mid [n, n] \mid \tau \to \tau \mid \langle\tau\rangle[n] \mid \top
+   \end{array}
+   \\]
+
+   서브타입 관계와 주요 타입 규칙은 다음과 같습니다. 반사성, \\(\tau <: \top\\), 함수 타입 규칙은 \\(\mathsf{STFAE}\\)와 같고, `val`의 타입 표기와 함수 적용은 \\(\mathsf{STFAE}\\)의 알고리즘적 규칙처럼 서브타입 관계로 검사합니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$l \geq l'$}
+   \AxiomC{$h \leq h'$}
+   \BinaryInfC{$[l, h] <: [l', h']$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{}
+   \UnaryInfC{$[l, h] <: \mathtt{num}$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{$\tau <: \tau'$}
+   \UnaryInfC{$\langle\tau\rangle[n] <: \langle\tau'\rangle[n]$}
+   \end{prooftree}
+   \\]
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{}
+   \UnaryInfC{$\Gamma \vdash n : [n, n]$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e_1 : \tau_1$}
+   \AxiomC{$\Gamma \vdash e_2 : \tau_2$}
+   \BinaryInfC{$\Gamma \vdash e_1 + e_2 : \mathsf{add}(\tau_1, \tau_2)$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e_i : \tau_i \quad \tau_i <: \tau \quad (1 \leq i \leq n)$}
+   \UnaryInfC{$\Gamma \vdash \langle\tau\rangle[e_1, \ldots, e_n] : \langle\tau\rangle[n]$}
+   \end{prooftree}
+   \\]
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e_a : \langle\tau\rangle[n]$}
+   \AxiomC{$\Gamma \vdash e_i : [l, h]$}
+   \AxiomC{$0 \leq l \quad h < n$}
+   \TrinaryInfC{$\Gamma \vdash e_a[e_i] : \tau$}
+   \end{prooftree}
+   \\]
+
+   여기서 \\(\mathsf{add}(\tau_1, \tau_2)\\)는 두 타입이 \\([l, h]\\)와 \\([l', h']\\)이면 \\([l + l', h + h']\\)이고, 그렇지 않고 둘 다 \\(\mathtt{num}\\)의 서브타입이면 \\(\mathtt{num}\\)이며, 그 밖에는 정의되지 않습니다. 이제 이 언어에 배열 원소를 바꾸는 식 \\(e_a[e_i] = e\\)를 다음 타입 규칙과 함께 더한다고 합시다. 두 식을 차례로 계산하는 \\(e_1; e_2\\)도 쓸 수 있습니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e_a : \langle\tau\rangle[n]$}
+   \AxiomC{$\Gamma \vdash e_i : [l, h]$}
+   \AxiomC{$\Gamma \vdash e : \tau' \quad \tau' <: \tau \quad 0 \leq l \quad h < n$}
+   \TrinaryInfC{$\Gamma \vdash e_a[e_i] = e : \tau'$}
+   \end{prooftree}
+   \\]
+
+   이 타입 시스템은 여전히 건전할까요? 건전하다면 이유를 설명하고, 건전하지 않다면 타입 검사를 통과하지만 원소 변경 때문에 실행 중에 타입 오류가 나는 식을 만드세요.
+
+   <details><summary>힌트</summary>
+
+   배열 타입은 원소 타입에 대해 공변입니다. 같은 배열을 서로 다른 타입의 두 이름으로 가리키게 한 뒤, 한 이름으로 원소를 바꾸고 다른 이름으로 읽어 보세요. 이 장의 Java 배열 예와 같은 구멍입니다.
+
+   </details>
+
+   [해답 →](./answers-3.md#ans-bounded-polymorphism-8)
+
 ## 더 읽을거리
 
 - Luca Cardelli and Peter Wegner. "On Understanding Types, Data Abstraction, and Polymorphism." *ACM Computing Surveys*, 1985. 유계 정량화를 처음 제안한 논문으로, 다형성의 종류를 정리한 고전입니다.

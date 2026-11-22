@@ -6,7 +6,7 @@ src = "src"
 
 [output.html]
 site-url = "/pl-book/ko/"
-additional-js = ["lang.js", "mathjax.js", "runner.js"]
+additional-js = ["lang.js", "mathjax.js", "runner.js", "draft.js"]
 additional-css = ["style.css"]
 default-theme = "light"
 preferred-dark-theme = "navy"

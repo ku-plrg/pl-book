@@ -748,3 +748,67 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
    - `forall[T] forall[T] (x: T) => x`
 4. 이 장의 첫 번째 \\(\mathsf{PTFAE}\\) 예제에서 `z = f[[T](T => T)](f)`의 타입이 \\(\forall T.T \to T\\)가 되는 과정을 \\(\tau\texttt{-TypeApp}\\)과 \\(\tau\texttt{-App}\\)으로 설명하세요.
 5. 강의 연습 과제 `ptfae`(Exercise #14)에서 \\(\mathsf{PTFAE}\\)의 `typeCheck`와 `interp`를 구현해 보세요. 이어서 Scala를 본뜬 작은 언어 \\(\mathsf{MiniScala}\\)를 구현하는 프로젝트 `mini-scala`(Project #3)에도 도전해 보세요. 주어진 테스트만으로는 충분하지 않으니 직접 테스트를 더 작성하는 것이 좋습니다.
+
+6. <a id="ex-parametric-polymorphism-6"></a>★★ 다음은 타입 없는 언어 FAE의 식입니다.
+
+   ```fae,run
+   /* FAE */
+   val twice = f => x => f(f(x));
+   val inc = x => x + 1;
+   val x = twice(inc)(42);
+   val y = twice(twice)(inc);
+   twice(x => x)(twice)
+   ```
+
+   매개변수 다형성을 써서 같은 일을 하는 \\(\mathsf{PTFAE}\\) 식을 만들려고 합니다. 타입 검사를 통과하도록 빈칸 (A)~(G)를 채우세요.
+
+   ```ptfae
+   /* PTFAE */
+   val twice = forall[A] (f: ???) => (x: ???) => f(f(x));   // (A), (B)
+   val inc = (x: Number) => x + 1;
+   val x = twice[???](inc)(42);                             // (C)
+   val y = twice[???](twice[???])(inc);                     // (D), (E)
+   twice[???]((x: ???) => x)(twice)                         // (F), (G)
+   ```
+
+   <details><summary>힌트</summary>
+
+   `twice[τ]`의 타입은 \\((\tau \to \tau) \to \tau \to \tau\\)입니다. 각 줄에서 `twice[τ]`에 넘기는 첫 번째 인자의 타입이 \\(\tau \to \tau\\)가 되도록 \\(\tau\\)를 고르세요. 마지막 줄에서는 다형 타입 자체가 타입 인자가 됩니다.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-parametric-polymorphism-6)
+
+7. <a id="ex-parametric-polymorphism-7"></a>★★ 처치 인코딩(Church encoding)은 자료 구조와 그 연산을 함수만으로 나타내는 방법입니다. 예를 들어 FAE에서는 두 값을 묶는 쌍과, 첫째와 둘째 값을 꺼내는 연산을 다음처럼 나타낼 수 있습니다.
+
+   ```fae,run
+   /* FAE */
+   val pair = x => y => f => f(x)(y);
+   val fst = p => p(x => y => x);
+   val snd = p => p(x => y => y);
+   val p = pair(1)(x => x + 2);
+   val a = fst(p);
+   val b = snd(p);
+   b(a)
+   ```
+
+   같은 인코딩을 \\(\mathsf{PTFAE}\\)로 옮기려고 합니다. 타입 검사를 통과하도록 빈칸 (A)~(D)를 채우세요. 같은 기호의 빈칸에는 같은 것이 들어갑니다.
+
+   ```ptfae
+   /* PTFAE */
+   val pair = forall[A] forall[B] (x: A) => (y: B) => ???;          // (A)
+   val fst = forall[A] forall[B] (p: ???) => ???((x: A) => (y: B) => x);   // (B), (C)
+   val snd = forall[A] forall[B] (p: ???) => ???((x: A) => (y: B) => y);   // (B), (D)
+   val p = pair[Number][Number => Number](1)((x: Number) => x + 2);
+   val a = fst[Number][Number => Number](p);
+   val b = snd[Number][Number => Number](p);
+   b(a)
+   ```
+
+   <details><summary>힌트</summary>
+
+   쌍은 "두 값을 받아 무언가를 돌려주는 함수 `f`"를 받아 `f(x)(y)`를 돌려줍니다. 그 "무언가"의 타입은 쌍을 만들 때가 아니라 쌍을 **쓸 때** 정해집니다. `fst`는 \\(\alpha\\)를, `snd`는 \\(\beta\\)를 꺼내려고 하니까요.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-parametric-polymorphism-7)

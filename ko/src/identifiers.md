@@ -2,7 +2,7 @@
 
 지금까지 다룬 AE는 숫자와 덧셈, 곱셈만 있는 아주 작은 언어였습니다. 이 언어로는 `(1 + 2) * (1 + 2)`처럼 같은 계산을 두 번 적어야 하고, 중간 결과에 이름을 붙여 다시 쓸 수도 없습니다. 실제 프로그래밍에서 우리가 가장 먼저 하는 일 중 하나가 바로 "이 값을 `x`라고 부르자"인데 말이죠.
 
-이 장에서는 이름, 즉 <a id="g-identifier"></a>**식별자(identifier)** 를 다룹니다. 먼저 식별자가 프로그램 안에서 어떤 역할을 하는지, 어디서 정의되고 어디서 쓰이며 어디까지 유효한지를 정확한 용어로 정리합니다. 그다음 AE에 변수를 더한 언어 VAE를 정의하고, 변수의 값을 기억해 두는 <a id="g-environment"></a>**환경(environment)** 을 이용해 인터프리터와 자연 의미(natural semantics)을 함께 만들어 봅니다. 여기서 익히는 개념들(묶는 출현, 스코프, 자유 식별자, 섀도잉, 환경)은 앞으로 함수, 클로저, 타입 시스템을 다룰 때까지 계속 쓰이므로 이 장을 단단히 다져 두는 것이 좋습니다.
+이 장에서는 이름, 즉 <a id="g-identifier"></a>**식별자**(identifier)를 다룹니다. 먼저 식별자가 프로그램 안에서 어떤 역할을 하는지, 어디서 정의되고 어디서 쓰이며 어디까지 유효한지를 정확한 용어로 정리합니다. 그다음 AE에 변수를 더한 언어 VAE를 정의하고, 변수의 값을 기억해 두는 <a id="g-environment"></a>**환경**(environment)을 이용해 인터프리터와 자연 의미(natural semantics)을 함께 만들어 봅니다. 여기서 익히는 개념들(묶는 출현, 스코프, 자유 식별자, 섀도잉, 환경)은 앞으로 함수, 클로저, 타입 시스템을 다룰 때까지 계속 쓰이므로 이 장을 단단히 다져 두는 것이 좋습니다.
 
 이 장에서 만들 `VAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
 
@@ -44,7 +44,7 @@ def add(a: Int, b: Int): Int =
 add(x, b)
 ```
 
-<a id="g-bound-identifier"></a>**묶인 식별자(bound identifier)** 는 프로그램 안에서 **정의된** 식별자입니다. 묶인 식별자를 이야기할 때는 세 가지를 구분합니다.
+<a id="g-bound-identifier"></a>**묶인 식별자**(bound identifier)는 프로그램 안에서 **정의된** 식별자입니다. 묶인 식별자를 이야기할 때는 세 가지를 구분합니다.
 
 - <a id="g-binding-occurrence"></a>**묶는 출현(binding occurrence)**: 식별자가 **정의되는** 위치입니다.
 - <a id="g-scope"></a>**스코프(scope)**: 그 식별자를 **쓸 수 있는** 범위입니다.
@@ -501,7 +501,7 @@ add(x, b)
 
 표에 빠진 출현이 있습니다. `val y: Int = x + z`의 `z`, `x + add(y, z)`의 `z`, 그리고 마지막 줄 `add(x, b)`의 `b`입니다. 이들은 화살표를 그릴 곳이 없습니다.
 
-<a id="g-free-identifier"></a>**자유 식별자(free identifier)** 는 프로그램의 현재 스코프에서 **정의되지 않은** 식별자입니다. `z`는 프로그램 어디에서도 정의되지 않았으니 자유 식별자입니다. 마지막 줄의 `b`는 조금 더 흥미롭습니다. 프로그램에 `b`라는 매개변수가 있기는 하지만, 그 스코프는 `add`의 본문뿐이므로 마지막 줄에서는 정의되지 않은 이름입니다. 즉 "자유롭다"는 것은 이름 자체의 성질이 아니라 **그 출현이 놓인 위치**의 성질입니다.
+<a id="g-free-identifier"></a>**자유 식별자**(free identifier)는 프로그램의 현재 스코프에서 **정의되지 않은** 식별자입니다. `z`는 프로그램 어디에서도 정의되지 않았으니 자유 식별자입니다. 마지막 줄의 `b`는 조금 더 흥미롭습니다. 프로그램에 `b`라는 매개변수가 있기는 하지만, 그 스코프는 `add`의 본문뿐이므로 마지막 줄에서는 정의되지 않은 이름입니다. 즉 "자유롭다"는 것은 이름 자체의 성질이 아니라 **그 출현이 놓인 위치**의 성질입니다.
 
 <div style="text-align:center">
 <svg viewBox="12 0 336 271" width="100%" style="max-width: 420px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="자유 식별자 z, z, b에 X 표시" font-family="sans-serif" fill="currentColor">
@@ -573,10 +573,10 @@ add(x, b)
 
 앞의 표에서 `x + add(y, z)`의 `x`는 첫 줄의 `x`와 본문 안의 `x` 두 스코프에 모두 들어 있었습니다. 이 경우 가장 안쪽의 정의가 이깁니다.
 
-<a id="g-shadowing"></a>**섀도잉(shadowing)** 이란 같은 이름에 대해 가장 안쪽의 묶는 출현이 바깥쪽 묶는 출현들을 가리는 것을 말합니다.
+<a id="g-shadowing"></a>**섀도잉**(shadowing)이란 같은 이름에 대해 가장 안쪽의 묶는 출현이 바깥쪽 묶는 출현들을 가리는 것을 말합니다.
 
-- <a id="g-shadowing-identifier"></a>**가리는 식별자(shadowing identifier)** 는 다른 식별자를 가리는 식별자입니다. 예제에서는 본문 안의 `val x: Int = a + b`의 `x`입니다.
-- <a id="g-shadowed-identifier"></a>**가려진 식별자(shadowed identifier)** 는 다른 식별자에 의해 가려진 식별자입니다. 예제에서는 첫 줄의 `x`입니다.
+- <a id="g-shadowing-identifier"></a>**가리는 식별자**(shadowing identifier)는 다른 식별자를 가리는 식별자입니다. 예제에서는 본문 안의 `val x: Int = a + b`의 `x`입니다.
+- <a id="g-shadowed-identifier"></a>**가려진 식별자**(shadowed identifier)는 다른 식별자에 의해 가려진 식별자입니다. 예제에서는 첫 줄의 `x`입니다.
 
 <div style="text-align:center">
 <svg viewBox="12 -1 305 308" width="100%" style="max-width: 440px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="본문 안의 x가 첫 줄의 x를 가리는 섀도잉" font-family="sans-serif" fill="currentColor">
@@ -664,7 +664,7 @@ y + 4           // 6 + 4 = 10
 
 ### 식별자의 구체 문법
 
-먼저 VAE에서 쓸 수 있는 식별자의 **구체 문법(concrete syntax)** 을 BNF로 정의합니다.
+먼저 VAE에서 쓸 수 있는 식별자의 **구체 문법**(concrete syntax)을 BNF로 정의합니다.
 
 ```bnf
 <digit>    ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
@@ -724,7 +724,7 @@ val x = 1 + 2;
 
 ### 추상 문법
 
-VAE의 **추상 문법(abstract syntax)** 은 다음과 같습니다.
+VAE의 **추상 문법**(abstract syntax)은 다음과 같습니다.
 
 \\[
 \begin{array}[t]{lrcl}
@@ -1221,7 +1221,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 \text{where} \quad \sigma_0 = [\texttt{x} \mapsto 1]
 \\]
 
-덧셈의 오른쪽 `x`는 자유 식별자이므로 이 예제에 대해서는 **유도 트리를 그릴 수 없습니다**. 위에서 빨간 부분은 진짜 유도가 아니라, **어떤 규칙도 적용할 수 없는** 지점을 표시한 것입니다. `Id` 규칙은 \\( \texttt{x} \in \text{Dom}(\varnothing) \\)을 요구하지만 이것이 성립하지 않습니다. \\( \text{FAIL} \\)은 계산이 거기서 **막힌다(stuck)** 는 것을 나타낼 뿐입니다. 인터프리터는 이때 `free identifier: x` 오류를 냅니다.
+덧셈의 오른쪽 `x`는 자유 식별자이므로 이 예제에 대해서는 **유도 트리를 그릴 수 없습니다**. 위에서 빨간 부분은 진짜 유도가 아니라, **어떤 규칙도 적용할 수 없는** 지점을 표시한 것입니다. `Id` 규칙은 \\( \texttt{x} \in \text{Dom}(\varnothing) \\)을 요구하지만 이것이 성립하지 않습니다. \\( \text{FAIL} \\)은 계산이 거기서 **막힌다**(stuck)는 것을 나타낼 뿐입니다. 인터프리터는 이때 `free identifier: x` 오류를 냅니다.
 
 > **자주 하는 실수** 왼쪽 `{ val x = 1; x }`에서 `x`를 정의했으니 오른쪽 `x`도 `1`이라고 생각하기 쉽습니다. 하지만 `x`의 스코프는 중괄호 안까지입니다. `Add` 규칙이 두 부분식을 **같은 환경** \\( \sigma \\)(여기서는 \\( \varnothing \\))에서 계산한다는 점을 떠올리면, 왼쪽에서 만든 환경이 오른쪽으로 새어 나갈 방법이 없다는 것을 알 수 있습니다.
 
@@ -1319,3 +1319,29 @@ interp(Add(Val("x", Num(1), Id("x")), Id("x")), Map.empty)
    - `shadowedIds`: 식에서 가려진 식별자의 집합을 구합니다.
 
    힌트: `freeIds`를 구현할 때는 `Val(x, e, b)`에서 `e`와 `b`를 서로 다르게 다뤄야 합니다. 어떤 식별자가 어디까지 "정의된" 상태인지를 인자로 들고 다니는 보조 함수를 만들면 편합니다.
+5. <a id="ex-identifiers-5"></a>★ 다음 프로그램은 [일급 함수](./first-class-functions.md) 장에서 정의할 FVAE로 쓴 것입니다. `y => e`는 매개변수 `y`를 받는 익명 함수로, 매개변수 `y`는 묶는 출현이고 그 스코프는 몸통 `e`입니다. `e0(e1)`은 함수 호출이고, `{ e }`는 `( e )`와 같습니다. 주석의 숫자는 바로 윗줄에 있는 식별자의 번호입니다.
+
+   ```fvae,run
+   /* FVAE */
+   val x = y => {
+   //  0   1
+     val y = (y => x + y)(y);
+   //    2    3    4   5  6
+     (x => x)(x => y)(x)
+   // 7    8  9    10 11
+   }; x + y
+   // 12  13
+   ```
+
+   번호를 써서 다음 물음에 답하세요.
+   - (a) 자유 식별자의 번호를 모두 쓰세요.
+   - (b) 각 묶인 출현과 그것이 가리키는 묶는 출현을 \\( i \to j \\) 꼴로 모두 쓰세요. \\( i \\)는 묶인 출현의 번호, \\( j \\)는 묶는 출현의 번호입니다.
+   - (c) 가리는 식별자와 그것이 가리는 식별자를 \\( i \to j \\) 꼴로 모두 쓰세요. \\( i \\)는 가리는 식별자, \\( j \\)는 가려진 식별자의 번호입니다.
+
+   <details><summary>힌트</summary>
+
+   `val x = e1; e2`에서 `x`의 스코프는 `e2`뿐이고 초기화 식 `e1`은 들어가지 않습니다. 먼저 묶는 출현 0, 1, 2, 3, 7, 9 각각의 스코프를 표시해 보세요.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-identifiers-5)

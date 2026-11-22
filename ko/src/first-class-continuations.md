@@ -620,3 +620,24 @@ while (cond) body
 3. `Vcc` 규칙에서 컨티뉴에이션 값을 \\(\langle \kappa \mathrel{||} s \rangle\\) 대신 \\(\langle \kappa \mathrel{||} \blacksquare \rangle\\)로 만들면 예제 1의 결과는 어떻게 될까요? 값 스택까지 저장해야 하는 이유를 설명하세요.
 4. \\(\textsf{KFAE}\\)에 일급 컨티뉴에이션을 그대로 두고, 앞 장의 CPS 인터프리터 `interpCPS`(컨티뉴에이션을 Scala 함수 `Value => Value`로 나타낸 것)를 확장해 `Vcc`를 지원하려면 `ContV`에 무엇을 저장해야 할까요? `App`의 함수 위치에 `ContV`가 오면 어떻게 해야 할까요?
 5. 강의 연습 과제 **KFAE**(`kfae`)의 `step` 함수를 직접 구현해 보세요.
+6. <a id="ex-first-class-continuations-6"></a>★★★ 다음 \\(\textsf{KFAE}\\) 식의 결과를 구하세요. `val x = e1; e2`는 `(x => e2)(e1)`의 설탕입니다.
+
+   ```kfae,run
+   /* KFAE */
+   val f = { vcc x; x };
+   val g = {
+     vcc y;
+     val z = f(y) * 3;
+     val x = z * 11;
+     y(x * 2) + 1
+   };
+   g(x => x)(5) * 7
+   ```
+
+   <details><summary>힌트</summary>
+
+   `val f = { vcc x; x }; ...`를 설탕 제거하면 `(f => ...)({ vcc x; x })`이므로, `x`에 담기는 컨티뉴에이션은 "결과를 `f`에 묶고 나머지를 계산하기"입니다. 이 컨티뉴에이션을 다시 부르면 `f`가 **다른 값으로 다시 묶인 채** 나머지 계산이 처음부터 다시 진행됩니다.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-first-class-continuations-6)

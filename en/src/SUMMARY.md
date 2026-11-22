@@ -49,4 +49,7 @@
 
 ---
 
+[Answers for Part I](./answers-1.md)
+[Answers for Part II](./answers-2.md)
+[Answers for Part III](./answers-3.md)
 [Glossary](./glossary.md)

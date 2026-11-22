@@ -80,7 +80,7 @@
 - **다형 타입**(polymorphic type) · [매개변수 다형성 › PTFAE: 매개변수 다형성을 더한 TFAE](./parametric-polymorphism.md#g-polymorphic-type)
 - **다형성**(polymorphism) · [매개변수 다형성 › 다형성](./parametric-polymorphism.md#g-polymorphism)
 - **단계 지표 논리 관계**(step-indexed logical relation) · [논리 관계 › 더 나아가기](./lean-logical-relations.md#g-step-indexed-logical-relation)
-- **단락 계산**(short-circuit evaluation) · [지연 계산 › 지연 계산은 어디에 쓰일까](./lazy-evaluation.md#g-short-circuit-evaluation)
+- **단락 계산**(short-circuit evaluation) · [재귀 함수 › 연습 문제](./recursive-functions.md#g-short-circuit-evaluation)
 - **단말 기호**(terminal) · [문법과 의미 › 확장 배커스-나우르 표기법](./syntax-semantics.md#g-terminal)
 - **단편화**(fragmentation) · [쓰레기 수집 › 참조 횟수 세기](./garbage-collection.md#g-fragmentation)
 - **단형**(monomorphic) · [대수적 데이터 타입 › 예제](./algebraic-data-types.md#g-monomorphic)

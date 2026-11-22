@@ -74,15 +74,22 @@ svg.lang-map a.proj:hover rect { stroke: var(--proj); fill: color-mix(in srgb, v
 .run-button { color: var(--icons); }
 .run-button:hover { color: var(--links); }
 code.run[contenteditable]:focus { outline: 1px solid var(--links); outline-offset: 2px; }
-pre.run-output { margin-top: -0.6em; padding: 0.5em 0.9em; border-left: 3px solid var(--links);
-  background: var(--quote-bg); font-size: 0.85em; white-space: pre-wrap; }
-pre.run-output.error { border-left-color: #c0392b; }
+pre.run-output { margin-top: -0.4em; padding: 0.45em 0.9em 0.55em; border: 1px solid var(--quote-border); border-radius: 4px;
+  background: var(--bg); font-size: 0.85em; line-height: 1.5; white-space: pre-wrap; }
+pre.run-output::before { content: "결과"; display: block; margin-bottom: 0.15em; font: 600 0.75em/1.4 "Open Sans", sans-serif;
+  letter-spacing: 0.04em; color: var(--icons); }
+html[lang="en"] pre.run-output::before { content: "Result"; text-transform: uppercase; }
+pre.run-output.error { color: #b42318; border-color: color-mix(in srgb, #b42318 35%, var(--quote-border));
+  background: color-mix(in srgb, #b42318 6%, var(--bg)); }
+pre.run-output.error::before { content: "오류"; color: inherit; }
+html[lang="en"] pre.run-output.error::before { content: "Error"; }
+.navy pre.run-output.error, .coal pre.run-output.error, .ayu pre.run-output.error { color: #f87171; }
 div.playground { border: 1px solid var(--quote-border); border-radius: 4px; padding: 0.6em 0.9em; margin: 1.2em 0; }
 div.playground pre { margin: 0.4em 0; }
 div.playground pre.run-output { margin-top: 0.4em; }
 .playground-head { display: flex; align-items: center; gap: 0.8em; font-weight: bold; }
 .playground-hint { font-weight: normal; font-size: 0.8em; opacity: 0.7; margin-right: auto; }
-.playground-head .run-button { background: none; border: 1px solid var(--quote-border); border-radius: 4px;
+.playground-head .reset-button, .playground-head .run-button { display: inline-flex; align-items: center; gap: 0.3em; font: inherit; font-size: 0.85em; font-weight: normal; color: var(--fg); background: none; border: 1px solid var(--quote-border); border-radius: 4px;
   padding: 0.2em 0.6em; cursor: pointer; }
 
 /* CodeMirror editors (book-editor.js): same grammar as the course website */
@@ -109,3 +116,16 @@ pre > .pl-editor { margin: 0; }
 .navy .pl-editor .tok-string, .coal .pl-editor .tok-string, .ayu .pl-editor .tok-string { color: #b5bd68; }
 .navy .pl-editor .tok-comment, .coal .pl-editor .tok-comment, .ayu .pl-editor .tok-comment { color: #969896; }
 .pl-editor .cm-editor:not(.cm-focused) .cm-activeLine { background: transparent; }
+
+/* draft banner (draft.js) */
+.draft-banner { margin: 0.8em 0 1.2em; padding: 0.55em 0.9em; border-left: 4px solid #d97706;
+  background: color-mix(in srgb, #d97706 10%, transparent); border-radius: 4px; font-size: 0.9em; }
+.draft-banner b { color: #b45309; margin-right: 0.5em; }
+.navy .draft-banner b, .coal .draft-banner b, .ayu .draft-banner b { color: #fbbf24; }
+
+.playground-head .reset-button:hover, .playground-head .run-button:hover { color: var(--links); border-color: var(--links); }
+.playground-head .reset-button { border: 1px solid var(--quote-border); border-radius: 4px; padding: 0.2em 0.6em; cursor: pointer; }
+/* visited links: browsers do not apply :visited colors through currentColor in SVG, so set the project colors directly */
+svg.lang-map a.proj rect { stroke: var(--proj); }
+svg.lang-map a.proj text, svg.lang-map g.proj text { fill: var(--proj); }
+svg.lang-map g.proj rect { stroke: var(--proj); }

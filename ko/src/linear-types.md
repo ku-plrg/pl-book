@@ -1252,6 +1252,58 @@ LTFAE와 다른 점은 선형성을 **타입**이 아니라 **화살표**에 붙
    }
    ```
 
+7. <a id="ex-linear-types-7"></a>★★★ 한정자 없이 **모든** 변수가 선형인 작은 언어를 설계해 봅시다. 즉 정의한 변수는 모두 **정확히 한 번** 써야 합니다. 식과 타입은 다음과 같고, 실행 의미는 TFAE에 쌍을 더한 보통의 의미입니다.
+
+   \\[
+   \begin{array}{lrcl}
+   \text{Expressions} & \mathbb{E} \ni e & ::= & n \mid b \mid x \mid e + e \mid (e, e) \mid \texttt{val}\ x\ \texttt{=}\ e;\ e \mid \texttt{val}\ (x, y)\ \texttt{=}\ e;\ e \\\\
+   & & \mid & \lambda x\texttt{:}\tau.e \mid e(e) \mid \texttt{if}\ (e)\ e\ \texttt{else}\ e \\\\
+   \text{Types} & \mathbb{T} \ni \tau & ::= & \texttt{num} \mid \texttt{bool} \mid \tau \to \tau \mid \tau \times \tau
+   \end{array}
+   \\]
+
+   예를 들어 `val x = 10; val y = 20; x + y`는 `x`와 `y`를 한 번씩 쓰므로 타입 검사를 통과하지만, `x`를 쓰지 않는 `val x = 10; 42`와 `y`를 두 번 쓰는 `val y = 10; y + y`는 통과하지 못해야 합니다.
+
+   이 장의 타입 검사기처럼 쓴 변수를 타입 환경에서 지우고 남은 타입 환경을 다음 식에 넘기는 방식, 즉 \\(\Gamma \vdash e : \tau \dashv \Gamma'\\) 꼴의 알고리즘적 타입 규칙을 쓰려고 합니다. 예를 들어 \\([x : \texttt{num}, y : \texttt{num}, z : \texttt{num}] \vdash x + y : \texttt{num} \dashv [z : \texttt{num}]\\)입니다. 반면 \\([x : \texttt{num}] \vdash x + x : \texttt{num} \dashv \Gamma'\\)은 \\(x\\)를 두 번 지워야 하므로 어떤 \\(\Gamma'\\)으로도 성립하지 않습니다. 수, 덧셈, 함수 적용의 규칙은 다음과 같습니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{}
+   \UnaryInfC{$\Gamma \vdash n : \texttt{num} \dashv \Gamma$}
+   \end{prooftree}
+   \qquad
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e_1 : \texttt{num} \dashv \Gamma_1$}
+   \AxiomC{$\Gamma_1 \vdash e_2 : \texttt{num} \dashv \Gamma_2$}
+   \BinaryInfC{$\Gamma \vdash e_1 + e_2 : \texttt{num} \dashv \Gamma_2$}
+   \end{prooftree}
+   \\]
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e_1 : \tau_1 \to \tau_2 \dashv \Gamma_1$}
+   \AxiomC{$\Gamma_1 \vdash e_2 : \tau_1 \dashv \Gamma_2$}
+   \BinaryInfC{$\Gamma \vdash e_1(e_2) : \tau_2 \dashv \Gamma_2$}
+   \end{prooftree}
+   \\]
+
+   변수 이름은 모두 다르다고(가림이 없다고) 가정하고, \\(\Gamma \setminus \\{x_1, \ldots, x_n\\}\\)은 \\(\Gamma\\)에서 \\(x_1, \ldots, x_n\\)을 지운 타입 환경이라고 합시다. 다음 여섯 가지 식의 타입 규칙을 쓰세요.
+
+   - 변수 \\(x\\)
+   - 쌍 \\((e_1, e_2)\\)
+   - 변수 정의 \\(\texttt{val}\ x\ \texttt{=}\ e_1;\ e_2\\)
+   - 쌍 분해 \\(\texttt{val}\ (x, y)\ \texttt{=}\ e_1;\ e_2\\)
+   - 함수 \\(\lambda x\texttt{:}\tau.e\\)
+   - 조건식 \\(\texttt{if}\ (e_0)\ e_1\ \texttt{else}\ e_2\\)
+
+   <details><summary>힌트</summary>
+
+   "두 번 쓰지 않기"는 쓴 변수를 출력 타입 환경에서 지우는 것으로, "빠뜨리지 않기"는 변수의 스코프가 끝나는 곳에서 그 변수가 출력에 남아 있지 않은지 확인하는 것으로 보장합니다. 조건식은 두 갈래 중 하나만 실행되니, 두 갈래가 같은 변수들을 써야 합니다.
+
+   </details>
+
+   [해답 →](./answers-3.md#ans-linear-types-7)
+
 ## 더 읽을거리
 
 - Philip Wadler, "Linear types can change the world!", *Programming Concepts and Methods*, North-Holland, 1990. 선형 타입으로 함수형 언어에서 배열 같은 자원을 제자리에서 안전하게 고치는 방법을 제안한 고전입니다.

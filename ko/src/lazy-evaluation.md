@@ -61,7 +61,7 @@ f(1 + 2, { Thread.sleep(5000); 42 })  // 6
 
 지연 계산은 생각보다 훨씬 많은 언어에, 여러 이유로 들어 있습니다.
 
-<a id="g-short-circuit-evaluation"></a>**단락 계산**(short-circuit evaluation). 논리 연산에서 왼쪽 피연산자만 보고 결과가 정해지면 오른쪽은 계산하지 않습니다.
+**단락 계산**(short-circuit evaluation). 논리 연산에서 왼쪽 피연산자만 보고 결과가 정해지면 오른쪽은 계산하지 않습니다.
 
 ```scala
 true  && ((5 / 0) < 1)        // error  -- division by zero
@@ -589,3 +589,60 @@ def interp(expr: Expr, env: Env): Value = expr match
 3. \\(\textsf{LFAE}\\)에 조건식 `if0 e1 e2 e3`(e1의 값이 0이면 e2, 아니면 e3)을 추가하려고 합니다. 자연 의미 규칙과 `interp`의 해당 경우를 쓰세요. 어떤 하위 식에 엄격한 계산이 필요한가요?
 4. 엄격한 계산 규칙 `StrictExpr`에서 두 번째 전제 \\(v \Downarrow v'\\)을 빼고 결과를 \\(v\\)로 두면 어떤 프로그램이 잘못 동작하는지 예를 들어 보세요.
 5. 강의 연습 과제 **LFAE**(`lfae`)의 `interp` 함수를 직접 구현해 보세요.
+6. <a id="ex-lazy-evaluation-6"></a>★★ 다음 식을 \\(\textsf{LFAE}\\)로 계산한 결과를 구하세요. 결과가 클로저나 식 값이면 담긴 환경까지 쓰세요(예: \\(\langle\mkern-3mu\langle \texttt{x} \texttt{ + } 1, [\texttt{x} \mapsto 2] \rangle\mkern-3mu\rangle\\)). 단, 이 문제에서는 `val`을 함수 적용의 설탕으로 보지 않고, FVAE의 `Val` 규칙대로 초기화 식을 곧바로 계산해 그 값을 묶는다고 합시다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\sigma \vdash e_1 \Rightarrow v_1$}
+   \AxiomC{$\sigma[x \mapsto v_1] \vdash e_2 \Rightarrow v_2$}
+   \LeftLabel{$\texttt{Val}$}
+   \BinaryInfC{$\sigma \vdash \texttt{val}\ x\ \texttt{=}\ e_1\texttt{;}\ e_2 \Rightarrow v_2$}
+   \end{prooftree}
+   \\]
+
+   - (a) `(x => (y => y)(x))(2 * 3)`
+   - (b) 다음 식
+
+     ```pl
+     /* LFAE (val is not sugar) */
+     val f = x => x;
+     val y = 2 * 5;
+     (z => f(z + y))(y + 1)
+     ```
+
+   <details><summary>힌트</summary>
+
+   `Id` 규칙은 엄격한 계산을 하지 않습니다. 엄격한 계산은 덧셈과 곱셈의 피연산자, 그리고 함수 적용의 함수 위치에서만 일어납니다.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-lazy-evaluation-6)
+7. <a id="ex-lazy-evaluation-7"></a>★★★ 식 값에 환경을 담지 않고 식만 담으면 어떻게 될까요? FAE(값에 의한 호출, `val`은 FVAE의 `Val` 규칙)를 다음처럼 바꿉니다. 새 값 \\(\langle\mkern-3mu\langle e \rangle\mkern-3mu\rangle\\)은 환경 없이 식만 담은 식 값입니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\sigma \vdash e_0 \Rightarrow \langle \lambda x.e_2, \sigma' \rangle$}
+   \AxiomC{$\sigma'[x \mapsto \langle\mkern-3mu\langle e_1 \rangle\mkern-3mu\rangle] \vdash e_2 \Rightarrow v_2$}
+   \LeftLabel{$\texttt{App}$}
+   \BinaryInfC{$\sigma \vdash e_0(e_1) \Rightarrow v_2$}
+   \end{prooftree}
+   \\]
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\sigma(x) = \langle\mkern-3mu\langle e \rangle\mkern-3mu\rangle$}
+   \AxiomC{$\sigma \vdash e \Rightarrow v$}
+   \LeftLabel{$\texttt{Id}_E$}
+   \BinaryInfC{$\sigma \vdash x \Rightarrow v$}
+   \end{prooftree}
+   \\]
+
+   \\(\sigma(x)\\)가 식 값이 아니면 원래의 `Id` 규칙을 쓰고, 나머지 규칙은 FAE와 같습니다. 예를 들어 `(x => y => y)(z)(42)`는 원래 FAE에서는 자유 식별자 `z` 때문에 오류가 나지만, 바뀐 의미에서는 `z`를 계산하지 않으므로 `42`가 됩니다. 원래 FAE와 바뀐 의미에서 **서로 다른 숫자**를 내는 식을 하나 만들고, 각 의미에서의 결과를 쓰세요.
+
+   <details><summary>힌트</summary>
+
+   미뤄 둔 식은 나중에 그 식을 **꺼내 쓰는 곳의** 환경에서 계산됩니다. 인자 식에 있는 이름이 함수 안에서 다른 값으로 다시 묶인다면 어떻게 될까요?
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-lazy-evaluation-7)

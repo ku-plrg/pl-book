@@ -952,3 +952,30 @@ def step(k: Cont, s: Stack): (Cont, Stack) = (k, s) match
 4. \\(\textsf{FAE}\\)에 뺄셈 \\(e_1 \texttt{ - } e_2\\)를 추가할 때 필요한 작은 걸음 규칙을 쓰세요. 값 스택에서 두 값의 순서에 주의하세요.
 5. 상태 \\(\langle (\texttt{@}) :: \square \mathrel{||} 2 :: 1 :: \blacksquare \rangle\\)에서는 어떤 규칙도 적용할 수 없습니다. 이 상태에 이르는 \\(\textsf{FAE}\\) 식을 하나 찾고, `step` 함수는 이 상태에서 어떻게 동작해야 할지 생각해 보세요.
 6. 강의 연습 과제 **FAE-CPS**(`fae-cps`)의 `interpCPS` 함수와 `step` 함수를 직접 구현해 보세요.
+7. <a id="ex-continuations-7"></a>★ 다음 장 [일급 컨티뉴에이션](./first-class-continuations.md)에서 배울 `vcc`를 작은 걸음 의미로 미리 따라가 봅시다. \\(\textsf{FAE}\\)에 식 \\(\texttt{vcc}\ x;\ e\\)를 더하고, 값에 **컨티뉴에이션 값** \\(\langle \kappa \mathrel{||} s \rangle\\)을 더합니다. \\(\texttt{vcc}\ x;\ e\\)는 "이 식을 다 계산한 뒤에 할 일" 자체를 값으로 \\(x\\)에 담고 \\(e\\)를 계산합니다. 컨티뉴에이션 값을 함수처럼 호출하면 지금 할 일을 버리고 담아 둔 일로 돌아갑니다. 새로 더하는 규칙은 다음 두 개이고, 클로저를 호출하는 원래의 \\(\texttt{App}\_2\\)는 그대로 둡니다.
+
+   \\[
+   \begin{array}{llcl}
+   \texttt{Vcc} & \langle (\sigma \vdash \texttt{vcc}\ x;\ e) :: \kappa \mathrel{||} s \rangle & \to & \langle (\sigma[x \mapsto \langle \kappa \mathrel{||} s \rangle] \vdash e) :: \kappa \mathrel{||} s \rangle \\\\
+   \texttt{App}\_{2,\kappa} & \langle (\texttt{@}) :: \kappa \mathrel{||} v_2 :: \langle \kappa' \mathrel{||} s' \rangle :: s \rangle & \to & \langle \kappa' \mathrel{||} v_2 :: s' \rangle
+   \end{array}
+   \\]
+
+   식 \\((\texttt{vcc}\ \texttt{x};\ \texttt{x})(\lambda \texttt{y}.\texttt{y})\\)를 계산하는 처음 세 상태는 다음과 같습니다. 계산이 끝날 때까지 나머지 상태를 모두 쓰고, \\(\kappa_0\\)이 무엇인지도 쓰세요.
+
+   \\[
+   \begin{array}{rl}
+   & \langle (\varnothing \vdash (\texttt{vcc}\ \texttt{x};\ \texttt{x})(\lambda \texttt{y}.\texttt{y})) :: \square \mathrel{||} \blacksquare \rangle \\\\
+   \to & \langle (\varnothing \vdash \texttt{vcc}\ \texttt{x};\ \texttt{x}) :: (\varnothing \vdash \lambda \texttt{y}.\texttt{y}) :: (\texttt{@}) :: \square \mathrel{||} \blacksquare \rangle \\\\
+   \to & \langle ([\texttt{x} \mapsto \langle \kappa_0 \mathrel{||} \blacksquare \rangle] \vdash \texttt{x}) :: (\varnothing \vdash \lambda \texttt{y}.\texttt{y}) :: (\texttt{@}) :: \square \mathrel{||} \blacksquare \rangle \\\\
+   \to & \cdots
+   \end{array}
+   \\]
+
+   <details><summary>힌트</summary>
+
+   \\(\kappa_0\\)은 `Vcc`를 적용할 때 맨 위의 할 일을 뺀 나머지 컨티뉴에이션입니다. 컨티뉴에이션 값이 \\((\texttt{@})\\)에서 함수 자리에 오면 \\(\texttt{App}\_{2,\kappa}\\)가 적용됩니다.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-continuations-7)

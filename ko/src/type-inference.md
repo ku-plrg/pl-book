@@ -1013,3 +1013,71 @@ infer(/* x => x(x) */)
 4. `x => { val z = x; z + 1 }`의 타입을 추론해 보세요. `z`를 정의할 때 `gen`이 무엇을 돌려주는지, 마지막에 `x`의 타입이 어떻게 정해지는지 따라가 보세요.
 5. 이 장에서는 \\(\mathtt{gen}\\)과 \\(\mathtt{inst}\\)를 수식으로만 정의했습니다. 수식을 보고 Scala 함수 `gen(ty: Type, tenv: TypeEnv, sol: Solution): TypeScheme`, `free`, `inst(scheme: TypeScheme, sol: Solution): (Type, Solution)`을 구현해 보세요. `inst`에서 새 타입 변수를 여러 개 만들 때 `newTypeVar`를 어떻게 이어 부르면 되는지도 생각해 보세요.
 6. (과제 `TIFAE`) 과목 과제 `tifae`의 `typeCheck`와 `interp` 함수를 구현해 보세요. `typeCheck`는 이 장의 규칙을, `interp`는 [`TRFAE`](./typing-recursive-functions.md)의 의미를 그대로 따르면 됩니다.
+
+7. <a id="ex-type-inference-7"></a>★ 이 장의 \\(\mathtt{unify}\\) 정의에 따라 다음 단일화의 결과 해를 구하세요. 단일화가 실패하면 X라고 쓰고 이유를 적으세요. 예를 들어 \\(\mathtt{unify}(\alpha \to \mathtt{num}, \mathtt{bool} \to \beta, [\alpha \mapsto \bullet, \beta \mapsto \bullet]) = [\alpha \mapsto \mathtt{bool}, \beta \mapsto \mathtt{num}]\\)입니다.
+
+   (a) \\(\mathtt{unify}(\alpha, \beta \to \mathtt{num}, [\alpha \mapsto \bullet, \beta \mapsto \alpha])\\)
+
+   (b) \\(\mathtt{unify}(\alpha, \mathtt{num}, [\alpha \mapsto \beta, \beta \mapsto \gamma, \gamma \mapsto \bullet])\\)
+
+   (c) \\(\mathtt{unify}(\alpha \to \beta, \mathtt{num} \to (\mathtt{bool} \to \mathtt{num}), [\alpha \mapsto \bullet, \beta \mapsto \bullet])\\)
+
+   (d) \\(\mathtt{unify}(\alpha \to \mathtt{num}, \beta, [\alpha \mapsto \bullet, \beta \mapsto \mathtt{num} \to \gamma, \gamma \mapsto \alpha])\\)
+
+   (e) \\(\mathtt{unify}(\alpha, \mathtt{num} \to \gamma, [\alpha \mapsto \beta \to \beta, \beta \mapsto \bullet, \gamma \mapsto \mathtt{bool}])\\)
+
+   <details><summary>힌트</summary>
+
+   무엇보다 먼저 두 타입을 지금의 해로 \\(\mathtt{resolve}\\)하세요. 해를 갱신하는 타입 변수는 언제나 해소한 뒤에 남은 대표 타입 변수이고, 해소한 결과가 이미 같으면 해는 바뀌지 않습니다.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-type-inference-7)
+
+8. <a id="ex-type-inference-8"></a>★★ 타입 표기가 없는 언어에 리스트를 더해 봅시다. 식에는 빈 리스트 `nil`, 리스트 앞에 원소를 붙이는 `e1 :: e2`, 첫 원소를 꺼내는 `e.head`, 첫 원소를 뺀 나머지를 꺼내는 `e.tail`이 생기고, 타입에는 원소의 타입이 \\(\tau\\)인 리스트의 타입 \\(\mathtt{List}[\tau]\\)가 생깁니다.
+
+   \\[
+   \begin{array}{lrcl}
+   \text{Expressions} & \mathbb{E} \ni e & ::= & \ldots \mid \mathtt{nil} \mid e \mathbin{::} e \mid e.\mathtt{head} \mid e.\mathtt{tail} \\\\
+   \text{Types} & \mathbb{T} \ni \tau & ::= & \mathtt{num} \mid \tau \to \tau \mid \alpha \mid \mathtt{List}[\tau]
+   \end{array}
+   \\]
+
+   \\(\mathtt{resolve}\\), \\(\mathtt{occur}\\), \\(\mathtt{unify}\\)는 리스트 타입의 안쪽으로도 들어간다고 합시다. 예를 들어 \\(\mathtt{unify}(\mathtt{List}[\tau_1], \mathtt{List}[\tau_2], \psi) = \mathtt{unify}(\tau_1, \tau_2, \psi)\\)입니다. `val`은 이 장 앞부분의 \\(\tau\texttt{-Val}\\)을 그대로 씁니다(일반화하지 않습니다). 타입 검사기 중 `Nil`과 `Cons`의 경우는 다음과 같습니다.
+
+   ```scala
+   def typeCheck(e: Expr, tenv: TypeEnv, sol: Solution): (Type, Solution) = e match
+     ...
+     case Nil =>
+       val (ety, sol1) = newTypeVar(sol)
+       (ListT(ety), sol1)
+     case Cons(h, t) =>
+       val (hty, sol1) = typeCheck(h, tenv, sol)
+       val (tty, sol2) = typeCheck(t, tenv, sol1)
+       val sol3 = unify(ListT(hty), tty, sol2)
+       (tty, sol3)
+   ```
+
+   (a) 위 코드에 맞게 `nil`과 `e1 :: e2`의 타입 규칙 \\(\tau\texttt{-Nil}\\), \\(\tau\texttt{-Cons}\\)를 \\(\Gamma, \psi \vdash e : \tau, \psi'\\) 꼴로 쓰세요.
+
+   (b) `e.head`와 `e.tail`의 타입 규칙 \\(\tau\texttt{-Head}\\), \\(\tau\texttt{-Tail}\\)을 정의하세요. 다음 식의 타입을 추론할 수 있어야 합니다.
+
+   ```pl
+   /* TIFAE with lists */
+   val f = x => {
+     val y = x.head(42);
+     val z = x.tail;
+     z.head(y)
+   };
+   f
+   ```
+
+   (c) (b)에서 정의한 규칙으로 위 식의 타입을 구하세요. 최종 타입에는 타입 변수를 모두 해로 바꿔 쓰세요.
+
+   <details><summary>힌트</summary>
+
+   `e.head`에서는 `e`가 어떤 리스트인지 아직 모를 수 있으므로, 원소 타입을 위한 새 타입 변수를 만들고 `e`의 타입을 그 원소 타입의 리스트와 단일화하세요. `e.tail`도 같은 제약을 걸지만, 결과는 원소가 아니라 리스트 자신입니다.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-type-inference-8)

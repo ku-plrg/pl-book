@@ -49,4 +49,7 @@
 
 ---
 
+[1부 연습 문제 해답](./answers-1.md)
+[2부 연습 문제 해답](./answers-2.md)
+[3부 연습 문제 해답](./answers-3.md)
 [용어집](./glossary.md)

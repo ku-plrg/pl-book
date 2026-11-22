@@ -554,3 +554,31 @@ def interp(expr: Expr, env: Env): Value = expr match
 5. TFAE에서 `val`을 문법 설탕이 아니라 직접 정의한 덕분에 얻는 장점은 무엇인가요? 반대로 `val x: Number = 42; ...`처럼 타입 표기를 요구하는 방식에는 어떤 장점이 있을까요?
 
 6. **과제.** 강의의 `tfae` 과제에서 `typeCheck` 함수와 `interp` 함수를 구현해 보세요. 제출할 필요는 없지만 시험 문제와 관련될 수 있으니 직접 풀어 보기를 강력히 권합니다.
+
+7. <a id="ex-typed-languages-7"></a>★★★ TFAE의 \\(\tau\texttt{-Fun}\\) 규칙을 왼쪽에서 오른쪽으로 바꾸었다고 합시다. 바꾼 규칙은 함수 본문 \\(e\\)를 검사할 때 매개변수의 타입 정보 \\(x : \tau\\)를 타입 환경에 넣지 않습니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\Gamma[x : \tau] \vdash e : \tau^{\prime}$}
+   \LeftLabel{$\tau\texttt{-Fun}$}
+   \UnaryInfC{$\Gamma \vdash \lambda x\texttt{:}\tau.e : \tau \to \tau^{\prime}$}
+   \end{prooftree}
+   \qquad\qquad
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e : \tau^{\prime}$}
+   \LeftLabel{$\tau\texttt{-Fun}^{\prime}$}
+   \UnaryInfC{$\Gamma \vdash \lambda x\texttt{:}\tau.e : \tau \to \tau^{\prime}$}
+   \end{prooftree}
+   \\]
+
+   (a) 원래 규칙으로는 타입 검사를 통과하지만, 바꾼 규칙으로는 통과하지 못하는 TFAE 식을 하나 만드세요.
+
+   (b) 바꾼 규칙을 쓰는 타입 시스템은 건전한가요? 건전하다면 그 이유를 설명하고, 건전하지 않다면 타입 검사를 통과하지만 실행 중에 타입 오류가 나는 TFAE 식을 만드세요.
+
+   <details><summary>힌트</summary>
+
+   바꾼 규칙에서 본문의 \\(x\\)는 타입을 어디서 찾을까요? 함수 바깥에 같은 이름 \\(x\\)가 다른 타입으로 정의되어 있으면, 타입 검사기가 믿는 \\(x\\)의 타입과 실행할 때 \\(x\\)에 실제로 묶이는 값이 어긋납니다.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-typed-languages-7)

@@ -2,7 +2,7 @@
 
 [식별자](./identifiers.md) 장에서 만든 VAE는 계산 결과에 이름을 붙일 수 있게 해 주었습니다. 하지만 이름이 붙는 것은 **값**뿐입니다. 같은 모양의 계산을 입력만 바꿔 여러 번 하고 싶을 때, 즉 **계산 자체**에 이름을 붙이고 싶을 때는 여전히 방법이 없습니다.
 
-이 장에서는 <a id="g-first-order-function"></a>**1차 함수(first-order function)** 를 배웁니다. 먼저 1차 함수가 무엇인지 살펴보고, VAE에 1차 함수를 더한 언어 F1VAE의 문법을 정의합니다. 그다음 함수 정의를 찾아보기 위한 <a id="g-function-environment"></a>**함수 환경(function environment)** 을 도입해 인터프리터와 자연 의미를 만듭니다. 마지막으로 함수 몸통 안의 이름이 어느 정의를 가리키는지에 대한 두 가지 방식, <a id="g-static-scoping"></a>**정적 스코핑(static scoping)** 과 **동적 스코핑(dynamic scoping)** 을 비교합니다. 이 비교는 다음 장의 일급 함수와 클로저를 이해하는 열쇠가 되므로 꼼꼼히 봐 두기 바랍니다.
+이 장에서는 <a id="g-first-order-function"></a>**1차 함수**(first-order function)를 배웁니다. 먼저 1차 함수가 무엇인지 살펴보고, VAE에 1차 함수를 더한 언어 F1VAE의 문법을 정의합니다. 그다음 함수 정의를 찾아보기 위한 <a id="g-function-environment"></a>**함수 환경**(function environment)을 도입해 인터프리터와 자연 의미를 만듭니다. 마지막으로 함수 몸통 안의 이름이 어느 정의를 가리키는지에 대한 두 가지 방식, <a id="g-static-scoping"></a>**정적 스코핑**(static scoping)과 **동적 스코핑**(dynamic scoping)을 비교합니다. 이 비교는 다음 장의 일급 함수와 클로저를 이해하는 열쇠가 되므로 꼼꼼히 봐 두기 바랍니다.
 
 이 장에서 만들 `F1VAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
 
@@ -29,7 +29,7 @@ square(42)   // 1764
 square(2434) // 5924356
 ```
 
-1차 함수는 (1) **함수 이름**, (2) **매개변수(parameter)** 목록, (3) <a id="g-function-body"></a>**함수 몸통(body)** 으로 이루어지며, <a id="g-argument"></a>**인자(argument)** 를 주어 <a id="g-invoke"></a>**호출(invoke)** 할 수 있습니다. `square`의 경우 함수 이름은 `square`, 매개변수는 `n` 하나, 몸통은 `n * n`이고, `square(3)`은 인자 `3`으로 함수를 호출한 것입니다.
+1차 함수는 (1) **함수 이름**, (2) **매개변수(parameter)** 목록, (3) <a id="g-function-body"></a>**함수 몸통**(body)으로 이루어지며, <a id="g-argument"></a>**인자**(argument)를 주어 <a id="g-invoke"></a>**호출**(invoke)할 수 있습니다. `square`의 경우 함수 이름은 `square`, 매개변수는 `n` 하나, 몸통은 `n * n`이고, `square(3)`은 인자 `3`으로 함수를 호출한 것입니다.
 
 대부분의 프로그래밍 언어가 1차 함수를 지원합니다. 문법은 조금씩 달라도 구성 요소는 똑같습니다.
 
@@ -140,7 +140,7 @@ def mul2(m) = m * 2;
 mul2(add3(4))
 ```
 
-다음과 같은 <a id="g-abstract-syntax-tree"></a>**추상 문법 트리(abstract syntax tree, AST)** 가 만들어집니다.
+다음과 같은 <a id="g-abstract-syntax-tree"></a>**추상 문법 트리**(abstract syntax tree, AST)가 만들어집니다.
 
 ```scala
 Program(
@@ -420,7 +420,7 @@ f & = & \texttt{def}\ \texttt{inc}(\texttt{x})\ \texttt{=}\ \texttt{x} + 1 \\\\
 
 ### 두 가지 방식
 
-지금까지 정의한 의미는 **정적 스코핑(static scoping)** 또는 <a id="g-lexical-scoping"></a>**어휘적 스코핑(lexical scoping)** 이라고 부릅니다. 식별자의 묶는 출현이 함수가 **호출되는** 곳이 아니라 함수가 **정의된** 곳에 따라, 즉 프로그램을 실행하지 않고 코드만 보고도 **정적으로** 정해지기 때문입니다.
+지금까지 정의한 의미는 **정적 스코핑(static scoping)** 또는 <a id="g-lexical-scoping"></a>**어휘적 스코핑**(lexical scoping)이라고 부릅니다. 식별자의 묶는 출현이 함수가 **호출되는** 곳이 아니라 함수가 **정의된** 곳에 따라, 즉 프로그램을 실행하지 않고 코드만 보고도 **정적으로** 정해지기 때문입니다.
 
 다음 프로그램을 봅시다.
 
@@ -432,7 +432,7 @@ def f(x) = x + y;       // y is a free variable
 
 함수 `f`의 몸통에 있는 `y`는 `f`의 정의에서 보면 어디에도 정의되지 않은 **자유 식별자**입니다. 정적 스코핑에서는 이 사실이 호출하는 쪽에 `y`가 있든 없든 바뀌지 않습니다. 앞에서 본 `App` 규칙이 몸통을 \\( [x_1 \mapsto n_1] \\)에서만 계산하므로, 호출하는 쪽의 `val y = 2`는 몸통에서 보이지 않습니다. 따라서 이 프로그램은 `free identifier: y` 오류를 냅니다.
 
-하지만 F1VAE의 의미를 다른 방식으로 정의할 수도 있습니다. **동적 스코핑(dynamic scoping)** 에서는 묶는 출현이 함수가 적용되는 <a id="g-call-site"></a>**호출 위치(call site)** 의 환경에 따라 **동적으로** 정해집니다.
+하지만 F1VAE의 의미를 다른 방식으로 정의할 수도 있습니다. **동적 스코핑**(dynamic scoping)에서는 묶는 출현이 함수가 적용되는 <a id="g-call-site"></a>**호출 위치**(call site)의 환경에 따라 **동적으로** 정해집니다.
 
 ```f1vae,run
 /* F1VAE */

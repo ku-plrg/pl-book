@@ -2,7 +2,7 @@
 
 [1차 함수](./first-order-functions.md) 장의 F1VAE에서 함수는 프로그램 맨 앞에 이름을 붙여 정의해 두고 그 이름으로 호출만 할 수 있었습니다. 함수를 변수에 담거나, 다른 함수에 넘기거나, 함수가 함수를 만들어 돌려주는 일은 할 수 없었지요. 하지만 Scala에서 `List(1, 2, 3).map(x => x * 2)`처럼 함수를 인자로 넘기는 코드는 너무나 흔합니다.
 
-이 장에서는 함수를 숫자와 똑같은 **값**으로 다루는 **일급 함수(first-class function)** 를 배웁니다. 먼저 "일급"이 무슨 뜻인지 살펴보고, VAE에 일급 함수를 더한 언어 FVAE를 정의합니다. 함수가 값이 되려면 함수의 코드뿐 아니라 함수가 정의될 때의 환경도 함께 기억해야 한다는 사실을 발견하게 되는데, 이것이 바로 **클로저(closure)** 입니다. 클로저는 이 책의 나머지 부분 내내 등장하는 핵심 개념입니다.
+이 장에서는 함수를 숫자와 똑같은 **값**으로 다루는 **일급 함수**(first-class function)를 배웁니다. 먼저 "일급"이 무슨 뜻인지 살펴보고, VAE에 일급 함수를 더한 언어 FVAE를 정의합니다. 함수가 값이 되려면 함수의 코드뿐 아니라 함수가 정의될 때의 환경도 함께 기억해야 한다는 사실을 발견하게 되는데, 이것이 바로 **클로저**(closure)입니다. 클로저는 이 책의 나머지 부분 내내 등장하는 핵심 개념입니다.
 
 이 장에서 만들 `FVAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
 
@@ -12,7 +12,7 @@
 
 ### 일급 시민
 
-프로그래밍 언어에서 어떤 대상이 **값**으로 취급되면 그 대상을 **일급 시민(first-class citizen)** 이라고 부릅니다. 값으로 취급된다는 것은 다음 세 가지가 모두 가능하다는 뜻입니다.
+프로그래밍 언어에서 어떤 대상이 **값**으로 취급되면 그 대상을 **일급 시민**(first-class citizen)이라고 부릅니다. 값으로 취급된다는 것은 다음 세 가지가 모두 가능하다는 뜻입니다.
 
 1. **변수**에 **대입**할 수 있다.
 2. 함수의 **인자**로 **넘길** 수 있다.
@@ -56,7 +56,7 @@ val add3: Int => Int = addN(3)
 add3(5)                                 // 3 + 5 = 8
 ```
 
-`x => x + 1`은 이름 없이 만든 함수로, <a id="g-anonymous-function"></a>**익명 함수(anonymous function)** 또는 <a id="g-lambda-function"></a>**람다 함수(lambda function)** 라고 부릅니다. `addN`은 정수 `n`을 받아 "`m`을 받아 `n + m`을 돌려주는 함수"를 돌려줍니다. 그래서 `addN(3)`은 그 자체로 함수이고, 여기에 다시 `5`를 넘기면 `8`이 됩니다. Scala에서는 같은 함수를 매개변수 목록을 여러 개 써서 다음과 같이 정의할 수도 있는데, 이렇게 인자를 하나씩 차례로 받는 함수를 만드는 것을 <a id="g-currying"></a>**커링(currying)** 이라고 합니다.
+`x => x + 1`은 이름 없이 만든 함수로, <a id="g-anonymous-function"></a>**익명 함수(anonymous function)** 또는 <a id="g-lambda-function"></a>**람다 함수**(lambda function)라고 부릅니다. `addN`은 정수 `n`을 받아 "`m`을 받아 `n + m`을 돌려주는 함수"를 돌려줍니다. 그래서 `addN(3)`은 그 자체로 함수이고, 여기에 다시 `5`를 넘기면 `8`이 됩니다. Scala에서는 같은 함수를 매개변수 목록을 여러 개 써서 다음과 같이 정의할 수도 있는데, 이렇게 인자를 하나씩 차례로 받는 함수를 만드는 것을 <a id="g-currying"></a>**커링**(currying)이라고 합니다.
 
 ```scala
 def addN(n: Int)(m: Int): Int = n + m   // or, currying
@@ -231,7 +231,7 @@ v_1 = \lambda \texttt{m}.(\texttt{n} + \texttt{m})
 
 `addN(3)`의 결과는 `n`에 `3`을 넘긴 뒤의 몸통, 즉 함수 \\( \lambda \texttt{m}.(\texttt{n} + \texttt{m}) \\)입니다. 이제 `add3(5)`를 계산하면 몸통 `n + m`에서 `m`이 `5`라는 것은 압니다. 그런데 **`n`은 무엇일까요?** 함수 \\( \lambda \texttt{m}.(\texttt{n} + \texttt{m}) \\)만 봐서는 `n`이 `3`이었다는 정보가 어디에도 없습니다. `addN(3)`을 계산하는 동안 `n`이 `3`이었던 환경은 함수를 돌려주는 순간 사라져 버렸습니다.
 
-해결책은 함수를 값으로 만들 때 **그 함수가 만들어진 환경도 함께** 담아 두는 것입니다. 함수와 그 환경의 쌍을 **클로저(closure)** 라고 합니다.
+해결책은 함수를 값으로 만들 때 **그 함수가 만들어진 환경도 함께** 담아 두는 것입니다. 함수와 그 환경의 쌍을 **클로저**(closure)라고 합니다.
 
 \\[
 \begin{array}{lrcrl}
@@ -702,3 +702,51 @@ def interp(expr: Expr, env: Env): Value = expr match
 5. (Exercise #4, FVAE) 과제 문서 [`fvae`](https://github.com/ku-plrg-classroom/docs/tree/main/cose212/fvae)를 참고해 다음 함수를 구현해 보세요. 제출할 필요는 없지만 시험 문제와 관련이 있을 수 있으니 꼭 직접 풀어 보기를 권합니다.
    - `interp`: 정적 스코핑으로 FVAE 식을 계산합니다.
    - `interpDS`: 동적 스코핑으로 FVAE 식을 계산합니다.
+6. <a id="ex-first-class-functions-6"></a>★★ 다음 두 FVAE 프로그램을 정적 스코핑과 동적 스코핑으로 각각 계산한 결과를 쓰세요. 값이 나오면 그 값을, 계산이 끝나지 않으면 "끝나지 않음"을, 실행 중 오류가 나면 "오류"를 쓰세요.
+
+   ```fvae,run
+   /* FVAE */
+   val f = x => y => x * y;
+   val x = 3;
+   f(4)(5)
+   ```
+
+   ```fvae,run
+   /* FVAE */
+   val f = x => f(x);
+   f(42)
+   ```
+
+   <details><summary>힌트</summary>
+
+   동적 스코핑에서는 함수 몸통을 **호출 위치**의 환경에서 계산합니다. 첫 번째 프로그램에서는 두 번째 호출 `(...)(5)`의 호출 위치 환경에 `x`가 무엇으로 묶여 있는지 보세요. 두 번째 프로그램에서는 `val`의 초기화 식이 `f`의 스코프에 들어가는지 생각해 보세요.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-first-class-functions-6)
+7. <a id="ex-first-class-functions-7"></a>★★ 다음은 FVAE 식 `val f = x => x; f(f)(1 + 2)`의 유도 트리에서 세 부분 (A), (B), (C)를 비워 둔 것입니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{}
+   \LeftLabel{$\texttt{Fun}$}
+   \UnaryInfC{$\varnothing \vdash \lambda \texttt{x}.\texttt{x} \Rightarrow \langle \lambda \texttt{x}.\texttt{x}, \varnothing \rangle$}
+   \AxiomC{(A)}
+   \AxiomC{(B)}
+   \AxiomC{(C)}
+   \LeftLabel{$\texttt{App}$}
+   \TrinaryInfC{$\sigma_0 \vdash \texttt{f}(\texttt{f})(1 + 2) \Rightarrow 3$}
+   \LeftLabel{$\texttt{Val}$}
+   \BinaryInfC{$\varnothing \vdash \texttt{val}\ \texttt{f}\ \texttt{=}\ \lambda \texttt{x}.\texttt{x}\texttt{;}\ \texttt{f}(\texttt{f})(1 + 2) \Rightarrow 3$}
+   \end{prooftree}
+   \\]
+
+   여기서 \\( \sigma_0 = [\texttt{f} \mapsto \langle \lambda \texttt{x}.\texttt{x}, \varnothing \rangle] \\)입니다. (A), (B), (C)에 들어갈 유도 트리를 각각 쓰세요. 새로 생기는 환경에는 \\( \sigma_1, \sigma_2 \\)처럼 이름을 붙이고 그 내용을 적으세요.
+
+   <details><summary>힌트</summary>
+
+   바깥 `App`의 세 전제는 함수 식 `f(f)`, 인자 식 `1 + 2`, 그리고 몸통의 계산입니다. 몸통은 \\( \sigma_0 \\)가 아니라 **클로저에 담긴 환경**을 확장한 환경에서 계산합니다.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-first-class-functions-7)

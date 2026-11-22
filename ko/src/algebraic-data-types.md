@@ -1279,3 +1279,92 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 5. \\(\tau\texttt{-TypeDef}\\)에서 배리언트 타입의 올바른 형태를 \\(\Gamma^{\prime}\\) 대신 \\(\Gamma\\)에서 검사한다면 어떤 프로그램이 거부될까요?
 6. 수정(2)의 \\(\Gamma \vdash \tau\\) 검사가 없을 때 타입 안전성이 깨지는 예를 이 장에 나온 것과 다르게 하나 더 만들어 보세요.
 7. 과제 [`atfae`](https://github.com/ku-plrg-classroom/docs/tree/main/cose212/atfae)의 `typeCheck`와 `interp` 함수를 구현해 보세요. 제출할 필요는 없지만, 시험 문제와 관련 있을 수 있으니 꼭 직접 풀어 보기를 권합니다.
+
+8. <a id="ex-algebraic-data-types-8"></a>★★ 다음 ATFAE 식 각각의 **실행 결과**와 **타입**을 쓰세요.
+   - 실행 결과는 타입 검사를 하지 않고 인터프리터로 바로 실행했을 때의 결과입니다. 실행 중 오류가 나면 "오류", 끝나지 않으면 "끝나지 않음"이라고 쓰고, 배리언트 값은 \\(B(v)\\)처럼 씁니다.
+   - 타입은 타입 검사를 통과하면 그 타입을, 통과하지 못하면 "타입 없음"이라고 씁니다.
+
+   (a)
+
+   ```atfae,run
+   /* ATFAE */
+   enum A { case B(Number) }; B(42)
+   ```
+
+   (b)
+
+   ```atfae,run
+   /* ATFAE */
+   enum A { case B(Boolean) };
+   enum A { case C(Number) };
+   B(true)
+   ```
+
+   (c)
+
+   ```atfae
+   /* ATFAE */
+   enum A { case B(Boolean) };
+   def f(x: A): Number => Number = f(x);
+   f(B(true))(42)
+   ```
+
+   (d)
+
+   ```atfae,run
+   /* ATFAE */
+   enum A { case B(); case C(A, A) };
+   def f(x: A): Number = x match {
+     case B() => 0;
+     case C(y, z) => 1 + (if (f(y) < f(z)) f(z) else f(y));
+   };
+   f(C(C(B(), C(B(), B())), C(B(), B())))
+   ```
+
+   <details><summary>힌트</summary>
+
+   실행 결과와 타입은 따로 구하세요. 타입을 구할 때는 \\(\tau\texttt{-TypeDef}\\)의 두 수정, 즉 같은 타입 이름을 다시 정의하지 못하게 한 것과 본문의 타입이 `enum` 바깥 환경에서도 올바른 형태여야 한다는 것을 떠올리세요. 끝나지 않는 식에도 타입은 있을 수 있습니다.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-algebraic-data-types-8)
+
+9. <a id="ex-algebraic-data-types-9"></a>★ 다음은 타입 없는 언어 RFAE로 쓴 `mkRec` 함수와, 그것으로 만든 재귀 함수 `sum`입니다.
+
+   ```rfae,run
+   /* RFAE */
+   val mkRec = f => {
+     val g = x => {
+       val h = v => x(x)(v);
+       f(h)
+     };
+     g(g)
+   };
+   val sum = mkRec(sum => n => if (n < 1) 0 else n + sum(n + -1));
+   sum(10)
+   ```
+
+   재귀적인 대수적 데이터 타입을 쓰면 같은 일을 하는 ATFAE 식을 만들 수 있습니다. 다음 식의 빈칸 (A)~(F)를 채워서, 타입 검사를 통과하고 위 식과 같은 결과를 내도록 하세요.
+
+   ```atfae
+   /* ATFAE */
+   enum T { case T(???) };                  // (A)
+   val mkRec = (f: ???) => {                // (B)
+     val g = (x: ???) => {                  // (C)
+       val h = (v: ???) => ???;             // (D), (E)
+       f(h)
+     };
+     g(???)                                 // (F)
+   };
+   val sum = mkRec((sum: Number => Number) => (n: Number) =>
+     if (n < 1) 0 else n + sum(n + -1));
+   sum(10)
+   ```
+
+   <details><summary>힌트</summary>
+
+   타입 없는 식에서 `x`는 자기 자신에게 적용되므로, `x`의 타입 \\(T\\)는 \\(T = T \to \mathtt{num} \to \mathtt{num}\\)을 만족해야 합니다. 배리언트 하나짜리 `enum`으로 이 재귀 타입을 만들고, 함수를 꺼낼 때는 패턴 매칭을 쓰세요.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-algebraic-data-types-9)

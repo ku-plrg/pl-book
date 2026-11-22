@@ -1,8 +1,8 @@
 # 재귀 함수
 
-[람다 계산](./lambda-calculus.md) 장 끝에서 우리는 함수만으로 모든 계산을 표현할 수 있다는 놀라운 이야기를 들었습니다. 그렇다면 "1부터 \\( n \\)까지 더하기"처럼 반복이 필요한 계산은 어떻게 할까요? 함수형 언어에서 반복의 주인공은 자기 자신을 부르는 <a id="g-recursive-function"></a>**재귀 함수(recursive function)** 입니다.
+[람다 계산](./lambda-calculus.md) 장 끝에서 우리는 함수만으로 모든 계산을 표현할 수 있다는 놀라운 이야기를 들었습니다. 그렇다면 "1부터 \\( n \\)까지 더하기"처럼 반복이 필요한 계산은 어떻게 할까요? 함수형 언어에서 반복의 주인공은 자기 자신을 부르는 <a id="g-recursive-function"></a>**재귀 함수**(recursive function)입니다.
 
-이 장에서는 재귀 함수와 그 짝꿍인 <a id="g-conditional"></a>**조건문(conditional)** 을 배웁니다. 먼저 지금까지 만든 언어들에서 재귀가 어떻게 되는지(또는 왜 안 되는지) 살펴봅니다. 그다음 FAE에서 재귀 함수를 만드는 두 가지 길을 걷습니다. 하나는 새 문법 없이 `mkRec`이라는 도우미 함수로 재귀를 만들어 내는 길이고, 다른 하나는 재귀 함수 정의 문법을 언어에 직접 추가해 **RFAE**라는 새 언어를 만드는 길입니다.
+이 장에서는 재귀 함수와 그 짝꿍인 <a id="g-conditional"></a>**조건문**(conditional)을 배웁니다. 먼저 지금까지 만든 언어들에서 재귀가 어떻게 되는지(또는 왜 안 되는지) 살펴봅니다. 그다음 FAE에서 재귀 함수를 만드는 두 가지 길을 걷습니다. 하나는 새 문법 없이 `mkRec`이라는 도우미 함수로 재귀를 만들어 내는 길이고, 다른 하나는 재귀 함수 정의 문법을 언어에 직접 추가해 **RFAE**라는 새 언어를 만드는 길입니다.
 
 이 장에서 만들 `RFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
 
@@ -10,7 +10,7 @@
 
 ## 재귀와 조건문
 
-**재귀 함수**는 자기 자신을 호출하는 함수로, 리스트나 트리 같은 <a id="g-inductive-data-structure"></a>**귀납적 자료 구조(inductive data structure)** 를 처리하는 **반복 과정**에 특히 유용합니다.
+**재귀 함수**는 자기 자신을 호출하는 함수로, 리스트나 트리 같은 <a id="g-inductive-data-structure"></a>**귀납적 자료 구조**(inductive data structure)를 처리하는 **반복 과정**에 특히 유용합니다.
 
 1부터 \\( n \\)까지의 정수를 모두 더하는 재귀 함수 `sum`을 Scala로 정의해 봅시다.
 
@@ -23,7 +23,7 @@ def sum(n: Int): Int =
 sum(10) // 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1 + 0 = 55
 ```
 
-이 함수에는 두 갈래가 있습니다. \\( n < 1 \\)이면 더 이상 자기 자신을 부르지 않고 `0`을 돌려주는 <a id="g-base-case"></a>**기저 사례(base case)** 와, 그렇지 않으면 `sum(n - 1)`을 부르는 <a id="g-recursive-case"></a>**재귀 사례(recursive case)** 입니다. 이 두 갈래를 나누려면 **조건문**이 꼭 필요합니다. 재귀 함수와 조건문이 늘 함께 다니는 이유입니다.
+이 함수에는 두 갈래가 있습니다. \\( n < 1 \\)이면 더 이상 자기 자신을 부르지 않고 `0`을 돌려주는 <a id="g-base-case"></a>**기저 사례**(base case)와, 그렇지 않으면 `sum(n - 1)`을 부르는 <a id="g-recursive-case"></a>**재귀 사례**(recursive case)입니다. 이 두 갈래를 나누려면 **조건문**이 꼭 필요합니다. 재귀 함수와 조건문이 늘 함께 다니는 이유입니다.
 
 재귀 함수는 거의 모든 프로그래밍 언어가 지원합니다. 같은 `sum`을 여러 언어로 써 보면 다음과 같습니다.
 
@@ -65,7 +65,7 @@ sum(10)
 
 그래서 `sum`의 몸통 안에서도 \\( \Lambda \\)에서 `sum`을 찾아 호출할 수 있습니다.
 
-그런데 이것으로 충분할까요? **아닙니다!** 위의 예는 기저 사례가 없어서 `sum(10)`, `sum(9)`, ..., `sum(-100)`, ... 끝없이 자기 자신을 부르는 <a id="g-infinite-loop"></a>**무한 루프(infinite loop)** 에 빠집니다. 재귀 함수를 쓸모 있게 만들려면 기저 사례와 재귀 사례를 나눌 **조건문**이 필요합니다.
+그런데 이것으로 충분할까요? **아닙니다!** 위의 예는 기저 사례가 없어서 `sum(10)`, `sum(9)`, ..., `sum(-100)`, ... 끝없이 자기 자신을 부르는 <a id="g-infinite-loop"></a>**무한 루프**(infinite loop)에 빠집니다. 재귀 함수를 쓸모 있게 만들려면 기저 사례와 재귀 사례를 나눌 **조건문**이 필요합니다.
 
 F1VAE에 조건문만 더하면, 재귀를 위한 다른 확장 없이도 재귀 함수를 정의할 수 있습니다.
 
@@ -112,9 +112,9 @@ val sum = n => {
 sum(10)
 ```
 
-이 식은 재귀 함수일까요? **아닙니다!** 몸통 안의 `sum`은 **자유 식별자(free identifier)** 입니다. 왜 그럴까요?
+이 식은 재귀 함수일까요? **아닙니다!** 몸통 안의 `sum`은 **자유 식별자**(free identifier)입니다. 왜 그럴까요?
 
-FAE의 함수는 **정적 스코핑(static scoping)** 를 따릅니다. 함수 `n => ...`가 만들어지는 **정의 시점**에 환경에는 아직 `sum`이 없습니다. `sum`은 `val sum = ...;`의 오른쪽 식을 다 계산한 **다음에야** 환경에 들어가니까요. 그래서 클로저가 기억하는 환경에는 `sum`이 없고, 몸통에서 `sum(n + -1)`을 계산하려는 순간 "free identifier" 오류가 납니다. ([람다 계산](./lambda-calculus.md) 장에서 본 것처럼 `val`은 함수 호출의 설탕이라는 점을 떠올려 보면 더 분명합니다. `(sum => sum(10))(n => ... sum(n + -1) ...)`에서 오른쪽 함수의 몸통에 있는 `sum`은 왼쪽 함수의 매개변수 `sum`과 아무 관계가 없습니다.)
+FAE의 함수는 **정적 스코핑**(static scoping)를 따릅니다. 함수 `n => ...`가 만들어지는 **정의 시점**에 환경에는 아직 `sum`이 없습니다. `sum`은 `val sum = ...;`의 오른쪽 식을 다 계산한 **다음에야** 환경에 들어가니까요. 그래서 클로저가 기억하는 환경에는 `sum`이 없고, 몸통에서 `sum(n + -1)`을 계산하려는 순간 "free identifier" 오류가 납니다. ([람다 계산](./lambda-calculus.md) 장에서 본 것처럼 `val`은 함수 호출의 설탕이라는 점을 떠올려 보면 더 분명합니다. `(sum => sum(10))(n => ... sum(n + -1) ...)`에서 오른쪽 함수의 몸통에 있는 `sum`은 왼쪽 함수의 매개변수 `sum`과 아무 관계가 없습니다.)
 
 그림으로 보면 다음과 같습니다.
 
@@ -190,7 +190,7 @@ val sum = n => {
 sum(10)
 ```
 
-이제 바깥에서는 그냥 `sum(10)`이라고 쓰면 됩니다. 이 식은 <a id="g-reduction"></a>**η-축약(η-reduction)** 으로 더 간단히 만들 수 있습니다.
+이제 바깥에서는 그냥 `sum(10)`이라고 쓰면 됩니다. 이 식은 <a id="g-reduction"></a>**η-축약**(η-reduction)으로 더 간단히 만들 수 있습니다.
 
 \\[
 \lambda x.e(x) \qquad\longrightarrow\qquad e
@@ -251,7 +251,7 @@ sum(10)
 
 > **자주 하는 실수.** \\( e \\)와 \\( \lambda x.e(x) \\)는 호출했을 때의 결과가 같으니 아무 데서나 바꿔 써도 된다고 생각하기 쉽습니다. 하지만 우리 언어처럼 식을 만나자마자 계산하는 언어에서는 **언제** 계산되는지가 다릅니다. \\( e \\)는 그 자리에서 바로 계산되지만, \\( \lambda x.e(x) \\)는 이미 값(함수)이므로 호출될 때까지 \\( e \\)가 계산되지 않습니다. \\( e \\)의 계산이 끝나지 않는 경우라면 이 차이가 곧 무한 루프와 정상 종료의 차이가 됩니다.
 
-그래서 <a id="g-expansion"></a>**η-확장(η-expansion)** 으로 `sum`의 계산을 **미뤄야(delay)** 합니다.
+그래서 <a id="g-expansion"></a>**η-확장**(η-expansion)으로 `sum`의 계산을 **미뤄야**(delay)합니다.
 
 \\[
 e \qquad\longrightarrow\qquad \lambda x.e(x)
@@ -350,16 +350,16 @@ body => {
 }
 ```
 
-여기서 `val`을 펼치고 이름을 정리하면 다음과 같은 식이 되는데, 이것을 <a id="g-z-combinator"></a>**Z 조합자(Z combinator)** 라고 부릅니다.
+여기서 `val`을 펼치고 이름을 정리하면 다음과 같은 식이 되는데, 이것을 <a id="g-z-combinator"></a>**Z 조합자**(Z combinator)라고 부릅니다.
 
 ```fae,run
 /* FAE + conditionals */
 f => (x => f(v => x(x)(v))) (x => f(v => x(x)(v)))
 ```
 
-<a id="g-combinator"></a>조합자(combinator)란 자유 변수가 없는 함수를 말합니다. Z 조합자는 함수 `f`를 받아서 `f(g)`와 같은 함수 `g`, 즉 `f`의 <a id="g-fixed-point"></a>**고정점(fixed point)** 을 만들어 냅니다. 위의 예에서 `sum => n => ...`의 고정점이 바로 우리가 원하던 `sum` 함수입니다. 이런 일을 하는 조합자를 통틀어 <a id="g-fixed-point-combinator"></a>**고정점 조합자(fixed-point combinator)** 라고 합니다([위키백과의 Fixed-point combinator 항목](https://en.wikipedia.org/wiki/Fixed-point_combinator)).
+<a id="g-combinator"></a>조합자(combinator)란 자유 변수가 없는 함수를 말합니다. Z 조합자는 함수 `f`를 받아서 `f(g)`와 같은 함수 `g`, 즉 `f`의 <a id="g-fixed-point"></a>**고정점**(fixed point)을 만들어 냅니다. 위의 예에서 `sum => n => ...`의 고정점이 바로 우리가 원하던 `sum` 함수입니다. 이런 일을 하는 조합자를 통틀어 <a id="g-fixed-point-combinator"></a>**고정점 조합자**(fixed-point combinator)라고 합니다([위키백과의 Fixed-point combinator 항목](https://en.wikipedia.org/wiki/Fixed-point_combinator)).
 
-가장 유명한 고정점 조합자는 <a id="g-y-combinator"></a>**Y 조합자(Y combinator)** 입니다. Z 조합자에서 η-확장(`v => ... (v)`)을 뺀 모양이고, <a id="g-non-strict"></a>비엄격(non-strict) 언어에서 쓰입니다.
+가장 유명한 고정점 조합자는 <a id="g-y-combinator"></a>**Y 조합자**(Y combinator)입니다. Z 조합자에서 η-확장(`v => ... (v)`)을 뺀 모양이고, <a id="g-non-strict"></a>비엄격(non-strict) 언어에서 쓰입니다.
 
 ```pl
 /* non-strict languages */
@@ -445,7 +445,7 @@ enum Expr:
 def interp(expr: Expr, env: Env): Value = ???
 ```
 
-그리고 2) 재귀 함수 정의를 비롯한 새 식들의 **자연 의미(natural semantics)** 를 정의해 봅시다. 판단의 모양은 FAE와 같은 \\( \sigma \vdash e \Rightarrow v \\)입니다.
+그리고 2) 재귀 함수 정의를 비롯한 새 식들의 **자연 의미**(natural semantics)를 정의해 봅시다. 판단의 모양은 FAE와 같은 \\( \sigma \vdash e \Rightarrow v \\)입니다.
 
 비교 연산의 결과로 불리언이 생기므로 값에 불리언 \\( b \\)가 추가됩니다.
 
@@ -687,3 +687,48 @@ def interp(expr: Expr, env: Env): Value = expr match
 3. RFAE 식 `def f(n) = if (n < 1) 0 else f(n + -1); f(2)`의 값을 구하는 증명 나무를 `Rec`, `App`, `If`\\( _T \\), `If`\\( _F \\), `Lt` 규칙으로 그려 보세요.
 4. `Rec` 규칙의 클로저 환경을 \\( \sigma' \\) 대신 \\( \sigma \\)로 바꾸면 어떤 RFAE 식의 결과가 달라지나요? 예를 들어 설명하세요.
 5. 수업 연습 문제 RFAE([과제 문서](https://github.com/ku-plrg-classroom/docs/tree/main/cose212/rfae))의 `interp` 함수를 구현해 보세요. 제출할 필요는 없지만 시험 문제와 관련될 수 있으니 직접 풀어 보기를 강하게 권합니다.
+6. <a id="ex-recursive-functions-6"></a>★★ 다음 식에서 `fac`은 팩토리얼을 계산하는 재귀 함수입니다. 전체 식의 값이 `720`(= 6!)이 되도록 `???`에 들어갈 식을 쓰세요.
+
+   ```fae
+   /* FAE + conditionals */
+   val mkRec = body => {
+     val f = fX => fX(fX);
+     f(fY => body(???))
+   };
+   val fac = mkRec(fac => n => {
+     if (n < 2) 1
+     else n * fac(n + -1)
+   });
+   fac(6)
+   ```
+
+   <details><summary>힌트</summary>
+
+   `f(fY => body(???))`를 한 걸음 계산하면 `fY`에는 `fY => body(???)` 자신이 묶이므로, `fY(fY)`는 `body(???)`와 같습니다. 그런데 `fY(fY)`를 그대로 넣으면 어떻게 될까요?
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-recursive-functions-6)
+7. <a id="ex-recursive-functions-7"></a>★★ RFAE에 논리곱 `&&`, 논리합 `||`, 부정 `!`을 더하려고 합니다.
+
+   \\[
+   \begin{array}{lrcll}
+   \text{Expressions} & \mathbb{E} \ni e & ::= & \ldots \mid e\ \mathtt{\\&\\&}\ e \mid e\ \texttt{||}\ e \mid \texttt{!}\ e
+   \end{array}
+   \\]
+
+   `&&`와 `||`는 <a id="g-short-circuit-evaluation"></a>**단락 계산**(short-circuit evaluation)을 해야 합니다. 즉 왼쪽 피연산자만 보고 결과가 정해지면 오른쪽은 계산하지 않습니다. 또 왼쪽 피연산자는 불리언이어야 하지만 오른쪽 피연산자는 아무 값이나 될 수 있습니다.
+   - `true || 1(2)`는 `1(2)`를 계산하지 않고 `true`가 됩니다.
+   - `false && 1(2)`는 `1(2)`를 계산하지 않고 `false`가 됩니다.
+   - `1 && 2`는 `1`이 불리언이 아니므로 실행 중 오류입니다.
+   - `true && 1`은 `1`이 불리언이 아니지만 `1`이 됩니다.
+
+   세 연산자의 자연 의미 규칙을 쓰세요.
+
+   <details><summary>힌트</summary>
+
+   `If`\\( _T \\), `If`\\( _F \\)처럼 왼쪽 피연산자의 값에 따라 규칙을 둘로 나누고, 계산하지 않는 피연산자는 전제에 넣지 마세요.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-recursive-functions-7)

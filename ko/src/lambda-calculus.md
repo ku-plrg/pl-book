@@ -2,7 +2,7 @@
 
 [일급 함수](./first-class-functions.md) 장에서 우리는 함수를 값처럼 다루는 언어 FVAE를 만들었습니다. FVAE에는 숫자, 덧셈과 곱셈, 변수 정의(`val`), 함수, 함수 호출이 있었지요. 그런데 이 기능들이 정말 전부 필요할까요? 어떤 기능은 다른 기능으로 흉내 낼 수 있지 않을까요?
 
-이 장에서는 두 가지를 배웁니다. 먼저 다른 문법으로 표현할 수 있는 문법인 **문법 설탕(syntactic sugar)** 과, 그것을 걷어내는 변환인 <a id="g-desugaring"></a>**설탕 제거(desugaring)** 를 살펴봅니다. 그다음 이 생각을 끝까지 밀어붙여, 변수와 함수와 함수 호출만 남긴 아주 작은 언어인 <a id="g-lambda-calculus"></a>**람다 계산(lambda calculus)** 에 도착합니다. 놀랍게도 이 작은 언어만으로 숫자와 참·거짓, 나아가 컴퓨터가 할 수 있는 모든 계산을 표현할 수 있습니다.
+이 장에서는 두 가지를 배웁니다. 먼저 다른 문법으로 표현할 수 있는 문법인 **문법 설탕**(syntactic sugar)과, 그것을 걷어내는 변환인 <a id="g-desugaring"></a>**설탕 제거**(desugaring)를 살펴봅니다. 그다음 이 생각을 끝까지 밀어붙여, 변수와 함수와 함수 호출만 남긴 아주 작은 언어인 <a id="g-lambda-calculus"></a>**람다 계산**(lambda calculus)에 도착합니다. 놀랍게도 이 작은 언어만으로 숫자와 참·거짓, 나아가 컴퓨터가 할 수 있는 모든 계산을 표현할 수 있습니다.
 
 이 장에서 만들 `FAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
 
@@ -227,7 +227,7 @@ Scala의 `for`-`yield`는 `map` 호출로, C++의 배열 접근과 화살표 연
 
 ### 정의
 
-그렇다면 질문을 끝까지 밀어붙여 봅시다. FVAE의 모든 문법 요소를 표현할 수 있는 가장 작은 언어는 무엇일까요? 답은 **람다 계산(lambda calculus, LC)** 입니다.
+그렇다면 질문을 끝까지 밀어붙여 봅시다. FVAE의 모든 문법 요소를 표현할 수 있는 가장 작은 언어는 무엇일까요? 답은 **람다 계산**(lambda calculus, LC)입니다.
 
 람다 계산은 1) **변수**, 2) **함수**, 3) **함수 호출** 단 세 가지로만 이루어진 언어입니다.
 
@@ -245,11 +245,11 @@ Scala의 `for`-`yield`는 `map` 호출로, C++의 배열 접근과 화살표 연
 \mathcal{D}⟦ \texttt{val}\ x\ \texttt{=}\ e_1;\ e_2 ⟧ = (\lambda x.\mathcal{D}⟦ e_2 ⟧)(\mathcal{D}⟦ e_1 ⟧)
 \\]
 
-그렇다면 숫자나 덧셈 같은 FVAE의 나머지 문법 요소는 어떻게 설탕 제거할 수 있을까요? 이제 <a id="g-church-encoding"></a>**처치 인코딩(Church encoding)** 을 배울 차례입니다.
+그렇다면 숫자나 덧셈 같은 FVAE의 나머지 문법 요소는 어떻게 설탕 제거할 수 있을까요? 이제 <a id="g-church-encoding"></a>**처치 인코딩**(Church encoding)을 배울 차례입니다.
 
 ### 처치 인코딩: 처치 수
 
-**처치 인코딩**은 **데이터**와 **연산**을 람다 계산 안에서 표현하는 방법입니다. 그 대표적인 예가 **자연수**를 표현하는 <a id="g-church-numeral"></a>**처치 수(Church numeral)** 입니다.
+**처치 인코딩**은 **데이터**와 **연산**을 람다 계산 안에서 표현하는 방법입니다. 그 대표적인 예가 **자연수**를 표현하는 <a id="g-church-numeral"></a>**처치 수**(Church numeral)입니다.
 
 핵심 아이디어는 이렇습니다. 자연수 \\( n \\)을 "함수 \\( f \\)와 인자 \\( x \\)를 받아서, \\( x \\)에 \\( f \\)를 \\( n \\)번 적용하는 함수"로 나타냅니다. 숫자를 "몇 번 반복할지"로 보는 셈입니다.
 
@@ -308,9 +308,9 @@ Scala의 `for`-`yield`는 `map` 호출로, C++의 배열 접근과 화살표 연
 </svg>
 </div>
 
-여기서 \\( f \\)와 \\( x \\)는 반드시 <a id="g-fresh-variable"></a>**새 변수**(fresh variable), 즉 \\( e_1 \\)과 \\( e_2 \\)에 나타나지 않는 이름이어야 합니다. 그렇지 않으면 \\( e_1 \\)이나 \\( e_2 \\) 안에 있던 자유 변수 \\( x \\)가 우리가 새로 만든 \\( \lambda x \\)에 붙잡혀 엉뚱한 값을 가리키게 되는 <a id="g-variable-capture"></a>**변수 포획(variable capture)** 이 일어납니다.
+여기서 \\( f \\)와 \\( x \\)는 반드시 <a id="g-fresh-variable"></a>**새 변수**(fresh variable), 즉 \\( e_1 \\)과 \\( e_2 \\)에 나타나지 않는 이름이어야 합니다. 그렇지 않으면 \\( e_1 \\)이나 \\( e_2 \\) 안에 있던 자유 변수 \\( x \\)가 우리가 새로 만든 \\( \lambda x \\)에 붙잡혀 엉뚱한 값을 가리키게 되는 <a id="g-variable-capture"></a>**변수 포획**(variable capture)이 일어납니다.
 
-예를 들어 \\( 1 + 1 \\)을 설탕 제거하고 함수 호출을 하나씩 계산해 보면 \\( 2 \\)가 나옵니다. 여기서 \\( = \\)는 글자 그대로 같다는 뜻이 아니라, 함수 호출을 계산하면 같아진다는 <a id="g-equivalence"></a>**β-동치(β-equivalence)** 를 뜻합니다.
+예를 들어 \\( 1 + 1 \\)을 설탕 제거하고 함수 호출을 하나씩 계산해 보면 \\( 2 \\)가 나옵니다. 여기서 \\( = \\)는 글자 그대로 같다는 뜻이 아니라, 함수 호출을 계산하면 같아진다는 <a id="g-equivalence"></a>**β-동치**(β-equivalence)를 뜻합니다.
 
 \\[
 \begin{array}{rcl}
@@ -337,7 +337,7 @@ toInt(two)                     // 2
 toInt(mul(two, add(two, one))) // 6
 ```
 
-같은 방식으로 **정수**, **불리언**, **쌍**, **리스트** 등 거의 모든 데이터와 연산을 처치 인코딩으로 표현할 수 있습니다([위키백과의 Church encoding 항목](https://en.wikipedia.org/wiki/Church_encoding)에 많은 예가 있습니다). 여기서는 하나만 더, 불리언과 논리 연산을 표현하는 <a id="g-church-boolean"></a>**처치 불리언(Church boolean)** 을 보겠습니다.
+같은 방식으로 **정수**, **불리언**, **쌍**, **리스트** 등 거의 모든 데이터와 연산을 처치 인코딩으로 표현할 수 있습니다([위키백과의 Church encoding 항목](https://en.wikipedia.org/wiki/Church_encoding)에 많은 예가 있습니다). 여기서는 하나만 더, 불리언과 논리 연산을 표현하는 <a id="g-church-boolean"></a>**처치 불리언**(Church boolean)을 보겠습니다.
 
 ### 처치 인코딩: 처치 불리언
 
@@ -379,17 +379,17 @@ toInt(mul(two, add(two, one))) // 6
 <br><small>알론조 처치(왼쪽)와 앨런 튜링(오른쪽)</small>
 </div>
 
-람다 계산은 1930년대에 <a id="g-alonzo-church"></a>**알론조 처치(Alonzo Church)** 가 고안했고, 이후 **프로그래밍 언어**의 이론적 토대가 되었습니다.
+람다 계산은 1930년대에 <a id="g-alonzo-church"></a>**알론조 처치**(Alonzo Church)가 고안했고, 이후 **프로그래밍 언어**의 이론적 토대가 되었습니다.
 
 \\[
 e \ ::=\  x \mid \lambda x.e \mid e(e)
 \\]
 
-비슷한 시기인 1936년, <a id="g-alan-turing"></a>**앨런 튜링(Alan Turing)** 은 무한한 테이프 위를 헤드가 오가며 기호를 읽고 쓰는 <a id="g-turing-machine"></a>**튜링 기계(Turing machine, TM)** 를 고안했고, 이것은 **컴퓨터**의 이론적 토대가 되었습니다.
+비슷한 시기인 1936년, <a id="g-alan-turing"></a>**앨런 튜링**(Alan Turing)은 무한한 테이프 위를 헤드가 오가며 기호를 읽고 쓰는 <a id="g-turing-machine"></a>**튜링 기계**(Turing machine, TM)를 고안했고, 이것은 **컴퓨터**의 이론적 토대가 되었습니다.
 
 ![무한한 테이프와 그 위를 오가는 헤드로 이루어진 튜링 기계](./img/lambda-calculus/tm.png)
 
-겉모습은 전혀 다르지만, 튜링은 1937년에 람다 계산과 튜링 기계의 <a id="g-expressive-power"></a>**표현력(expressive power)** 이 같다는 것을 보였습니다. 한쪽에서 할 수 있는 계산은 다른 쪽에서도 할 수 있다는 뜻입니다. 여기에 더해 <a id="g-church-turing-thesis"></a>**처치-튜링 논제(Church-Turing thesis)** 는 다음과 같이 주장합니다.
+겉모습은 전혀 다르지만, 튜링은 1937년에 람다 계산과 튜링 기계의 <a id="g-expressive-power"></a>**표현력**(expressive power)이 같다는 것을 보였습니다. 한쪽에서 할 수 있는 계산은 다른 쪽에서도 할 수 있다는 뜻입니다. 여기에 더해 <a id="g-church-turing-thesis"></a>**처치-튜링 논제**(Church-Turing thesis)는 다음과 같이 주장합니다.
 
 > 현실 세계의 어떤 계산이든 튜링 기계를 사용한 동등한 계산으로 옮길 수 있고, 람다 계산으로도 수행할 수 있다.
 
@@ -422,3 +422,92 @@ e \ ::=\  x \mid \lambda x.e \mid e(e)
 4. 처치 수의 덧셈에서 새 변수 조건을 지키지 않으면 어떤 일이 생기는지, \\( e_1 \\)이 자유 변수 \\( x \\)를 포함하는 예를 들어 설명하세요.
 5. 처치 불리언으로 배타적 논리합 \\( e_1\ \texttt{xor}\ e_2 \\)의 설탕 제거 규칙을 만들어 보세요.
 6. 수업 프로젝트 MiniFSharp의 `interp`와 `hanoiMovesBody`를 구현해 보세요.
+7. <a id="ex-lambda-calculus-7"></a>★★ FAE에 불리언 `true`, `false`와 조건식 `if (e0) e1 else e2`가 있다고 합시다. 조건식은 조건의 값이 `true`이면 `e1`만, `false`이면 `e2`만 계산합니다([재귀 함수](./recursive-functions.md) 장에서 정식으로 정의합니다). 여기에 쌍과 쌍 패턴 매칭을 문법 설탕으로 더합니다.
+
+   ```bnf
+   <expr> ::= ...
+            | "(" <expr> "," <expr> ")"
+            | "val" "(" <id> "," <id> ")" "=" <expr> ";" <expr>
+   ```
+
+   \\[
+   \begin{array}{lcl}
+   \mathcal{D}⟦ (e_0, e_1) ⟧ &=& \lambda x.\texttt{if}\ (x)\ \mathcal{D}⟦ e_0 ⟧\ \texttt{else}\ \mathcal{D}⟦ e_1 ⟧ \\\\
+   \mathcal{D}⟦ \texttt{val}\ (x, y)\ \texttt{=}\ e_0;\ e_1 ⟧ &=& \mathcal{D}⟦ \texttt{val}\ z\ \texttt{=}\ e_0;\ \texttt{val}\ x\ \texttt{=}\ z(\texttt{true});\ \texttt{val}\ y\ \texttt{=}\ z(\texttt{false});\ e_1 ⟧
+   \end{array}
+   \\]
+
+   첫 규칙의 \\( x \\)는 \\( e_0 \\)과 \\( e_1 \\)에 자유롭게 나타나지 않는 새 변수이고, 둘째 규칙의 \\( z \\)는 \\( x \\), \\( y \\)와 다르고 \\( e_1 \\)에 자유롭게 나타나지 않는 새 변수입니다. 나머지 경우는 부분식을 재귀적으로 설탕 제거합니다.
+
+   ```pl
+   /* FAE + conditionals + pairs */
+   val (x, y) = (1, (2, 3));
+   val (a, b) = y;
+   x + a * b
+   ```
+
+   - (a) 위 식을 설탕 제거한 결과를 쓰세요. 읽기 쉽도록 `val`은 그대로 남겨 두어도 됩니다.
+   - (b) 쌍을 설탕으로 만들지 않고, 쌍 값 \\( (v, v) \\)와 다음 두 규칙을 언어에 직접 더하는 방법도 있습니다. 이 규칙으로 위 식을 계산한 결과를 쓰세요.
+
+     \\[
+     \begin{prooftree}
+     \AxiomC{$\sigma \vdash e_0 \Rightarrow v_0$}
+     \AxiomC{$\sigma \vdash e_1 \Rightarrow v_1$}
+     \LeftLabel{$\texttt{Pair}$}
+     \BinaryInfC{$\sigma \vdash (e_0, e_1) \Rightarrow (v_0, v_1)$}
+     \end{prooftree}
+     \\]
+
+     \\[
+     \begin{prooftree}
+     \AxiomC{$x_0 \neq x_1$}
+     \AxiomC{$\sigma \vdash e_0 \Rightarrow (v_0, v_1)$}
+     \AxiomC{$\sigma[x_0 \mapsto v_0, x_1 \mapsto v_1] \vdash e_1 \Rightarrow v_2$}
+     \LeftLabel{$\texttt{Match}$}
+     \TrinaryInfC{$\sigma \vdash \texttt{val}\ (x_0, x_1)\ \texttt{=}\ e_0;\ e_1 \Rightarrow v_2$}
+     \end{prooftree}
+     \\]
+
+   - (c) 설탕 제거로 정의한 방법과 새 규칙으로 정의한 방법은 문법에 맞는 모든 식에서 항상 같은 결과를 낼까요? 그렇다면 이유를, 아니라면 반례와 결과가 달라지는 이유를 쓰세요.
+
+   <details><summary>힌트</summary>
+
+   (c) 설탕 제거한 쌍에서 두 원소는 \\( \lambda x. \\) 안에 들어갑니다. 원소를 실제로 계산하는 때는 언제일까요?
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-lambda-calculus-7)
+8. <a id="ex-lambda-calculus-8"></a>★★★ FAE에 리스트를 더하려고 합니다. `nil`은 빈 리스트이고, `e0 :: e1`은 원소 `e0`을 리스트 `e1` 앞에 붙이고, `foldr e0 e1 e2`는 리스트 `e0`을 초깃값 `e1`과 두 인자 함수 `e2`로 오른쪽부터 접고, `e0 ++ e1`은 리스트 `e0` 뒤에 리스트 `e1`을 이어 붙입니다.
+
+   ```bnf
+   <expr> ::= ...
+            | "nil" | <expr> "::" <expr>
+            | "foldr" <expr> <expr> <expr> | <expr> "++" <expr>
+   ```
+
+   ```pl
+   /* FAE + lists */
+   foldr (1 :: 2 :: 3 :: 4 :: nil) 0 (x => y => x + y)
+   // 10 (= 1 + (2 + (3 + (4 + 0))))
+   foldr ((2 :: 3 :: nil) ++ (4 :: 5 :: nil)) 1 (x => y => x * y)
+   // 120 (= 2 * (3 * (4 * (5 * 1))))
+   ```
+
+   리스트를 문법 설탕으로 정의합니다. `nil`과 `::`의 설탕 제거 규칙은 다음과 같고, 여기서 \\( x \\)와 \\( y \\)는 \\( e_0 \\), \\( e_1 \\)에 자유롭게 나타나지 않는 새 변수입니다. 나머지 경우는 부분식을 재귀적으로 설탕 제거합니다.
+
+   \\[
+   \begin{array}{lcl}
+   \mathcal{D}⟦ \texttt{nil} ⟧ &=& \lambda x.\lambda y.y \\\\
+   \mathcal{D}⟦ e_0\ \texttt{::}\ e_1 ⟧ &=& \lambda x.\lambda y.x(\mathcal{D}⟦ e_0 ⟧)(\mathcal{D}⟦ e_1 ⟧(x)(y))
+   \end{array}
+   \\]
+
+   \\( \mathcal{D}⟦ \texttt{foldr}\ e_0\ e_1\ e_2 ⟧ \\)와 \\( \mathcal{D}⟦ e_0\ \texttt{++}\ e_1 ⟧ \\)의 설탕 제거 규칙을 쓰세요.
+
+   <details><summary>힌트</summary>
+
+   \\( \mathcal{D}⟦ 1\ \texttt{::}\ 2\ \texttt{::}\ \texttt{nil} ⟧ \\)는 \\( \lambda x.\lambda y.x(1)(x(2)(y)) \\)와 β-동치입니다. 리스트가 곧 "자기 자신을 오른쪽부터 접는 함수"라는 점을 보세요. 이어 붙이기는 처치 수의 덧셈과 같은 꼴입니다.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-lambda-calculus-8)

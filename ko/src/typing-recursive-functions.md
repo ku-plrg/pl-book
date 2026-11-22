@@ -510,3 +510,29 @@ def interp(expr: Expr, env: Env): Value = expr match
 3. \\(\tau\texttt{-Rec}\\)의 두 번째 전제에서 타입 환경에 \\(x_1 : \tau_1\\)도 넣는다면 어떤 문제가 생길까요? 타입 검사는 통과하지만 실행 중 오류가 나는 예를 만들어 보세요.
 4. 반환 타입 표기를 없애고, 본문의 타입을 계산해서 반환 타입으로 쓰는 방식을 생각해 봅시다. 이 방식이 왜 잘 동작하지 않는지 `def f(n: Number) = f(n); f`를 예로 설명하세요.
 5. 과제 [`trfae`](https://github.com/ku-plrg-classroom/docs/tree/main/cose212/trfae)의 `typeCheck`와 `interp` 함수를 구현해 보세요. 제출할 필요는 없지만, 시험 문제와 관련 있을 수 있으니 꼭 직접 풀어 보기를 권합니다.
+
+6. <a id="ex-typing-recursive-functions-6"></a>★ 다음 TRFAE 식은 실행하면 끝나지 않습니다. 이 식은 타입 검사를 통과할까요? 통과한다면 타입과 타입 유도 트리를 쓰고, \\(\tau\texttt{-Rec}\\)의 두 전제를 검사하는 타입 환경이 각각 아래 \\(\Gamma_0, \ldots, \Gamma_5\\) 중 어느 것인지 고르세요. 통과하지 못한다면 어느 규칙에서 막히는지 설명하세요.
+
+   ```trfae,run
+   /* TRFAE */
+   def f(x: Number): Number = f(x) * 7; f
+   ```
+
+   \\[
+   \begin{array}{lll}
+   \Gamma_0 = [f : \mathtt{num} \to \mathtt{num}] &
+   \Gamma_1 = [x : \mathtt{num}] &
+   \Gamma_2 = [f : \mathtt{num} \to \mathtt{num}, x : \mathtt{num}] \\\\
+   \Gamma_3 = [f : \mathtt{num} \to \mathtt{bool}] &
+   \Gamma_4 = [x : \mathtt{bool}] &
+   \Gamma_5 = [f : \mathtt{num} \to \mathtt{bool}, x : \mathtt{num}]
+   \end{array}
+   \\]
+
+   <details><summary>힌트</summary>
+
+   타입 검사기는 함수를 호출해 보지 않으므로, 프로그램이 끝나는지는 타입 검사와 상관이 없습니다. \\(\tau\texttt{-Rec}\\)에서 본문은 함수와 매개변수를 모두 아는 환경에서, 범위 식은 함수만 아는 환경에서 검사한다는 점을 떠올리세요.
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-typing-recursive-functions-6)

@@ -722,3 +722,89 @@ val x: {a: Number} = {a=2, b=3}; x.a
 3. 마지막 문제에서 `x.b`는 실행하면 값이 있는데도 타입 검사를 통과하지 못합니다. 이것이 타입 시스템이 안전하지 않다는 뜻인지, 아니면 다른 성질의 문제인지 설명하세요.
 4. 서브타입 관계를 판정하는 함수 `isSubType(lty: Type, rty: Type): Boolean`을 구현하세요. \\(\bot\\)과 \\(\top\\), 함수 타입, 레코드 타입의 경우를 각각 처리해야 합니다. 레코드 타입은 `Map`으로 표현되어 있으므로, 오른쪽 레코드 타입의 모든 필드에 대해 왼쪽에 같은 이름의 필드가 있고 그 타입이 서브타입인지 확인하면 됩니다.
 5. 강의 연습 과제 `stfae`(Exercise #15)에서 \\(\mathsf{STFAE}\\)의 `typeCheck`와 `interp`를 구현해 보세요.
+
+6. <a id="ex-subtype-polymorphism-6"></a>★★★ 이 문제에서는 \\(\mathsf{STFAE}\\)에 불 타입 \\(\mathtt{bool}\\)(구체 문법 `Boolean`)과 `true`, `false`, 조건식 `if (e0) e1 else e2`를 더했다고 합시다. \\(\mathtt{bool}\\)은 서브타입 관계에서 \\(\mathtt{num}\\)처럼 다룹니다. 즉 자기 자신과 \\(\top\\)의 서브타입이고, \\(\bot\\)만 \\(\mathtt{bool}\\)의 서브타입입니다.
+
+   (a) 다음 각 쌍의 빈칸에 \\(<:\\)(왼쪽이 오른쪽의 서브타입), \\(:>\\)(오른쪽이 왼쪽의 서브타입), X(어느 쪽으로도 서브타입 관계가 없음) 중 하나를 쓰세요.
+
+   \\[
+   \begin{array}{lcl}
+   \\{a : \mathtt{num}, b : \mathtt{num}\\} & \square & \\{a : \mathtt{num}\\} \\\\
+   \\{a : \top, b : \mathtt{num}\\} & \square & \\{b : \mathtt{num}, a : \mathtt{num}\\} \\\\
+   \\{a : \top, b : \mathtt{num}\\} & \square & \\{a : \mathtt{num}\\} \\\\
+   \mathtt{num} \to \mathtt{num} & \square & \top \to \mathtt{num} \\\\
+   \mathtt{num} \to (\mathtt{num} \to \mathtt{num}) & \square & \bot \to (\top \to \top) \\\\
+   (\bot \to \top) \to \bot & \square & (\mathtt{num} \to \mathtt{num}) \to \mathtt{num} \\\\
+   \\{a : (\mathtt{num} \to \top) \to \mathtt{num}\\} \to \\{c : \top\\} & \square & \\{a : (\top \to \mathtt{num}) \to \top\\} \to \\{b : \mathtt{num}, c : \mathtt{num}\\}
+   \end{array}
+   \\]
+
+   (b) 두 타입 \\(\tau\\)와 \\(\tau'\\)의 **최소 상계**(least upper bound)를 \\(\tau \sqcup \tau'\\)이라고 쓰고 조인(join)이라고 부릅니다. 즉 \\(\tau \sqcup \tau'\\)은 다음을 만족하는 타입입니다.
+   - \\(\tau <: \tau \sqcup \tau'\\)이고 \\(\tau' <: \tau \sqcup \tau'\\)이다.
+   - 어떤 타입 \\(\tau''\\)이든 \\(\tau <: \tau''\\)이고 \\(\tau' <: \tau''\\)이면 \\(\tau \sqcup \tau' <: \tau''\\)이다.
+
+   다음 조인의 결과를 쓰세요. 결과가 없으면 X라고 쓰세요.
+
+   \\[
+   \begin{array}{lcl}
+   \mathtt{num} \sqcup \mathtt{bool} & = & \square \\\\
+   \\{a : \mathtt{num}, b : \mathtt{num}\\} \sqcup \\{a : \mathtt{bool}\\} & = & \square \\\\
+   (\mathtt{num} \to \mathtt{num}) \sqcup (\mathtt{bool} \to \mathtt{bool}) & = & \square \\\\
+   ((\mathtt{num} \to \top) \to \mathtt{bool}) \sqcup ((\bot \to \mathtt{bool}) \to \mathtt{num}) & = & \square \\\\
+   (\\{a : \top, b : \mathtt{bool}\\} \to \mathtt{num}) \sqcup (\\{a : \mathtt{num}\\} \to \mathtt{bool}) & = & \square
+   \end{array}
+   \\]
+
+   (c) 조건식의 타입 규칙이 다음과 같다고 합시다. 두 갈래의 타입이 같아야 합니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\Gamma \vdash e_0 : \mathtt{bool}$}
+   \AxiomC{$\Gamma \vdash e_1 : \tau$}
+   \AxiomC{$\Gamma \vdash e_2 : \tau$}
+   \LeftLabel{$\tau\texttt{-If}$}
+   \TrinaryInfC{$\Gamma \vdash \mathtt{if}\ (e_0)\ e_1\ \mathtt{else}\ e_2 : \tau$}
+   \end{prooftree}
+   \\]
+
+   포섭 규칙을 쓰면 다음 식도 타입 검사를 통과하지만, 포섭 규칙은 알고리즘적이지 않습니다. 포섭 규칙 **없이** 다음 식이 타입 검사를 통과하도록 \\(\tau\texttt{-If}\\)를 알고리즘적인 규칙으로 고치세요.
+
+   ```stfae
+   /* STFAE */
+   val f = (x: Boolean) => if (x) {a = 1, b = true} else {a = 2};
+   f(true).a * f(false).a
+   ```
+
+   <details><summary>힌트</summary>
+
+   (a) 함수 타입은 매개변수 쪽에서 방향이 뒤집힙니다. 레코드 타입은 오른쪽의 필드가 모두 왼쪽에 있어야 합니다. (b) 함수 타입의 조인을 구하려면, 매개변수 쪽에서는 거꾸로 두 타입의 **최대 하계**(둘 모두의 서브타입 중 가장 큰 것)가 필요합니다. 레코드 타입의 조인은 공통 필드만 남깁니다. (c) 두 갈래의 타입을 모두 받아 줄 수 있는 가장 작은 타입이 무엇일까요?
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-subtype-polymorphism-6)
+
+7. <a id="ex-subtype-polymorphism-7"></a>★★ \\(\mathsf{STFAE}\\)의 함수 타입 서브타입 규칙을 왼쪽에서 오른쪽으로 바꾸었다고 합시다. 매개변수 타입의 관계 방향을 뒤집어, 매개변수도 공변으로 비교합니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$\tau_1 :> \tau_1'$}
+   \AxiomC{$\tau_2 <: \tau_2'$}
+   \BinaryInfC{$(\tau_1 \to \tau_2) <: (\tau_1' \to \tau_2')$}
+   \end{prooftree}
+   \qquad\qquad
+   \begin{prooftree}
+   \AxiomC{$\tau_1 <: \tau_1'$}
+   \AxiomC{$\tau_2 <: \tau_2'$}
+   \BinaryInfC{$(\tau_1 \to \tau_2) <: (\tau_1' \to \tau_2')$}
+   \end{prooftree}
+   \\]
+
+   바꾼 서브타입 관계를 써도 \\(\mathsf{STFAE}\\)의 타입 시스템은 여전히 건전할까요? 건전하다면 이유를 설명하고, 건전하지 않다면 타입 검사를 통과하지만 이 변경 때문에 실행 중에 타입 오류가 나는 \\(\mathsf{STFAE}\\) 식을 만드세요.
+
+   <details><summary>힌트</summary>
+
+   "아무 값이나 받는 함수"가 필요한 자리에 "수만 받는 함수"를 넣을 수 있게 됩니다. 그 자리에서 함수에 수가 아닌 값을 넘기면 어떻게 될까요?
+
+   </details>
+
+   [해답 →](./answers-2.md#ans-subtype-polymorphism-7)

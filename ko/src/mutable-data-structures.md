@@ -1,13 +1,13 @@
 # 변경 가능한 자료 구조
 
-지금까지 만든 언어들은 모두 <a id="g-purely-functional"></a>**순수 함수형(purely functional)** 언어였습니다. 모든 함수는 <a id="g-pure"></a>**순수(pure)** 해서 **부수 효과(side effect)** 가 없었고, 모든 자료 구조와 변수는 **불변(immutable)** 이라서 한 번 만들어지면 바뀌지 않았습니다. 같은 식은 언제 계산해도 같은 값을 냈지요.
+지금까지 만든 언어들은 모두 <a id="g-purely-functional"></a>**순수 함수형(purely functional)** 언어였습니다. 모든 함수는 <a id="g-pure"></a>**순수**(pure)해서 **부수 효과**(side effect)가 없었고, 모든 자료 구조와 변수는 **불변**(immutable)이라서 한 번 만들어지면 바뀌지 않았습니다. 같은 식은 언제 계산해도 같은 값을 냈지요.
 
-하지만 현실의 프로그램에서는 **변경(mutation)** 이 아주 널리 쓰입니다. 특히 C, C++, Java, Python 같은 <a id="g-imperative-language"></a>**명령형 언어(imperative language)** 에서는 변경이 일상입니다. 변경을 쓰면 자료 구조나 변수를 만든 **뒤에** 그 내용을 고쳐서 프로그램의 <a id="g-state"></a>**상태(state)** 를 바꿀 수 있습니다. 변경에는 크게 두 종류가 있습니다.
+하지만 현실의 프로그램에서는 **변경**(mutation)이 아주 널리 쓰입니다. 특히 C, C++, Java, Python 같은 <a id="g-imperative-language"></a>**명령형 언어**(imperative language)에서는 변경이 일상입니다. 변경을 쓰면 자료 구조나 변수를 만든 **뒤에** 그 내용을 고쳐서 프로그램의 <a id="g-state"></a>**상태**(state)를 바꿀 수 있습니다. 변경에는 크게 두 종류가 있습니다.
 
 - <a id="g-mutable-data-structure"></a>**변경 가능한 자료 구조(mutable data structure)**: 예를 들어 Scala의 `mutable.Map`
 - **변경 가능한 변수(mutable variable)**: 예를 들어 Scala의 `var`
 
-변경은 더 **효율적인** 프로그램을 쓰게 도와주지만, 프로그램을 **이해하기 어렵게** 만들고 **실수하기 쉽게** 만들기도 합니다. 이 장에서는 그중 변경 가능한 자료 구조를 배웁니다. FAE에 가장 단순한 변경 가능한 자료 구조인 <a id="g-box"></a>**상자(box)** 를 더한 언어 **BFAE**를 만들고, 그 의미를 정하기 위해 <a id="g-memory"></a>**메모리(memory)** 라는 새로운 개념을 도입합니다. 변경 가능한 변수는 다음 장 [변경 가능한 변수](./mutable-variables.md)에서 다룹니다.
+변경은 더 **효율적인** 프로그램을 쓰게 도와주지만, 프로그램을 **이해하기 어렵게** 만들고 **실수하기 쉽게** 만들기도 합니다. 이 장에서는 그중 변경 가능한 자료 구조를 배웁니다. FAE에 가장 단순한 변경 가능한 자료 구조인 <a id="g-box"></a>**상자**(box)를 더한 언어 **BFAE**를 만들고, 그 의미를 정하기 위해 <a id="g-memory"></a>**메모리**(memory)라는 새로운 개념을 도입합니다. 변경 가능한 변수는 다음 장 [변경 가능한 변수](./mutable-variables.md)에서 다룹니다.
 
 이 장에서 만들 `BFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
 
@@ -30,7 +30,7 @@ mmap                // mutable.Map(x -> 3, y -> 2)
 
 불변 맵 `imap`에 `+`를 하면 **새** 맵이 만들어질 뿐, `imap` 자체는 그대로입니다. 반면 변경 가능한 맵 `mmap`에 `update`를 하면 `mmap`의 내용 자체가 바뀝니다.
 
-우리만의 변경 가능한 자료 구조도 만들 수 있습니다. 값 하나를 담는 **상자(Box)** 입니다.
+우리만의 변경 가능한 자료 구조도 만들 수 있습니다. 값 하나를 담는 **상자**(Box)입니다.
 
 ```scala
 case class Box(var content: Int)
@@ -129,7 +129,7 @@ box.set(8);
 box.get     // 8
 ```
 
-지금까지 쓴 환경만으로는 부족합니다. 환경은 이름을 값에 묶어 줄 뿐이고, 한 번 묶이면 바뀌지 않기 때문입니다. 그래서 **메모리**를 도입합니다. 메모리 \\( M \\)은 <a id="g-address"></a>**주소(address)** 를 그 주소에 저장된 **값**에 대응시키는 유한한 **매핑**입니다.
+지금까지 쓴 환경만으로는 부족합니다. 환경은 이름을 값에 묶어 줄 뿐이고, 한 번 묶이면 바뀌지 않기 때문입니다. 그래서 **메모리**를 도입합니다. 메모리 \\( M \\)은 <a id="g-address"></a>**주소**(address)를 그 주소에 저장된 **값**에 대응시키는 유한한 **매핑**입니다.
 
 \\[
 M \in \mathbb{A} \xrightarrow{\text{fin}} \mathbb{V}
@@ -137,7 +137,7 @@ M \in \mathbb{A} \xrightarrow{\text{fin}} \mathbb{V}
 
 상자는 메모리에 <a id="g-memory-cell"></a>**메모리 칸(memory cell)** 하나를 잡아 값을 저장합니다.
 
-- **상자 만들기**는 메모리 칸을 새로 <a id="g-allocation"></a>**할당(allocation)** 하고 값을 저장합니다.
+- **상자 만들기**는 메모리 칸을 새로 <a id="g-allocation"></a>**할당**(allocation)하고 값을 저장합니다.
 - **내용물 읽기**는 그 메모리 칸에서 값을 읽습니다.
 - **내용물 쓰기**는 그 메모리 칸에 값을 씁니다.
 
@@ -212,7 +212,7 @@ f(5)
 
 - 클로저 `f`의 환경 \\( [\texttt{a} \mapsto a_0] \\)는 끝까지 바뀌지 않습니다. 그런데도 `f(5)`의 결과가 6, 7, 8로 바뀌는 이유는, 환경이 기억하는 것이 값이 아니라 **주소**이고 그 주소의 내용물이 바뀌기 때문입니다.
 - `Box(a)`는 상자 `a`를 담는 상자입니다. `a`의 값은 주소 \\( a_0 \\)이므로, 새 칸 \\( a_1 \\)에는 **주소** \\( a_0 \\)가 저장됩니다. 상자도 값이므로 상자 안에 넣을 수 있습니다.
-- `b.get.set(3)`에서 `b.get`은 \\( a_1 \\)의 내용물인 주소 \\( a_0 \\), 즉 상자 `a` 자체입니다. 그래서 `b.get.set(3)`은 `a.set(3)`과 같은 효과를 내고, 이름 `a`를 한 번도 쓰지 않았는데도 `a`의 내용물이 바뀝니다. 이처럼 같은 메모리 칸을 여러 경로로 가리키는 것을 <a id="g-aliasing"></a>**별칭(aliasing)** 이라고 합니다. 변경이 프로그램을 이해하기 어렵게 만드는 대표적인 이유입니다.
+- `b.get.set(3)`에서 `b.get`은 \\( a_1 \\)의 내용물인 주소 \\( a_0 \\), 즉 상자 `a` 자체입니다. 그래서 `b.get.set(3)`은 `a.set(3)`과 같은 효과를 내고, 이름 `a`를 한 번도 쓰지 않았는데도 `a`의 내용물이 바뀝니다. 이처럼 같은 메모리 칸을 여러 경로로 가리키는 것을 <a id="g-aliasing"></a>**별칭**(aliasing)이라고 합니다. 변경이 프로그램을 이해하기 어렵게 만드는 대표적인 이유입니다.
 
 ### 인터프리터와 자연 의미
 
@@ -502,3 +502,49 @@ def interp(expr: Expr, env: Env, mem: Mem): (Value, Mem) = expr match
 4. `Box(Box(1)).get.get`을 계산하는 증명 나무를 그려 보세요.
 5. 상자를 쓰지 않는 BFAE 식, 즉 FAE 식에서는 메모리가 어떻게 되나요? 이 경우 BFAE의 결과 값이 FAE의 결과 값과 같다는 것을 직관적으로 설명해 보세요.
 6. 수업 연습 문제 BFAE([과제 문서](https://github.com/ku-plrg-classroom/docs/tree/main/cose212/bfae))의 `interp` 함수를 구현해 보세요. 제출할 필요는 없지만 시험 문제와 관련될 수 있으니 직접 풀어 보기를 강하게 권합니다.
+7. <a id="ex-mutable-data-structures-7"></a>★★ BFAE 식을 받아 더 효율적인 식을 돌려주는 코드 변환 `optimize`를 만들려고 합니다. `optimize`가 **올바르다**는 것은 모든 식 \\( e \\)에 대해 다음이 성립한다는 뜻입니다.
+   - \\( e \\)가 숫자 \\( n \\)으로 계산되면 \\( \texttt{optimize}(e) \\)도 같은 숫자 \\( n \\)으로 계산됩니다.
+   - \\( e \\)가 상자로 계산되면 \\( \texttt{optimize}(e) \\)도 상자로, 함수로 계산되면 \\( \texttt{optimize}(e) \\)도 함수로 계산됩니다.
+   - \\( e \\)의 계산이 끝나지 않으면 \\( \texttt{optimize}(e) \\)의 계산도 끝나지 않고, \\( e \\)가 실행 중 오류를 내면 \\( \texttt{optimize}(e) \\)도 오류를 냅니다.
+
+   기본 틀은 다음과 같고, 최적화 하나는 패턴 매칭의 경우 하나를 맨 앞에 더하는 것입니다.
+
+   ```scala
+   def optimize(expr: Expr): Expr = expr match
+     // optimization cases will be added here
+     case Num(n)       => Num(n)
+     case Add(l, r)    => Add(optimize(l), optimize(r))
+     case Mul(l, r)    => Mul(optimize(l), optimize(r))
+     case Id(x)        => Id(x)
+     case Fun(p, b)    => Fun(p, optimize(b))
+     case App(f, e)    => App(optimize(f), optimize(e))
+     case NewBox(c)    => NewBox(optimize(c))
+     case GetBox(b)    => GetBox(optimize(b))
+     case SetBox(b, c) => SetBox(optimize(b), optimize(c))
+     case Seq(l, r)    => Seq(optimize(l), optimize(r))
+   ```
+
+   예를 들어 `case Mul(l, r)`에서 오른쪽이 `Num(0)`이면 `Num(0)`을 돌려주는 최적화는 올바르지 않습니다. `x * 0`은 `x`가 자유 식별자이면 오류를 내지만 최적화한 식 `0`은 숫자 0이 되기 때문입니다. 다음 두 최적화 각각에 대해 (1) 주어진 식의 최적화 결과를 쓰고, (2) 최적화가 올바른지 답하고, (3) 올바르면 그 이유를, 올바르지 않으면 반례 식과 두 식의 서로 다른 결과를 쓰세요.
+   - (a) 주어진 식: `Box(b.set(1)).set(f(42))`
+
+     ```scala
+       case SetBox(b, c) => (optimize(b), optimize(c)) match
+         case (NewBox(e1), e2) => Seq(e1, e2)
+         case (b, c)           => SetBox(b, c)
+     ```
+
+   - (b) 주어진 식: `x.set(42); x.get`
+
+     ```scala
+       case Seq(l, r) => (optimize(l), optimize(r)) match
+         case (SetBox(b, c), GetBox(b2)) if b == b2 => SetBox(b, c)
+         case (l, r)                                => Seq(l, r)
+     ```
+
+   <details><summary>힌트</summary>
+
+   (a) 새로 만든 상자의 주소를 아는 식이 프로그램 안에 있을 수 있을까요? (b) 상자 자리의 식 `b`는 원래 식에서 몇 번 계산되고, 최적화한 식에서 몇 번 계산되나요?
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-mutable-data-structures-7)

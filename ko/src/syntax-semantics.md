@@ -1022,3 +1022,28 @@ interp(Expr("1+2*3")) // interp(Add(Num(1), Mul(Num(2), Num(3)))) = 7
    ([`AE`](https://github.com/ku-plrg-classroom/docs/tree/main/cose212/ae))에서 `interp`와,
    식에 들어 있는 `Num` 노드의 개수를 세는 `countNums`를 구현해 보세요. 제출할 필요는 없지만, 시험
    문제와 직접 관련되어 있으니 꼭 직접 풀어 보기를 권합니다.
+7. <a id="ex-syntax-semantics-7"></a>★ 다음 구체 문법을 생각해 봅시다. `AE`와 달리 `"+"`의 오른쪽에는 정수만 올 수 있고, `"="`의 왼쪽에는 식별자만 올 수 있습니다.
+
+   ```bnf
+   <digit>    ::= "0" | "1" | "2" | ... | "9"
+   <number>   ::= "-"? <digit>+
+   <alphabet> ::= "a" | "b" | "c" | ... | "z"
+   <id>       ::= <alphabet>+
+   <expr>     ::= <number> | <id> | <expr> "+" <number>
+                | <id> "=" <expr> | "(" <expr> ")"
+   ```
+
+   토큰 사이의 공백은 무시한다고 할 때, 다음 각 문자열이 이 문법에 맞는 식이면 O, 아니면 X로 답하세요.
+   - (a) `1 + -2`
+   - (b) `x + (1 + 2)`
+   - (c) `x0 = 3 + 5`
+   - (d) `(x = y) = 7`
+   - (e) `x = (y = z) + 3`
+
+   <details><summary>힌트</summary>
+
+   `"+"`의 오른쪽과 `"="`의 왼쪽에 어떤 문법 요소가 올 수 있는지 하나씩 대조해 보세요. `<id>`에 숫자가 들어갈 수 있는지도 확인하세요.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-syntax-semantics-7)

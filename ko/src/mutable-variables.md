@@ -1,8 +1,8 @@
 # 변경 가능한 변수
 
-[변경 가능한 자료 구조](./mutable-data-structures.md)에서는 변경(mutation)을 통해 프로그램의 **상태를 바꾸는** 첫 번째 방법으로 상자(box)를 배웠습니다. 상자라는 자료 구조의 **내용물**을 바꾸는 방식이었지요. 그리고 이를 지원하는 언어 BFAE를 정의하면서 **메모리(memory)** 를 이용해 계산하는 법, 그리고 메모리를 주고받는 인터프리터와 자연 의미(natural semantics)를 함께 살펴보았습니다.
+[변경 가능한 자료 구조](./mutable-data-structures.md)에서는 변경(mutation)을 통해 프로그램의 **상태를 바꾸는** 첫 번째 방법으로 상자(box)를 배웠습니다. 상자라는 자료 구조의 **내용물**을 바꾸는 방식이었지요. 그리고 이를 지원하는 언어 BFAE를 정의하면서 **메모리**(memory)를 이용해 계산하는 법, 그리고 메모리를 주고받는 인터프리터와 자연 의미(natural semantics)를 함께 살펴보았습니다.
 
-이 장에서는 상태를 바꾸는 두 번째 방법인 **변경 가능한 변수(mutable variable)** 를 다룹니다. 상자 없이 변수 자체에 새 값을 대입하는 것입니다. FAE에 변경 가능한 변수를 더한 언어 MFAE를 정의하고, 그 구체 문법과 추상 문법, 인터프리터와 자연 의미를 차례로 만들어 봅니다. 마지막으로 함수에 인자를 넘기는 두 가지 방식인 <a id="g-call-by-value"></a>**값에 의한 호출(call-by-value)** 과 <a id="g-call-by-reference"></a>**참조에 의한 호출(call-by-reference)** 을 비교합니다. 둘의 차이는 변수를 바꿀 수 있을 때 비로소 눈에 보이기 시작합니다.
+이 장에서는 상태를 바꾸는 두 번째 방법인 **변경 가능한 변수**(mutable variable)를 다룹니다. 상자 없이 변수 자체에 새 값을 대입하는 것입니다. FAE에 변경 가능한 변수를 더한 언어 MFAE를 정의하고, 그 구체 문법과 추상 문법, 인터프리터와 자연 의미를 차례로 만들어 봅니다. 마지막으로 함수에 인자를 넘기는 두 가지 방식인 <a id="g-call-by-value"></a>**값에 의한 호출**(call-by-value)과 <a id="g-call-by-reference"></a>**참조에 의한 호출**(call-by-reference)을 비교합니다. 둘의 차이는 변수를 바꿀 수 있을 때 비로소 눈에 보이기 시작합니다.
 
 이 장에서 만들 `MFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
 
@@ -106,7 +106,7 @@ enum Expr:
 
 변수의 값을 바꾸려면 어떻게 해야 할까요? 지금까지 환경(environment) \\( \sigma \\)는 이름을 **값**에 직접 연결했습니다. 그런데 정적 스코핑(static scoping)을 따르는 언어에서는 함수가 만들어질 때의 환경이 클로저 안에 그대로 갇혀 버립니다. 이름이 값에 직접 묶여 있으면, `y = 3`을 실행해도 이미 만들어진 클로저 안의 `y`는 여전히 1을 가리킬 것입니다.
 
-해결책은 BFAE에서 상자를 다룰 때 썼던 메모리를 다시 꺼내는 것입니다. 각 변수에 서로 다른 **주소(address)** 를 하나씩 정해 환경에는 이름에서 주소로 가는 연결만 적고, 실제 값은 **메모리**의 그 주소에 저장합니다. 이렇게 하면 변수에 대입할 때 환경은 그대로 두고 메모리에서 그 주소의 내용만 바꾸면 됩니다. 같은 주소를 기억하는 모든 곳이 바뀐 값을 보게 되지요.
+해결책은 BFAE에서 상자를 다룰 때 썼던 메모리를 다시 꺼내는 것입니다. 각 변수에 서로 다른 **주소**(address)를 하나씩 정해 환경에는 이름에서 주소로 가는 연결만 적고, 실제 값은 **메모리**의 그 주소에 저장합니다. 이렇게 하면 변수에 대입할 때 환경은 그대로 두고 메모리에서 그 주소의 내용만 바꾸면 됩니다. 같은 주소를 기억하는 모든 곳이 바뀐 값을 보게 되지요.
 
 첫 번째 예를 한 줄씩 따라가 봅시다. 처음에는 환경과 메모리가 모두 비어 있습니다.
 
@@ -356,7 +356,7 @@ def interp(expr: Expr, env: Env, mem: Mem): (Value, Mem) = expr match
 \end{prooftree}
 \\]
 
-\\( e_1 \\)의 값 \\( v_1 \\)은 버리고 메모리 \\( M_1 \\)만 \\( e_2 \\)에 넘겨 줍니다. 앞의 식은 오직 메모리를 바꾸는 **부수 효과(side effect)** 를 위해 계산하는 셈입니다.
+\\( e_1 \\)의 값 \\( v_1 \\)은 버리고 메모리 \\( M_1 \\)만 \\( e_2 \\)에 넘겨 줍니다. 앞의 식은 오직 메모리를 바꾸는 **부수 효과**(side effect)를 위해 계산하는 셈입니다.
 
 ## 값에 의한 호출과 참조에 의한 호출
 
@@ -523,3 +523,123 @@ def interp(expr: Expr, env: Env, mem: Mem): (Value, Mem) = expr match
    var a = 1; var f = x => { x = x + 1; x }; f(a) + a
    ```
 4. 관련 과제 **MFAE**에서 CBV 전략을 따르는 `interp`와 CBR 전략을 따르는 `interpCBR`를 구현해 보세요. 제출할 필요는 없는 연습 과제이지만, 시험 문제와 관련될 수 있으니 직접 풀어 보기를 권합니다.
+5. <a id="ex-mutable-variables-5"></a>★★ MFAE에 후위 증가 연산자 `x++`를 더하고, **변수 정의에서만** 참조에 의한 호출처럼 동작하도록 바꾼 언어를 생각해 봅시다. 새로 더하는 규칙은 다음 두 개입니다.
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$x \in \text{Dom}(\sigma)$}
+   \AxiomC{$\sigma(x) = a$}
+   \AxiomC{$M(a) = n$}
+   \LeftLabel{$\texttt{Inc}$}
+   \TrinaryInfC{$\sigma, M \vdash x\texttt{++} \Rightarrow n, M[a \mapsto n + 1]$}
+   \end{prooftree}
+   \\]
+
+   \\[
+   \begin{prooftree}
+   \AxiomC{$y \in \text{Dom}(\sigma)$}
+   \AxiomC{$\sigma[x \mapsto \sigma(y)], M \vdash e \Rightarrow v, M'$}
+   \LeftLabel{$\texttt{Var}_x$}
+   \BinaryInfC{$\sigma, M \vdash \texttt{var}\ x\ \texttt{=}\ y;\ e \Rightarrow v, M'$}
+   \end{prooftree}
+   \\]
+
+   초기화 식이 식별자가 아니면 원래의 \\( \texttt{Var} \\) 규칙을 쓰고, 함수 호출은 원래의 \\( \texttt{App} \\) 규칙(값에 의한 호출)을 그대로 씁니다. 다음 식의 결과를 구하세요.
+
+   ```pl
+   /* MFAE + x++ */
+   var f = z => z = z * 5;
+   var x = 1;
+   var y = x;
+   f(x); y++; y * x++
+   ```
+
+   <details><summary>힌트</summary>
+
+   `var y = x` 뒤에는 `x`와 `y`가 같은 칸을 가리킵니다. `f(x)`는 값에 의한 호출이고, `x++`는 늘리기 **전의** 값을 돌려줍니다.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-mutable-variables-5)
+6. <a id="ex-mutable-variables-6"></a>★★ MFAE에 [변경 가능한 자료 구조](./mutable-data-structures.md) 장의 상자(`Box(e)`, `e.get`, `e.set(e)`)를 더한 언어에 **기본 인자**(default argument)를 더해 봅시다. 기본 인자가 있는 함수는 인자 없이 호출할 수 있고, 그러면 매개변수가 기본 인자의 값을 받습니다.
+
+   ```bnf
+   <expr> ::= ...
+            | <id> "=>" <expr>                      | <expr> "(" <expr> ")"
+            | "(" <id> "=" <expr> ")" "=>" <expr>   | <expr> "(" ")"
+   ```
+
+   \\[
+   \begin{array}{lrcll}
+   \text{Expressions} & \mathbb{E} \ni e & ::= & \ldots \mid \lambda x.e \mid \lambda (x\texttt{=}e).e & (\texttt{Fun}) \\\\
+   & & \mid & e(e) \mid e() & (\texttt{App}) \\\\
+   \text{Values} & \mathbb{V} \ni v & ::= & \ldots \mid \langle \lambda (x\texttt{=}\bot).e, \sigma \rangle \mid \langle \lambda (x\texttt{=}v).e, \sigma \rangle & (\texttt{CloV})
+   \end{array}
+   \\]
+
+   클로저의 \\( x\texttt{=}\bot \\)는 매개변수 \\( x \\)에 기본 인자가 없다는 뜻이고, \\( x\texttt{=}v \\)는 기본 인자의 값이 \\( v \\)라는 뜻입니다. 인터프리터는 다음과 같습니다.
+
+   ```scala
+   enum Expr:
+     ...
+     case Fun(param: String, default: Option[Expr], body: Expr)
+     case App(fun: Expr, arg: Option[Expr])
+
+   enum Value:
+     ...
+     case CloV(param: String, default: Option[Value], body: Expr, env: Env)
+
+   def interp(expr: Expr, env: Env, mem: Mem): (Value, Mem) = expr match
+     ...
+     case Fun(param, None, body) =>
+       (CloV(param, None, body, env), mem)
+     case App(fun, Some(arg)) =>
+       val (fv, fmem) = interp(fun, env, mem)
+       fv match
+         case CloV(param, _, body, fenv) =>
+           val (av, amem) = interp(arg, env, fmem)
+           val addr = malloc(amem)
+           interp(body, fenv + (param -> addr), amem + (addr -> av))
+         case _ => error("not a function")
+     case Fun(param, Some(default), body) =>
+       val (v, newMem) = interp(default, env, mem)
+       (CloV(param, Some(v), body, env), newMem)
+     case App(fun, None) =>
+       val (fv, fmem) = interp(fun, env, mem)
+       fv match
+         case CloV(param, Some(default), body, fenv) =>
+           val addr = malloc(fmem)
+           interp(body, fenv + (param -> addr), fmem + (addr -> default))
+         case CloV(_, None, _, _) => error("missing argument for function")
+         case _                   => error("not a function")
+   ```
+
+   - (a) 이 인터프리터를 따르는 자연 의미 규칙을 함수 정의(`Fun`) 두 경우와 함수 호출(`App`) 두 경우에 대해 쓰세요.
+   - (b) 다음 두 식의 결과를 구하세요.
+
+     ```pl
+     /* MFAE + Box + default arguments */
+     var f = (box=Box(0)) => k => box.set(box.get + k);
+     var x = f();
+     var y = f();
+     { x(1); x(2); x(3) } + { y(10); y(20) }
+     ```
+
+     ```pl
+     /* MFAE + Box + default arguments */
+     var inc = box => box.set(box.get + 1);
+     var f = (k=0) => (box=Box(k)) => box;
+     var g = f();
+     var x = g();
+     var y = g();
+     var z = f()();
+     { inc(x); inc(x) } * { inc(y); inc(y); inc(y) } * { inc(z); inc(z); inc(z); inc(z) }
+     ```
+
+   <details><summary>힌트</summary>
+
+   기본 인자 식은 함수를 **정의할 때** 한 번만 계산됩니다. 호출할 때마다 새로 계산되지 않으므로, 기본 인자가 상자라면 그 상자를 여러 호출이 함께 씁니다.
+
+   </details>
+
+   [해답 →](./answers-1.md#ans-mutable-variables-6)
