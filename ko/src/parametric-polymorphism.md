@@ -2,6 +2,10 @@
 
 지금까지 만든 타입 있는 언어에서는 함수 매개변수마다 타입을 딱 하나씩 적어야 했습니다. 그런데 "받은 값을 그대로 돌려주는 함수"처럼 값의 타입과 상관없이 똑같이 동작하는 함수는 어떻게 해야 할까요? 숫자용, 함수용 항등 함수를 따로따로 만들어야 할까요? 이 장에서는 이 문제를 푸는 대표적인 방법인 <a id="g-parametric-polymorphism"></a>매개변수 다형성(parametric polymorphism)을 배웁니다. [타입 있는 언어](./typed-languages.md)에서 만든 \\(\mathsf{TFAE}\\)에 매개변수 다형성을 더한 언어 \\(\mathsf{PTFAE}\\)를 정의하고, 인터프리터와 자연 의미(natural semantics), 타입 검사기와 타입 규칙을 차례로 만들어 봅니다. 그 과정에서 타입 변수를 다룰 때 피할 수 없는 <a id="g-substitution"></a>치환(substitution)의 함정, 즉 섀도잉(shadowing)과 변수 <a id="g-capture"></a>포획(capture)을 꼼꼼히 살펴보고, 마지막으로 처음 만든 타입 시스템에 숨어 있던 구멍을 찾아 메웁니다.
 
+이 장에서 만들 `PTFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="PTFAE"></div>
+
 ## 매개변수 다형성
 
 ### 다형성
@@ -26,7 +30,7 @@ f(1); f(true); f((y: Int) => y + 1)
 
 ### 타입 변수와 타입 인자
 
-> **정의 (매개변수 다형성)** 매개변수 다형성은 <a id="g-type-variable"></a>**타입 변수**(type variable)를 도입하고, 이를 <a id="g-type-argument"></a>**타입 인자**(type argument)로 구체화(instantiate)하는 방식의 다형성입니다.
+> **정의(매개변수 다형성)** 매개변수 다형성은 <a id="g-type-variable"></a>**타입 변수**(type variable)를 도입하고, 이를 <a id="g-type-argument"></a>**타입 인자**(type argument)로 구체화(instantiate)하는 방식의 다형성입니다.
 
 앞의 예제를 매개변수 다형성으로 고치면 다음과 같습니다.
 
@@ -579,7 +583,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 하지만 조금 더 나아질 여지가 있습니다. 다음 프로그램을 봅시다.
 
-```ptfae
+```ptfae,run
 /* PTFAE */
 val f = ((x: [T](T => T)) => x[Number](7)) // ([T](T => T)) => Number
 val x = forall[U] (x: U) => x              // [U] (U => U)
@@ -663,7 +667,7 @@ isSame(PolyT("b", ArrowT(b, b)), PolyT("a", ArrowT(a, b)))  // false
 
 이제 앞의 예제는 문제없이 타입 검사를 통과합니다.
 
-```ptfae
+```ptfae,run
 /* PTFAE */
 val f = ((x: [T](T => T)) => x[Number](7)) // ([T](T => T)) => Number
 val x = forall[U] (x: U) => x              // [U] (U => U)
@@ -674,11 +678,11 @@ f(x)                           // well-typed: [T](T => T) == [U](U => U)
 
 [타입 시스템](./type-systems.md)에서 배운 타입 안전성(type soundness)의 정의를 떠올려 봅시다.
 
-> **정의 (타입 안전성)** 타입 시스템이 안전하다(sound)는 것은, 타입 검사를 통과한 프로그램이 실행 중에 **절대** 타입 오류를 일으키지 않음을 보장한다는 뜻입니다.
+> **정의(타입 안전성)** 타입 시스템이 안전하다(sound)는 것은, 타입 검사를 통과한 프로그램이 실행 중에 **절대** 타입 오류를 일으키지 않음을 보장한다는 뜻입니다.
 
 그런데 지금까지 만든 타입 시스템에서는 다음 프로그램이 타입 검사를 통과합니다.
 
-```ptfae
+```ptfae,run
 /* PTFAE */
 val f = forall[U] (x: U) => {
   val y = forall[U] x           // [U](U)

@@ -428,7 +428,7 @@ enum Tree:
 <rect x="72.9" y="87.9" width="471.9" height="53.5" fill="none" stroke="#2f4fb8" stroke-width="2" rx="3"/>
 <line x1="388.8" y1="87.9" x2="388.8" y2="28.0" stroke="currentColor" stroke-width="1.5"/>
 <rect x="327.6" y="4.0" width="122.5" height="24.0" fill="#2a408e" rx="4"/>
-<text x="388.8" y="21.0" text-anchor="middle" font-size="14" fill="#ffffff">배리언트 (생성자)</text>
+<text x="388.8" y="21.0" text-anchor="middle" font-size="14" fill="#ffffff">배리언트(생성자)</text>
 <text x="0.0" y="80.0" font-size="18" font-family="ui-monospace, Menlo, monospace" font-weight="bold">enum</text>
 <text x="54.2" y="80.0" font-size="18" font-family="ui-monospace, Menlo, monospace">Tree</text>
 <text x="97.5" y="80.0" font-size="18" font-family="ui-monospace, Menlo, monospace">:</text>
@@ -729,28 +729,28 @@ val list3 = 6 :: list   // List(6, 3, 1, 2, 4): List[Int]
 <div style="text-align:center">
 <svg viewBox="-8 6 689 158" width="100%" style="max-width: 600px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="list2와 list3가 list의 원소들을 공유하는 모습" font-family="sans-serif" fill="currentColor">
 <defs><marker id="scala-fig-8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
-<rect x="200.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="244.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="200.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="244.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="222.0" y="94.0" text-anchor="middle" font-size="17">3</text>
-<rect x="310.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="354.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="310.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="354.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="332.0" y="94.0" text-anchor="middle" font-size="17">1</text>
-<rect x="420.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="464.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="420.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="464.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="442.0" y="94.0" text-anchor="middle" font-size="17">2</text>
-<rect x="530.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="574.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="530.0" y="70.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="574.0" y="70.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="552.0" y="94.0" text-anchor="middle" font-size="17">4</text>
 <line x1="256.0" y1="88.0" x2="308.0" y2="88.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#scala-fig-8)"/>
 <line x1="366.0" y1="88.0" x2="418.0" y2="88.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#scala-fig-8)"/>
 <line x1="476.0" y1="88.0" x2="528.0" y2="88.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#scala-fig-8)"/>
 <line x1="586.0" y1="88.0" x2="636.0" y2="88.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#scala-fig-8)"/>
 <text x="644.0" y="94.0" font-size="16" font-family="ui-monospace, Menlo, monospace">Nil</text>
-<rect x="70.0" y="20.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="114.0" y="20.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="70.0" y="20.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="114.0" y="20.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="92.0" y="44.0" text-anchor="middle" font-size="17">5</text>
-<rect x="70.0" y="120.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="114.0" y="120.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="70.0" y="120.0" width="44.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="114.0" y="120.0" width="12.0" height="36.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="92.0" y="144.0" text-anchor="middle" font-size="17">6</text>
 <line x1="126.0" y1="38.0" x2="198.0" y2="80.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#scala-fig-8)"/>
 <line x1="126.0" y1="138.0" x2="198.0" y2="96.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#scala-fig-8)"/>

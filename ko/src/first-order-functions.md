@@ -4,6 +4,10 @@
 
 이 장에서는 <a id="g-first-order-function"></a>**1차 함수(first-order function)** 를 배웁니다. 먼저 1차 함수가 무엇인지 살펴보고, VAE에 1차 함수를 더한 언어 F1VAE의 문법을 정의합니다. 그다음 함수 정의를 찾아보기 위한 <a id="g-function-environment"></a>**함수 환경(function environment)** 을 도입해 인터프리터와 자연 의미를 만듭니다. 마지막으로 함수 몸통 안의 이름이 어느 정의를 가리키는지에 대한 두 가지 방식, <a id="g-static-scoping"></a>**정적 스코핑(static scoping)** 과 **동적 스코핑(dynamic scoping)** 을 비교합니다. 이 비교는 다음 장의 일급 함수와 클로저를 이해하는 열쇠가 되므로 꼼꼼히 봐 두기 바랍니다.
 
+이 장에서 만들 `F1VAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="F1VAE"></div>
+
 ## 1차 함수
 
 Scala로 여러 숫자의 제곱을 계산해 봅시다.
@@ -59,13 +63,13 @@ square(3) // 9
 
 이제 VAE를 확장해 1차 함수가 있는 언어 **F1VAE**를 만들겠습니다. F1VAE 프로그램은 다음과 같이 생겼습니다.
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def square(n) = n * n;
 square(3) + 2 // 11
 ```
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def add3(n) = n + 3;
 def mul2(m) = m * 2;
@@ -129,7 +133,7 @@ enum Expr:
 
 예를 들어 다음 F1VAE 프로그램을 **파싱**하면
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def add3(n) = n + 3;
 def mul2(m) = m * 2;
@@ -154,7 +158,7 @@ Program(
 
 위의 F1VAE 프로그램을 계산해 봅시다.
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def add3(n) = n + 3;
 def mul2(m) = m * 2;
@@ -189,13 +193,11 @@ def interp(expr: Expr, env: Env): Value = ... // interpreter
 \boxed{\sigma \vdash e \Rightarrow n}
 \\]
 
-F1VAE에서는 이것을 확장해, 함수 이름에서 함수 정의로 가는 함수 환경 \\( \Lambda \\)도 함께 받도록 합니다.
+F1VAE에서는 이것을 확장해, 함수 이름에서 함수 정의로 가는 함수 환경 \\( \Lambda \\)도 함께 받도록 합니다. `Value`와 `Env`는 그대로이고, 함수 환경의 타입 `FEnv`가 새로 생기고 `interp`가 인자를 하나 더 받습니다.
 
 ```scala
-type Value = BigInt                           // values
-type Env = Map[String, Value]                 // environments
-type FEnv = Map[String, FunDef]               // function environments
-def interp(expr: Expr, env: Env, fenv: FEnv): Value = ... // interpreter
+type FEnv = Map[String, FunDef]               // function environments (새로 추가)
+def interp(expr: Expr, env: Env, fenv: FEnv): Value = ... // fenv 인자 추가
 ```
 
 \\[
@@ -282,42 +284,16 @@ def interp(expr: Expr, env: Env, fenv: FEnv): Value = expr match
 **첫째**, 함수 환경에서 함수 이름 \\( x_0 \\)의 정의를 찾습니다. \\( x_0 \\)가 함수 환경에 있어야 하고, 찾은 정의를 \\( \texttt{def}\ x_0(x_1)\ \texttt{=}\ e_2 \\)라고 합시다. 즉 매개변수가 \\( x_1 \\), 몸통이 \\( e_2 \\)입니다. 함수가 없으면 `unknown function` 오류를 냅니다.
 
 ```scala
-def interp(expr: Expr, env: Env, fenv: FEnv): Value = expr match
-  ...
   case App(f, e) =>
     val fdef = fenv.getOrElse(f, error(s"unknown function: $f"))
     ...
 ```
 
-**둘째**, 인자 식 \\( e_1 \\)을 현재 환경 \\( \sigma \\)에서 계산해 그 값을 \\( n_1 \\)이라고 합니다.
+**둘째**, 인자 식 \\( e_1 \\)을 현재 환경 \\( \sigma \\)에서 계산해 그 값을 \\( n_1 \\)이라고 합니다. 위 코드의 `...` 자리에 `interp(e, env, fenv)`가 들어갑니다.
 
-```scala
-def interp(expr: Expr, env: Env, fenv: FEnv): Value = expr match
-  ...
-  case App(f, e) =>
-    val fdef = fenv.getOrElse(f, error(s"unknown function: $f"))
-    ... interp(e, env, fenv) ...
-```
+**셋째**, 매개변수 \\( x_1 \\)을 인자 값 \\( n_1 \\)에 대응시키는 환경 \\( [x_1 \mapsto n_1] \\)을 만듭니다. 코드로는 `Map(fdef.param -> interp(e, env, fenv))`입니다.
 
-**셋째**, 매개변수 \\( x_1 \\)을 인자 값 \\( n_1 \\)에 대응시키는 환경 \\( [x_1 \mapsto n_1] \\)을 만듭니다.
-
-```scala
-def interp(expr: Expr, env: Env, fenv: FEnv): Value = expr match
-  ...
-  case App(f, e) =>
-    val fdef = fenv.getOrElse(f, error(s"unknown function: $f"))
-    ... Map(fdef.param -> interp(e, env, fenv)) ...
-```
-
-**넷째**, 그 환경에서 함수 몸통 \\( e_2 \\)를 계산한 값 \\( n_2 \\)가 함수 적용의 결과입니다.
-
-```scala
-def interp(expr: Expr, env: Env, fenv: FEnv): Value = expr match
-  ...
-  case App(f, e) =>
-    val fdef = fenv.getOrElse(f, error(s"unknown function: $f"))
-    interp(fdef.body, Map(fdef.param -> interp(e, env, fenv)), fenv)
-```
+**넷째**, 그 환경에서 함수 몸통 \\( e_2 \\)를 계산한 값 \\( n_2 \\)가 함수 적용의 결과입니다. 그래서 `...` 자리는 결국 `interp(fdef.body, Map(fdef.param -> interp(e, env, fenv)), fenv)`가 됩니다. 완성된 `App` 경우는 뒤에서 전체 인터프리터와 함께 보겠습니다.
 
 이 네 단계를 하나의 추론 규칙으로 쓰면 다음과 같습니다.
 
@@ -372,7 +348,7 @@ def eval(program: Program): Value =
 <div style="text-align:center">
 <svg viewBox="-8 -2 568 226" width="100%" style="max-width: 600px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="mul2(add3(4))를 계산할 때 각 함수 호출은 매개변수 하나만 담은 새 환경에서 몸통을 계산한다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="first-order-functions-fig-1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
-<rect x="40.0" y="30.0" width="239.7" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="40.0" y="30.0" width="239.7" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="92.1" y1="30.0" x2="92.1" y2="82.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="66.1" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">add3</text>
 <text x="185.9" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">def add3(n) = n + 3</text>
@@ -382,14 +358,14 @@ def eval(program: Program): Value =
 <text x="40.0" y="22.0" font-size="16" font-family="Times New Roman, Times, serif" font-style="italic">Λ</text>
 <text x="0.0" y="148.0" font-size="15" font-family="ui-monospace, Menlo, monospace" font-weight="bold">add3(4)</text>
 <line x1="72.0" y1="143.0" x2="120.0" y2="143.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#first-order-functions-fig-1)"/>
-<rect x="130.0" y="130.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="130.0" y="130.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="158.0" y1="130.0" x2="158.0" y2="156.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="144.0" y="148.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">n</text>
 <text x="173.0" y="148.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">4</text>
 <text x="200.0" y="148.0" font-size="15">⊢  n + 3  ⇒  7</text>
 <text x="0.0" y="208.0" font-size="15" font-family="ui-monospace, Menlo, monospace" font-weight="bold">mul2(7)</text>
 <line x1="72.0" y1="203.0" x2="120.0" y2="203.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#first-order-functions-fig-1)"/>
-<rect x="130.0" y="190.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="130.0" y="190.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="158.0" y1="190.0" x2="158.0" y2="216.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="144.0" y="208.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">m</text>
 <text x="173.0" y="208.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">7</text>
@@ -404,7 +380,7 @@ def eval(program: Program): Value =
 
 간단한 프로그램 하나의 유도 트리를 그려 봅시다.
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def inc(x) = x + 1;
 inc(2) // 3
@@ -448,7 +424,7 @@ f & = & \texttt{def}\ \texttt{inc}(\texttt{x})\ \texttt{=}\ \texttt{x} + 1 \\\\
 
 다음 프로그램을 봅시다.
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def f(x) = x + y;       // y is a free variable
 { val y = 2; f(1) } + { val y = 4; f(3) }
@@ -458,7 +434,7 @@ def f(x) = x + y;       // y is a free variable
 
 하지만 F1VAE의 의미를 다른 방식으로 정의할 수도 있습니다. **동적 스코핑(dynamic scoping)** 에서는 묶는 출현이 함수가 적용되는 <a id="g-call-site"></a>**호출 위치(call site)** 의 환경에 따라 **동적으로** 정해집니다.
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def f(x) = x + y;       // y = 2 or y = 4 depending on the call-site
 { val y = 2; f(1) } + { val y = 4; f(3) } // (1 + 2) + (3 + 4) = 10
@@ -471,11 +447,9 @@ def f(x) = x + y;       // y = 2 or y = 4 depending on the call-site
 동적 스코핑은 함수 적용의 정의를 딱 한 곳만 바꾸면 얻을 수 있습니다. 몸통을 계산할 때 빈 환경에서 시작하는 대신, **호출 위치의 환경** `env`에 매개변수를 추가한 환경을 씁니다.
 
 ```scala
-def interp(expr: Expr, env: Env, fenv: FEnv): Value = expr match
-  ...
   case App(f, e) =>
     val fdef = fenv.getOrElse(f, error(s"unknown function: $f"))
-    interp(fdef.body, env + (fdef.param -> interp(e, env, fenv)), fenv)
+    interp(fdef.body, env + (fdef.param -> interp(e, env, fenv)), fenv)  // Map(...) 대신 env + (...)
 ```
 
 \\[
@@ -499,7 +473,7 @@ x_0 \in \text{Dom}(\Lambda) & \quad \Lambda(x_0) = \texttt{def}\ x_0(x_1)\ \text
 
 두 방식의 차이를 유도 트리로 확인해 봅시다.
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def add(x) = x + y;
 val y = 2; add(1)
@@ -608,14 +582,14 @@ f & = & \texttt{def}\ \texttt{add}(\texttt{x})\ \texttt{=}\ \texttt{x} + \texttt
 <div style="text-align:center">
 <svg viewBox="43 -2 439 250" width="100%" style="max-width: 560px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="정적 스코핑에서는 몸통을 [x ↦ 1]에서 계산해 y를 찾지 못하고, 동적 스코핑에서는 호출 위치 환경을 확장한 [y ↦ 2, x ↦ 1]에서 계산해 3이 된다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="first-order-functions-fig-2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
-<rect x="250.0" y="30.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="250.0" y="30.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="278.0" y1="30.0" x2="278.0" y2="56.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="264.0" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">y</text>
 <text x="293.0" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">2</text>
 <text x="250.0" y="22.0" font-size="16" font-family="Times New Roman, Times, serif" font-style="italic">σ<tspan baseline-shift="sub" font-size="11">0</tspan></text>
 <text x="320.0" y="48.0" font-size="15">⊢  add(1)   (호출 위치)</text>
 <text x="100.0" y="120.0" text-anchor="middle" font-size="15" font-weight="bold">정적 스코핑</text>
-<rect x="80.0" y="140.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="80.0" y="140.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="108.0" y1="140.0" x2="108.0" y2="166.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="94.0" y="158.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="123.0" y="158.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
@@ -623,7 +597,7 @@ f & = & \texttt{def}\ \texttt{add}(\texttt{x})\ \texttt{=}\ \texttt{x} + \texttt
 <text x="100.0" y="230.0" text-anchor="middle" font-size="13" opacity="0.75">(y가 없음)</text>
 <text x="150.0" y="160.0" font-size="13" opacity="0.75">빈 환경에서 시작</text>
 <text x="420.0" y="120.0" text-anchor="middle" font-size="15" font-weight="bold">동적 스코핑</text>
-<rect x="400.0" y="140.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="400.0" y="140.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="428.0" y1="140.0" x2="428.0" y2="192.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="414.0" y="158.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">y</text>
 <text x="443.0" y="158.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">2</text>

@@ -30,7 +30,7 @@ sumEvenUntilZero(xs, 8);           // 4 + 2 = 6
 
 직관적으로, 컨티뉴에이션은 <a id="g-the-rest-of-the-computation"></a>**남은 계산**(the rest of the computation)을 나타냅니다. 다음 \\(\textsf{FAE}\\) 식을 봅시다.
 
-```fae
+```fae,run
 /* FAE */
 (1 + 3) * 5
 ```
@@ -49,24 +49,24 @@ sumEvenUntilZero(xs, 8);           // 4 + 2 = 6
 <svg viewBox="0 0 640 130" width="100%" style="max-width: 620px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="(1 + 3) * 5의 다섯 계산 단계: 1을 계산, 3을 계산, 더하기, 5를 계산, 곱하기. 3단계가 강조되어 있고, 4단계와 5단계를 묶어 3단계의 컨티뉴에이션이라고 표시했다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="cont-f1-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <text x="72.0" y="22" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">1단계</text>
-<rect x="17" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="17" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="72.0" y="58" text-anchor="middle" fill="currentColor" font-size="14">1을 계산</text>
 <path d="M128,53 L140,53" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#cont-f1-m0)"/>
 <text x="196.0" y="22" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">2단계</text>
-<rect x="141" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="141" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="196.0" y="58" text-anchor="middle" fill="currentColor" font-size="14">3을 계산</text>
 <path d="M252,53 L264,53" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#cont-f1-m0)"/>
 <text x="320.0" y="22" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">3단계</text>
-<rect x="265" y="32" width="110" height="42" fill="#2a408e"/>
-<text x="320.0" y="58" text-anchor="middle" fill="#fff" font-size="14">더하기 (4)</text>
+<rect rx="3" x="265" y="32" width="110" height="42" fill="#2a408e"/>
+<text x="320.0" y="58" text-anchor="middle" fill="#fff" font-size="14">더하기(4)</text>
 <path d="M376,53 L388,53" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#cont-f1-m0)"/>
 <text x="444.0" y="22" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">4단계</text>
-<rect x="389" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="389" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="444.0" y="58" text-anchor="middle" fill="currentColor" font-size="14">5를 계산</text>
 <path d="M500,53 L512,53" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#cont-f1-m0)"/>
 <text x="568.0" y="22" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">5단계</text>
-<rect x="513" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="568.0" y="58" text-anchor="middle" fill="currentColor" font-size="14">곱하기 (20)</text>
+<rect rx="3" x="513" y="32" width="110" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="568.0" y="58" text-anchor="middle" fill="currentColor" font-size="14">곱하기(20)</text>
 <path d="M389,84 L389,92 L623,92 L623,84" fill="none" stroke="currentColor" stroke-width="1.4"/>
 <text x="506.0" y="116" text-anchor="middle" fill="currentColor" font-size="14">3단계의 컨티뉴에이션</text>
 </svg>
@@ -95,7 +95,7 @@ e = (\ldots \ e' \ \ldots)
 
 `(1 + 3) * 5`에 이 변환을 한 단계씩 적용해 봅시다. 1단계에서 계산하는 부분은 `1`이므로, `1` 자리를 `x1`로 비우고 함수로 감쌉니다.
 
-```fae
+```fae,run
 /* FAE */
 {
   x1 => (x1 + 3) * 5      // step 2-5 (continuation of step 1)
@@ -104,7 +104,7 @@ e = (\ldots \ e' \ \ldots)
 
 이제 함수 본문 `(x1 + 3) * 5`에서 다음에 계산할 부분은 `3`입니다. 같은 방법을 적용합니다.
 
-```fae
+```fae,run
 /* FAE */
 {
   x1 => {
@@ -115,7 +115,7 @@ e = (\ldots \ e' \ \ldots)
 
 다음은 `x1 + x2`입니다.
 
-```fae
+```fae,run
 /* FAE */
 {
   x1 => {
@@ -128,7 +128,7 @@ e = (\ldots \ e' \ \ldots)
 
 다음은 `5`입니다.
 
-```fae
+```fae,run
 /* FAE */
 {
   x1 => {
@@ -143,7 +143,7 @@ e = (\ldots \ e' \ \ldots)
 
 마지막으로 `x3 * x4`입니다. 5단계 뒤에는 더 할 일이 없으므로, 5단계의 컨티뉴에이션은 받은 값을 그대로 돌려주는 항등 함수 `x5 => x5`입니다.
 
-```fae
+```fae,run
 /* FAE */
 {
   x1 => {
@@ -166,7 +166,7 @@ e = (\ldots \ e' \ \ldots)
 
 을 거꾸로 적용하면 놀랄 만큼 깔끔해집니다.
 
-```fae
+```fae,run
 /* FAE */
 val x1 = 1;               // step 1
 val x2 = 3;               // step 2
@@ -203,34 +203,18 @@ sumCPS(3, x => x * 5)   // (1 + 2 + 3) * 5 = 30
 
 `sumCPS(n, k)`는 "`n`까지의 합을 구한 다음, 그 결과로 `k`를 하라"는 뜻입니다. 위 예에서 `x => x * 5`는 `sum(3) * 5`에서 `sum(3)`의 컨티뉴에이션입니다.
 
-가장 쉬운 첫걸음은 이렇습니다.
-
-```scala
-type Cont = Int => Int
-def sumCPS(n: Int, k: Cont): Int = k(sum(n))
-```
-
-동작은 하지만 원래의 `sum`에 기대고 있으므로 올바른 CPS 구현이 아닙니다. `sum(n)`을 `sum`의 본문으로 바꿔 봅시다.
-
-```scala
-type Cont = Int => Int
-def sumCPS(n: Int, k: Cont): Int = k(
-  if (n <= 1) 1
-  else sum(n - 1) + n
-)
-```
-
-이제 다음 동치 관계를 이용해 `k`를 `if` 안으로 밀어 넣습니다.
+가장 쉬운 첫걸음은 본문을 `k(sum(n))`으로 두는 것입니다. 동작은 하지만 원래의 `sum`에 기대고 있으므로 올바른 CPS 구현이 아닙니다. 그래서 `sum(n)`을 `sum`의 본문으로 바꾼 다음, 다음 동치 관계를 이용해 `k`를 `if` 안으로 밀어 넣습니다.
 
 ```scala
 e0(if (e1) e2 else e3)     ==    if (e1) e0(e2) else e0(e3)
 ```
 
+`sumCPS`의 본문은 다음처럼 바뀝니다.
+
 ```scala
-type Cont = Int => Int
-def sumCPS(n: Int, k: Cont): Int =
-  if (n <= 1) k(1)
-  else k(sum(n - 1) + n)
+k(sum(n))
+== k(if (n <= 1) 1 else sum(n - 1) + n)      // sum(n)을 sum의 본문으로 바꿈
+== if (n <= 1) k(1) else k(sum(n - 1) + n)   // k를 if 안으로 밀어 넣음
 ```
 
 아직 `sum`에 기대는 부분이 남아 있습니다. 여기서 핵심 관찰을 합니다. `k(sum(n - 1) + n)`에서 지금 계산하는 부분은 `sum(n - 1)`이고, 그 컨티뉴에이션은 "결과에 `n`을 더해서 `k`에 넘기기", 즉 `x => k(x + n)`입니다.
@@ -240,7 +224,7 @@ k(sum(n - 1) + n)    ==    (x => k(x + n))(sum(n - 1))
                      ==    sumCPS(n - 1, x => k(x + n))
 ```
 
-두 번째 줄은 첫 번째 단락에서 본 변환이고, 세 번째 줄은 `sumCPS`의 정의 "`sumCPS(m, k)` = `k(sum(m))`"을 거꾸로 쓴 것입니다. 이렇게 완성된 CPS 버전은 다음과 같습니다.
+첫 번째 등식은 첫 번째 단락에서 본 변환이고, 두 번째 등식은 `sumCPS`의 정의 "`sumCPS(m, k)` = `k(sum(m))`"을 거꾸로 쓴 것입니다. 이렇게 완성된 CPS 버전은 다음과 같습니다.
 
 ```scala
 type Cont = Int => Int
@@ -295,31 +279,7 @@ type Cont = Value => Value
 def interpCPS(expr: Expr, env: Env, k: Cont): Value = ???
 ```
 
-`sumCPS`와 똑같은 전략을 씁니다. 먼저 `interpCPS(expr, env, k)`를 `k(interp(expr, env))`로 정의하고,
-
-```scala
-type Cont = Value => Value
-def interpCPS(expr: Expr, env: Env, k: Cont): Value =
-  k(interp(expr, env))
-```
-
-`interp(expr, env)`를 `interp`의 본문으로 바꿉니다.
-
-```scala
-type Cont = Value => Value
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = k(expr match
-  case Num(n)    => NumV(n)
-  case Add(l, r) => numAdd(interp(l, env), interp(r, env))
-  case Mul(l, r) => numMul(interp(l, env), interp(r, env))
-  case Id(x)     => env.getOrElse(x, error(s"free identifier: $x"))
-  case Fun(p, b) => CloV(p, b, env)
-  case App(f, a) => interp(f, env) match
-    case CloV(p, b, fenv) => interp(b, fenv + (p -> interp(a, env)))
-    case v                => error(s"not a function: ${v.str}")
-)
-```
-
-`if`에서 그랬듯이 `k`를 `match`의 각 경우 안으로 밀어 넣습니다.
+`sumCPS`와 똑같은 전략을 씁니다. 먼저 `interpCPS(expr, env, k)`를 `k(interp(expr, env))`로 정의하고, `interp(expr, env)`를 위의 `interp` 본문으로 바꾼 다음, `if`에서 그랬듯이 `k`를 `match`의 각 경우 안으로 밀어 넣습니다.
 
 ```scala
 type Cont = Value => Value
@@ -339,41 +299,12 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
 
 ### 덧셈과 곱셈
 
-`Add` 경우를 봅시다.
+`Add` 경우는 지금 `k(numAdd(interp(l, env), interp(r, env)))`입니다. 계산하는 부분을 하나씩 컨티뉴에이션으로 바꿔 봅시다.
 
-```scala
-  case Add(l, r) =>
-    k(numAdd(interp(l, env), interp(r, env)))
-```
+- 지금 계산하는 부분은 `interp(l, env)`이고, 그 컨티뉴에이션은 `lv => k(numAdd(lv, interp(r, env)))`입니다. 앞에서 배운 대로 함수로 감싸면 `(lv => k(numAdd(lv, interp(r, env))))(interp(l, env))`이고, 이것은 컨티뉴에이션을 `interpCPS`에 넘기는 `interpCPS(l, env, lv => k(numAdd(lv, interp(r, env))))`와 같습니다.
+- 이제 안쪽에서 계산하는 부분은 `interp(r, env)`이고, 그 컨티뉴에이션은 `rv => k(numAdd(lv, rv))`입니다. 같은 변환을 한 번 더 하면 `k(numAdd(lv, interp(r, env)))`가 `interpCPS(r, env, rv => k(numAdd(lv, rv)))`로 바뀝니다.
 
-지금 계산하는 부분은 `interp(l, env)`이고, 그 컨티뉴에이션은 `lv => k(numAdd(lv, interp(r, env)))`입니다. 앞에서 배운 대로 함수로 감싸면,
-
-```scala
-  case Add(l, r) =>
-    {
-      lv => k(numAdd(lv, interp(r, env)))   // cont. of `interp(l, env)`
-    }(interp(l, env))
-```
-
-이고, 이것은 컨티뉴에이션을 `interpCPS`에 넘기는 것과 같습니다.
-
-```scala
-  case Add(l, r) =>
-    interpCPS(l, env, {
-      lv => k(numAdd(lv, interp(r, env)))   // cont. of `interp(l, env)`
-    })
-```
-
-이제 안쪽에서 계산하는 부분은 `interp(r, env)`이고, 그 컨티뉴에이션은 `rv => k(numAdd(lv, rv))`입니다. 같은 변환을 한 번 더 합니다.
-
-```scala
-  case Add(l, r) =>
-    interpCPS(l, env, {
-      lv => {
-        rv => k(numAdd(lv, rv))             // cont. of `interp(r, env)`
-      }(interp(r, env))
-    })
-```
+두 단계를 거친 `Add` 경우는 다음과 같습니다.
 
 ```scala
   case Add(l, r) =>
@@ -384,62 +315,13 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
     })
 ```
 
-곱셈도 똑같습니다.
-
-```scala
-type Cont = Value => Value
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
-  ...
-  case Add(l, r) =>
-    interpCPS(l, env, {
-      lv => interpCPS(r, env, {
-        rv => k(numAdd(lv, rv))
-      })
-    })
-  case Mul(l, r) =>
-    interpCPS(l, env, {
-      lv => interpCPS(r, env, {
-        rv => k(numMul(lv, rv))
-      })
-    })
-  ...
-```
+곱셈도 똑같습니다. `numAdd` 자리에 `numMul`이 들어갈 뿐입니다.
 
 코드를 읽어 보면 계산 순서가 그대로 드러납니다. "`l`을 계산해서 `lv`라 하고, `r`을 계산해서 `rv`라 하고, 둘을 더해서 `k`에 넘긴다." 앞에서 본 `val x1 = ...; val x2 = ...;` 형태와 똑같은 구조입니다.
 
 ### 함수 적용
 
-함수 적용도 같은 방법으로 바꿉니다.
-
-```scala
-  case App(f, a) => k(interp(f, env) match
-    case CloV(p, b, fenv) => interp(b, fenv + (p -> interp(a, env)))
-    case v                => error(s"not a function: ${v.str}")
-  )
-```
-
-먼저 계산하는 부분은 `interp(f, env)`입니다. 그 결과를 `fv`로 받는 컨티뉴에이션을 만들어 `interpCPS`에 넘깁니다.
-
-```scala
-  case App(f, a) => interpCPS(f, env, {
-    // cont. of `interp(f, env)`
-    fv => k(fv match
-      case CloV(p, b, fenv) => interp(b, fenv + (p -> interp(a, env)))
-      case v                => error(s"not a function: ${v.str}")
-    )
-  })
-```
-
-조금 줄여 쓰면 다음과 같습니다.
-
-```scala
-  case App(f, a) => interpCPS(f, env, fv => k(fv match
-    case CloV(p, b, fenv) => interp(b, fenv + (p -> interp(a, env)))
-    case v                => error(s"not a function: ${v.str}")
-  ))
-```
-
-이제 `k(...)` 호출을 `match` 안으로 옮깁니다.
+함수 적용도 같은 방법으로 바꿉니다. 지금은 `k(interp(f, env) match ...)` 꼴입니다. 먼저 계산하는 부분은 `interp(f, env)`이므로, 그 결과를 `fv`로 받는 컨티뉴에이션 `fv => k(fv match ...)`를 만들어 `interpCPS`에 넘깁니다. 그리고 `k(...)` 호출을 `match` 안으로 옮깁니다.
 
 ```scala
   case App(f, a) => interpCPS(f, env, fv => fv match
@@ -448,49 +330,10 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
   )
 ```
 
-`error(...)`는 `k`로 감쌀 필요가 없습니다. 값을 돌려주는 것이 아니라 예외를 던지므로, 그 뒤에 할 "남은 계산"이 없기 때문입니다. 다음으로 계산하는 부분은 `interp(a, env)`입니다.
+`error(...)`는 `k`로 감쌀 필요가 없습니다. 값을 돌려주는 것이 아니라 예외를 던지므로, 그 뒤에 할 "남은 계산"이 없기 때문입니다. 이제 `CloV` 경우의 오른쪽만 두 번 더 바꾸면 됩니다.
 
-```scala
-  case App(f, a) => interpCPS(f, env, fv => fv match
-    case CloV(p, b, fenv) =>
-      interpCPS(a, env, {
-        // cont. of `interp(a, env)`
-        av => k(interp(b, fenv + (p -> av)))
-      })
-    case v => error(s"not a function: ${v.str}")
-  )
-```
-
-```scala
-  case App(f, a) => interpCPS(f, env, fv => fv match
-    case CloV(p, b, fenv) =>
-      interpCPS(a, env, av => k(interp(b, fenv + (p -> av))))
-    case v => error(s"not a function: ${v.str}")
-  )
-```
-
-마지막으로 계산하는 부분은 `interp(b, fenv + (p -> av))`이고, 그 컨티뉴에이션은 `x => k(x)`, 곧 `k` 자신입니다.
-
-```scala
-  case App(f, a) => interpCPS(f, env, fv => fv match
-    case CloV(p, b, fenv) =>
-      interpCPS(a, env, av => interpCPS(b, fenv + (p -> av), {
-        // cont. of `interp(b, fenv + (p -> av))`
-        k
-      }))
-    case v => error(s"not a function: ${v.str}")
-  )
-```
-
-완성된 함수 적용 경우는 다음과 같습니다.
-
-```scala
-  case App(f, a) => interpCPS(f, env, fv => fv match
-    case CloV(p, b, fenv) =>
-      interpCPS(a, env, av => interpCPS(b, fenv + (p -> av), k))
-    case v => error(s"not a function: ${v.str}")
-  )
-```
+- 다음으로 계산하는 부분은 `interp(a, env)`이고, 그 컨티뉴에이션은 `av => k(interp(b, fenv + (p -> av)))`입니다. 그래서 오른쪽이 `interpCPS(a, env, av => k(interp(b, fenv + (p -> av))))`가 됩니다.
+- 마지막으로 계산하는 부분은 `interp(b, fenv + (p -> av))`이고, 그 컨티뉴에이션은 `x => k(x)`, 곧 `k` 자신입니다. 그래서 `k(interp(b, fenv + (p -> av)))`가 `interpCPS(b, fenv + (p -> av), k)`가 되어, 오른쪽은 `interpCPS(a, env, av => interpCPS(b, fenv + (p -> av), k))`로 완성됩니다.
 
 함수 본문을 계산할 때 원래의 컨티뉴에이션 `k`를 **그대로** 넘긴다는 점이 흥미롭습니다. 함수 본문의 결과가 곧 함수 적용 전체의 결과이므로, 본문을 다 계산한 뒤에 할 일은 함수 적용 뒤에 할 일과 정확히 같습니다. 이것이 꼬리 호출의 본질입니다.
 
@@ -603,93 +446,93 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = ...
 <div style="text-align:center">
 <svg viewBox="0 0 640 330" width="100%" style="max-width: 620px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="5 * (1 + 2)를 계산하는 여덟 걸음 동안 컨티뉴에이션 스택과 값 스택의 모습. 각 스택은 위쪽이 맨 위이다" font-family="sans-serif" fill="currentColor">
 <text x="80" y="18" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">1</text>
-<rect x="14" y="108" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="14" y="108" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="60.0" y="124.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">5 * (1 + 2)</text>
 <path d="M10,132 L110,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <path d="M116,132 L160,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="60" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="138" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
 <text x="240" y="18" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">2</text>
-<rect x="174" y="60" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="174" y="60" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="220.0" y="76.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">5</text>
-<rect x="174" y="84" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="174" y="84" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="220.0" y="100.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">1 + 2</text>
-<rect x="174" y="108" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="174" y="108" width="92" height="24" fill="#2a408e"/>
 <text x="220.0" y="124.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M170,132 L270,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <path d="M276,132 L320,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="220" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="298" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
 <text x="400" y="18" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">3</text>
-<rect x="334" y="84" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="334" y="84" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="380.0" y="100.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">1 + 2</text>
-<rect x="334" y="108" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="334" y="108" width="92" height="24" fill="#2a408e"/>
 <text x="380.0" y="124.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M330,132 L430,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="440" y="108" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="440" y="108" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="458.0" y="124.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">5</text>
 <path d="M436,132 L480,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="380" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="458" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
 <text x="560" y="18" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">4</text>
-<rect x="494" y="36" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="494" y="36" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="540.0" y="52.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">1</text>
-<rect x="494" y="60" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="494" y="60" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="540.0" y="76.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">2</text>
-<rect x="494" y="84" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="494" y="84" width="92" height="24" fill="#2a408e"/>
 <text x="540.0" y="100.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(+)</text>
-<rect x="494" y="108" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="494" y="108" width="92" height="24" fill="#2a408e"/>
 <text x="540.0" y="124.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M490,132 L590,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="600" y="108" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="600" y="108" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="618.0" y="124.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">5</text>
 <path d="M596,132 L640,132" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="540" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="618" y="150" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
 <text x="80" y="183" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">5</text>
-<rect x="14" y="225" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="14" y="225" width="92" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="60.0" y="241.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">2</text>
-<rect x="14" y="249" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="14" y="249" width="92" height="24" fill="#2a408e"/>
 <text x="60.0" y="265.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(+)</text>
-<rect x="14" y="273" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="14" y="273" width="92" height="24" fill="#2a408e"/>
 <text x="60.0" y="289.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M10,297 L110,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="120" y="249" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="120" y="249" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="138.0" y="265.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">1</text>
-<rect x="120" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="120" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="138.0" y="289.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">5</text>
 <path d="M116,297 L160,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="60" y="315" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="138" y="315" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
 <text x="240" y="183" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">6</text>
-<rect x="174" y="249" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="174" y="249" width="92" height="24" fill="#2a408e"/>
 <text x="220.0" y="265.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(+)</text>
-<rect x="174" y="273" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="174" y="273" width="92" height="24" fill="#2a408e"/>
 <text x="220.0" y="289.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M170,297 L270,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="280" y="225" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="280" y="225" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="298.0" y="241.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">2</text>
-<rect x="280" y="249" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="280" y="249" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="298.0" y="265.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">1</text>
-<rect x="280" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="280" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="298.0" y="289.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">5</text>
 <path d="M276,297 L320,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="220" y="315" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="298" y="315" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
 <text x="400" y="183" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">7</text>
-<rect x="334" y="273" width="92" height="24" fill="#2a408e"/>
+<rect rx="3" x="334" y="273" width="92" height="24" fill="#2a408e"/>
 <text x="380.0" y="289.5" text-anchor="middle" fill="#fff" font-size="12" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M330,297 L430,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="440" y="249" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="440" y="249" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="458.0" y="265.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">3</text>
-<rect x="440" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="440" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="458.0" y="289.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">5</text>
 <path d="M436,297 L480,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="380" y="315" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="458" y="315" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
 <text x="560" y="183" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">8</text>
 <path d="M490,297 L590,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="600" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="600" y="273" width="36" height="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="618.0" y="289.5" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">15</text>
 <path d="M596,297 L640,297" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="540" y="315" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
@@ -736,11 +579,7 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = ...
 
 ### 숫자
 
-```scala
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
-  ...
-  case Num(n) => k(NumV(n))
-```
+`interpCPS`의 숫자 경우는 `case Num(n) => k(NumV(n))`입니다.
 
 \\[
 \begin{array}{llcl}
@@ -752,9 +591,9 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
 
 ### 덧셈
 
+`interpCPS`의 덧셈 경우는 다음과 같습니다.
+
 ```scala
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
-  ...
   case Add(l, r) =>
     interpCPS(l, env, {
       lv => interpCPS(r, env, {
@@ -775,16 +614,7 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
 
 ### 곱셈
 
-```scala
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
-  ...
-  case Mul(l, r) =>
-    interpCPS(l, env, {
-      lv => interpCPS(r, env, {
-        rv => k(numMul(lv, rv))
-      })
-    })
-```
+`interpCPS`의 곱셈 경우는 덧셈 경우에서 `rv => k(numAdd(lv, rv))`를 `rv => k(numMul(lv, rv))`로 바꾼 것이고, 규칙도 덧셈과 같은 꼴입니다.
 
 \\[
 \begin{array}{llcl}
@@ -796,11 +626,7 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
 
 ### 식별자 참조
 
-```scala
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
-  ...
-  case Id(x) => k(lookupId(x, env))
-```
+`interpCPS`의 식별자 경우는 `case Id(x) => k(lookupId(x, env))`입니다.
 
 \\[
 \begin{array}{llcl}
@@ -810,11 +636,7 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
 
 ### 함수 정의
 
-```scala
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
-  ...
-  case Fun(p, b) => k(CloV(p, b, env))
-```
+`interpCPS`의 함수 정의 경우는 `case Fun(p, b) => k(CloV(p, b, env))`입니다.
 
 \\[
 \begin{array}{llcl}
@@ -824,9 +646,9 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
 
 ### 함수 적용
 
+`interpCPS`의 함수 적용 경우는 다음과 같습니다.
+
 ```scala
-def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
-  ...
   case App(f, e) => interpCPS(f, env, v => v match
     case CloV(p, b, fenv) =>
       interpCPS(e, env, v => {
@@ -1006,7 +828,7 @@ def interpCPS(expr: Expr, env: Env, k: Cont): Value = expr match
 \end{array}
 \\]
 
-입니다. 세 전제 모두에 귀납 가정을 썼습니다. 이로써 (\\(\Rightarrow\\)) 방향의 증명이 끝납니다.
+입니다. 세 전제 모두에 귀납 가정을 썼습니다. 이로써(\\(\Rightarrow\\)) 방향의 증명이 끝납니다.
 
 반대 방향(\\(\Leftarrow\\))도 성립하지만, 증명이 더 복잡하므로 이 책에서는 다루지 않습니다. (작은 걸음 계산 도중의 상태는 컨티뉴에이션과 값 스택이 뒤섞여 있어서, 그것을 큰 걸음 유도의 어느 부분과 대응시킬지 정하는 일이 까다롭습니다.)
 
@@ -1095,9 +917,9 @@ def step(k: Cont, s: Stack): (Cont, Stack) = (k, s) match
 
 | 인터프리터 | 남은 계산 | Scala 호출 스택 |
 |---|---|---|
-| `interp` | 암묵적 (Scala 호출 스택 안) | 자람 |
-| `interpCPS` | Scala 함수 (`Value => Value`) | 자람 |
-| `evalK` | 데이터 (\\(\kappa\\)와 \\(s\\)) | 일정 |
+| `interp` | 암묵적(Scala 호출 스택 안) | 자람 |
+| `interpCPS` | Scala 함수(`Value => Value`) | 자람 |
+| `evalK` | 데이터(\\(\kappa\\)와 \\(s\\)) | 일정 |
 
 `interpCPS`도 Scala 호출 스택이 자라는 이유는, Scala(JVM)가 일반적인 꼬리 호출 최적화를 해 주지 않기 때문입니다. 컨티뉴에이션 함수 안에서 `interpCPS`를 부르고, 그 안에서 다시 컨티뉴에이션을 부르는 식으로 호출이 계속 쌓입니다.
 

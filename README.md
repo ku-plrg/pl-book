@@ -18,6 +18,7 @@ mdbook serve en --open                  # live preview of one language
 - When a Korean technical term first appears in a chapter, put the English term in parentheses
   right after it, e.g., 타입 안전성(type soundness), 서브타입(subtype). Do it again if the term
   comes back after a long gap within the chapter.
+- Headings go at most three levels deep: chapter (`#`), section (`##`), subsection (`###`). Use a bold lead-in sentence instead of a fourth level.
 - Do not add English in chapter/section titles or in `SUMMARY.md`, to keep titles and the
   sidebar short.
 - Technical terms are written in Korean, transliterated if there is no good translation (e.g.,

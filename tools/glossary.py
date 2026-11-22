@@ -128,7 +128,7 @@ if APPLY:
     for ko, en, r in items:
         g = group(ko)
         if not groups or groups[-1][0] != g: groups.append((g, []))
-        groups[-1][1].append(f"- **{ko}** ({en}) · [{r['label']}](./{r['f']}#{r['target']})")
+        groups[-1][1].append(f"- **{ko}**({en}) · [{r['label']}](./{r['f']}#{r['target']})")
     out = ['# 용어집', '',
            '이 책에서 쓰는 한국어 용어와 대응하는 영어 용어입니다. 본문에서는 각 장에서 처음 나올 때 영어를 괄호로 함께 적습니다. 링크를 누르면 그 용어가 처음 나와 설명되는 곳으로 갑니다.', '',
            ' · '.join(f'[{g}](#{g})' for g, _ in groups), '']

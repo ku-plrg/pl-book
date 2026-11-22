@@ -21,14 +21,14 @@
 <text x="60" y="52" text-anchor="middle" fill="currentColor" font-weight="bold"><tspan font-style="italic" font-family="serif" font-weight="normal">P</tspan></text>
 <text x="60" y="70" text-anchor="middle" fill="currentColor" font-weight="bold">Program</text>
 <polyline points="100,64 138,64" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-ts1)"/>
-<rect x="140" y="40" width="140" height="48" fill="#2a408e"/>
+<rect rx="3" x="140" y="40" width="140" height="48" fill="#2a408e"/>
 <text x="210.0" y="69.0" text-anchor="middle" fill="#fff">Interpreter</text>
 <polyline points="280,64 318,64" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-ts1)"/>
 <text x="360" y="70" text-anchor="middle" fill="currentColor" font-weight="bold">Result</text>
 <text x="60" y="147" text-anchor="middle" fill="currentColor" font-weight="bold"><tspan font-style="italic" font-family="serif" font-weight="normal">P</tspan></text>
 <text x="60" y="165" text-anchor="middle" fill="currentColor" font-weight="bold">Program</text>
 <polyline points="100,159 138,159" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-ts1)"/>
-<rect x="140" y="135" width="140" height="48" fill="#2a408e"/>
+<rect rx="3" x="140" y="135" width="140" height="48" fill="#2a408e"/>
 <text x="210.0" y="164.0" text-anchor="middle" fill="#fff">Compiler</text>
 <polyline points="280,159 318,159" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-ts1)"/>
 <text x="360" y="147" text-anchor="middle" fill="currentColor" font-weight="bold"><tspan font-style="italic" font-family="serif" font-weight="normal">P</tspan></text>
@@ -47,10 +47,10 @@ x * 42              // error: free identifier
 
 이 정도라면 "실행해 보고 고치면 되지" 하고 넘어갈 수도 있습니다. 하지만 중요한 소프트웨어에서 예상하지 못한 실행 중 오류가 나면 이야기가 달라집니다.
 
-- **로켓 (Ariane 5, 1996)**: 첫 비행에서 이륙 약 37초 만에 궤도를 벗어나 자폭했습니다. 관성 기준 장치에서 64비트 부동소수점 값을 16비트 부호 있는 정수로 변환하다가 오버플로가 났기 때문입니다. Ariane 4의 코드를 그대로 재사용했는데, Ariane 5는 속도 값이 훨씬 커서 범위를 넘어선 것입니다.
-- **보안 (Heartbleed, 2014)**: OpenSSL의 Heartbeat 확장이 공격자가 보낸 길이 값을 경계 검사 없이 `memcpy()`에 넘겼습니다. 1바이트를 보내면서 "64KB"라고 주장하면 서버가 주변 메모리 64KB를 함께 돌려주었고, 그 안에는 개인 키나 비밀번호가 들어 있을 수 있었습니다. 이 버그는 약 2년 동안 아무도 모른 채 노출되어 있었습니다.
+- **로켓(Ariane 5, 1996)**: 첫 비행에서 이륙 약 37초 만에 궤도를 벗어나 자폭했습니다. 관성 기준 장치에서 64비트 부동소수점 값을 16비트 부호 있는 정수로 변환하다가 오버플로가 났기 때문입니다. Ariane 4의 코드를 그대로 재사용했는데, Ariane 5는 속도 값이 훨씬 커서 범위를 넘어선 것입니다.
+- **보안(Heartbleed, 2014)**: OpenSSL의 Heartbeat 확장이 공격자가 보낸 길이 값을 경계 검사 없이 `memcpy()`에 넘겼습니다. 1바이트를 보내면서 "64KB"라고 주장하면 서버가 주변 메모리 64KB를 함께 돌려주었고, 그 안에는 개인 키나 비밀번호가 들어 있을 수 있었습니다. 이 버그는 약 2년 동안 아무도 모른 채 노출되어 있었습니다.
 - **전 세계 IT (CrowdStrike, 2024)**: 보안 소프트웨어가 입력 필드 20개를 기대했는데 배포된 설정 파일에는 21개가 있었습니다. 이 개수 불일치가 배열 범위를 벗어난 메모리 읽기로 이어져 약 850만 대의 Windows 컴퓨터가 부팅되지 않았습니다. 21번째 필드를 실제로 쓰는 경우에 대한 테스트가 없어서 테스트로는 잡히지 않았습니다.
-- **클라우드 (Cloudflare, 2025)**: 설정 파일의 크기가 예상의 두 배를 넘자 파싱 코드가 오류(`Err`)를 돌려주었는데, 호출하는 쪽이 Rust의 `.unwrap()`으로 처리하는 바람에 프로그램이 그대로 멈춰 버렸습니다. Rust의 `Result` 타입은 실패할 수 있다는 사실을 타입에 드러내 처리하도록 강제하지만, `.unwrap()`은 그 정보를 버리고 실행 중 오류로 미룹니다. 타입 시스템의 보장은 프로그래머가 스스로 포기하지 않는 데까지만 유효하다는 것을 보여 주는 사례입니다.
+- **클라우드(Cloudflare, 2025)**: 설정 파일의 크기가 예상의 두 배를 넘자 파싱 코드가 오류(`Err`)를 돌려주었는데, 호출하는 쪽이 Rust의 `.unwrap()`으로 처리하는 바람에 프로그램이 그대로 멈춰 버렸습니다. Rust의 `Result` 타입은 실패할 수 있다는 사실을 타입에 드러내 처리하도록 강제하지만, `.unwrap()`은 그 정보를 버리고 실행 중 오류로 미룹니다. 타입 시스템의 보장은 프로그래머가 스스로 포기하지 않는 데까지만 유효하다는 것을 보여 주는 사례입니다.
 
 그렇다면 이런 오류를 어떻게 **막을** 수 있을까요? 프로그램에 실행 중 오류가 없는지를 **자동으로** 검사할 수는 없을까요?
 
@@ -64,10 +64,10 @@ x * 42              // error: free identifier
 <text x="50" y="48" text-anchor="middle" fill="currentColor" font-weight="bold"><tspan font-style="italic" font-family="serif" font-weight="normal">P</tspan></text>
 <text x="50" y="66" text-anchor="middle" fill="currentColor" font-weight="bold">Program</text>
 <polyline points="90,60 128,60" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-ts2)"/>
-<rect x="130" y="36" width="140" height="48" fill="#2a408e"/>
+<rect rx="3" x="130" y="36" width="140" height="48" fill="#2a408e"/>
 <text x="200.0" y="65.0" text-anchor="middle" fill="#fff">Analyzer</text>
 <polyline points="270,60 298,60" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-ts2)"/>
-<rect x="300" y="36" width="140" height="48" fill="#2a408e"/>
+<rect rx="3" x="300" y="36" width="140" height="48" fill="#2a408e"/>
 <text x="370.0" y="65.0" text-anchor="middle" fill="#fff">Interpreter</text>
 <polyline points="440,60 478,60" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-ts2)"/>
 <text x="515" y="66" text-anchor="middle" fill="currentColor" font-weight="bold">Result</text>
@@ -255,8 +255,8 @@ def abs(x: Int): Int = { /* L1 */
 | | 동적 분석 | 정적 분석 |
 |---|---|---|
 | 일반적인 성질 | 완전, 건전하지 않음 | 건전, 완전하지 않음 |
-| 보고한 오류 | <a id="g-tp"></a>모두 진짜 (TP) | 거짓 경보가 섞일 수 있음 (FP) |
-| 놓치는 오류 | 있을 수 있음 (FN) | 없음 |
+| 보고한 오류 | <a id="g-tp"></a>모두 진짜(TP) | 거짓 경보가 섞일 수 있음(FP) |
+| 놓치는 오류 | 있을 수 있음(FN) | 없음 |
 | 오류 없음의 증명 | 불가능 | 가능 |
 
 > **자주 하는 실수.** "건전하다"를 "오류를 정확하게 찾는다"로 오해하기 쉽습니다. 오류가 없음을 증명하는 관점에서 건전한 분석은 **오류를 하나도 놓치지 않는** 분석입니다. 그 대가로 거짓 경보를 낼 수 있습니다.
@@ -267,7 +267,7 @@ def abs(x: Int): Int = { /* L1 */
 
 ### 타입
 
-> **정의 (타입).** <a id="g-type"></a>**타입**(type)은 값의 집합입니다.
+> **정의(타입).** <a id="g-type"></a>**타입**(type)은 값의 집합입니다.
 
 예를 들어 Scala의 `Int`, `Boolean`, `Int => Int` 타입은 다음과 같은 값의 집합입니다.
 
@@ -291,7 +291,7 @@ f(42)                       // 43   : Int
 
 ### 타입 오류
 
-> **정의 (타입 오류).** <a id="g-type-error"></a>**타입 오류**(type error)는 프로그램이 기대하는 타입과 **맞지 않는** 타입의 값을 사용하려 할 때 일어납니다.
+> **정의(타입 오류).** <a id="g-type-error"></a>**타입 오류**(type error)는 프로그램이 기대하는 타입과 **맞지 않는** 타입의 값을 사용하려 할 때 일어납니다.
 
 예를 들어 다음 Scala 프로그램에는 타입 오류가 있습니다.
 
@@ -329,12 +329,12 @@ x.k                 // `NullPointerException` at run-time
 
 두 번째와 세 번째 경우가 들어 있다는 점에 주목합시다. 타입은 "타입 오류는 일어나지 않는다"는 것만 약속할 뿐, 계산이 반드시 끝난다거나 `42 / 0` 같은 오류가 없다는 것까지 약속하지는 않습니다.
 
-> **정의 (타입 검사).** <a id="g-type-checking"></a>**타입 검사**(type checking)는 주어진 식 \\(e\\)가 타입이 맞는지 검사하는 정적 분석입니다. **타입 검사기**(type checker)는 \\(e\\)가 타입이 맞으면 그 **타입**을 돌려주고, 그렇지 않으면 \\(e\\)를 거부하고 발견한 **타입 오류**를 보고합니다.
+> **정의(타입 검사).** <a id="g-type-checking"></a>**타입 검사**(type checking)는 주어진 식 \\(e\\)가 타입이 맞는지 검사하는 정적 분석입니다. **타입 검사기**(type checker)는 \\(e\\)가 타입이 맞으면 그 **타입**을 돌려주고, 그렇지 않으면 \\(e\\)를 거부하고 발견한 **타입 오류**를 보고합니다.
 
 <div style="text-align:center">
 <svg viewBox="0 0 620 190" width="100%" style="max-width: 620px" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="15">
 <defs><marker id="arr-tc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="100" y="40" width="140" height="62" fill="#2a408e"/>
+<rect rx="3" x="100" y="40" width="140" height="62" fill="#2a408e"/>
 <text x="170.0" y="67.0" text-anchor="middle" fill="#fff">Type</text>
 <text x="170.0" y="85.0" text-anchor="middle" fill="#fff">Checker</text>
 <polyline points="240,52 500,52" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc)"/>
@@ -348,7 +348,7 @@ x.k                 // `NullPointerException` at run-time
 <text x="40" y="170" text-anchor="middle" fill="currentColor" font-weight="bold">Program</text>
 <polyline points="80,140 170,140 170,104" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc)"/>
 <polyline points="80,164 368,164" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc)"/>
-<rect x="370" y="114" width="140" height="62" fill="#2a408e"/>
+<rect rx="3" x="370" y="114" width="140" height="62" fill="#2a408e"/>
 <text x="440.0" y="150.0" text-anchor="middle" fill="#fff">Interpreter</text>
 <polyline points="510,145 540,145" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc)"/>
 <text x="548" y="150" text-anchor="start" fill="currentColor" font-weight="bold">Result</text>
@@ -357,7 +357,7 @@ x.k                 // `NullPointerException` at run-time
 
 ### 타입 안전성
 
-> **정의 (타입 안전성).** 타입 시스템이 **건전하다**(sound)는 것은, 타입이 맞는 프로그램이 실행 중에 타입 오류를 **절대** 일으키지 않는다고 보장한다는 뜻입니다. 이 성질을 <a id="g-type-soundness"></a>**타입 안전성**(type soundness)이라고 부릅니다.
+> **정의(타입 안전성).** 타입 시스템이 **건전하다**(sound)는 것은, 타입이 맞는 프로그램이 실행 중에 타입 오류를 **절대** 일으키지 않는다고 보장한다는 뜻입니다. 이 성질을 <a id="g-type-soundness"></a>**타입 안전성**(type soundness)이라고 부릅니다.
 
 타입 시스템의 관점에서 언어는 두 부류로 나눌 수 있습니다.
 

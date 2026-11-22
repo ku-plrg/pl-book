@@ -6,7 +6,7 @@ src = "src"
 
 [output.html]
 site-url = "/pl-book/ko/"
-additional-js = ["lang.js", "mathjax.js"]
+additional-js = ["lang.js", "mathjax.js", "runner.js"]
 additional-css = ["style.css"]
 default-theme = "light"
 preferred-dark-theme = "navy"
@@ -14,3 +14,6 @@ smart-punctuation = false
 
 [output.html.print]
 enable = false
+
+[output.html.playground]
+runnable = false

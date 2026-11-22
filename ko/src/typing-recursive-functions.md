@@ -10,6 +10,10 @@
 
 TRFAE의 인터프리터와 자연 의미(natural semantics)는 타입을 무시한다는 점만 빼면 RFAE와 똑같으므로, 이 장은 타입 규칙과 타입 검사기에 집중합니다.
 
+이 장에서 만들 `TRFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="TRFAE"></div>
+
 ## 재귀 함수의 타입
 
 ### 다시 보기: `mkRec`과 재귀 함수
@@ -40,7 +44,7 @@ val sum = mkRec(sum => n => if (n < 1) 0 else n + sum(n + -1)); sum(10)
 
 둘째는 RFAE처럼 재귀 함수를 위한 새로운 문법을 아예 언어에 넣는 방법입니다.
 
-```rfae
+```rfae,run
 /* RFAE */
 def sum(n) = if (n < 1) 0 else n + sum(n + -1); sum(10)
 ```
@@ -155,26 +159,22 @@ sum(10) // 55
 
 이 코드는 2023년에 최민석, 최용욱 학생이 알려 준 코드를 조금 고친 것입니다. 원래 `mkRec`과 달라진 곳은 두 군데뿐입니다. `fY`를 함수로 쓰려면 `fY.self`로 안에 든 함수를 꺼내야 하고, `fX`를 `T` 타입 자리에 넘기려면 `T(fX)`로 감싸야 합니다.
 
-Scala 3의 <a id="g-implicit-conversion"></a>암묵적 변환(implicit conversion)을 쓰면 이 감싸기와 꺼내기도 자동으로 하게 만들 수 있습니다(`import scala.language.implicitConversions`가 필요합니다). 그러면 원래 `mkRec`과 거의 똑같은 모양이 됩니다.
+Scala 3의 <a id="g-implicit-conversion"></a>암묵적 변환(implicit conversion)을 쓰면 이 감싸기와 꺼내기도 자동으로 하게 만들 수 있습니다(`import scala.language.implicitConversions`가 필요합니다). 그러면 원래 `mkRec`과 거의 똑같은 모양이 됩니다. 위 코드에서 달라지는 곳만 주석으로 표시했고, `sum`의 정의와 사용은 위와 같습니다.
 
 ```scala
-import scala.language.implicitConversions
+import scala.language.implicitConversions                 // 추가
 
 type Number = BigInt
 case class T(self: T => Number => Number) // T = T => Number => Number
-given Conversion[T, T => Number => Number] = _.self
-given Conversion[T => Number => Number, T] = T(_)
+given Conversion[T, T => Number => Number] = _.self       // 추가: 꺼내기
+given Conversion[T => Number => Number, T] = T(_)         // 추가: 감싸기
 val mkRec = (body: (Number => Number) => Number => Number) => {
   val fX = (fY: T) => {
-    val f = (x: Number) => fY(fY)(x);
+    val f = (x: Number) => fY(fY)(x);                      // fY.self 대신 fY
     body(f)
   };
-  fX(fX)
+  fX(fX)                                                   // T(fX) 대신 fX
 }
-val sum = mkRec((sum: Number => Number) => (n: Number) =>
-  if (n < 1) 0
-  else n + sum(n + -1));
-sum(10) // 55
 ```
 
 case class `T`처럼 이름을 붙여 새 타입을 정의하는 기능은 다음 장 [대수적 데이터 타입](./algebraic-data-types.md)에서 우리 언어에도 넣어 봅니다. 그때 TFAE에서 실패했던 `mkRec`을 다시 정의해 보겠습니다.
@@ -185,7 +185,7 @@ case class `T`처럼 이름을 붙여 새 타입을 정의하는 기능은 다�
 
 TRFAE를 정의하기 전에, 다음 RFAE 식의 타입이 무엇일지 추측해 봅시다.
 
-```rfae
+```rfae,run
 /* RFAE */ def f(n) = n; f
 ```
 
@@ -209,7 +209,7 @@ TRFAE를 정의하기 전에, 다음 RFAE 식의 타입이 무엇일지 추측�
 
 이제 TRFAE 프로그램을 몇 개 보겠습니다. 합을 구하는 `sum`과 피보나치 수를 구하는 `fib`입니다.
 
-```trfae
+```trfae,run
 /* TRFAE */
 def sum(n: Number): Number = {
   if (n < 1) 0
@@ -218,7 +218,7 @@ def sum(n: Number): Number = {
 sum(10) // 55
 ```
 
-```trfae
+```trfae,run
 /* TRFAE */
 def fib(n: Number): Number = {
   if (n < 2) n
@@ -237,8 +237,8 @@ TRFAE의 타입 시스템을 만들려면 TFAE에 없던 다음 세 가지 경�
 
 RFAE의 구체 문법(concrete syntax)에 다음 두 가지를 더합니다.
 
-1. 재귀 함수 정의의 타입 표기 (매개변수 타입과 반환 타입)
-2. 타입 (숫자 타입, 불리언 타입, 화살표 타입)
+1. 재귀 함수 정의의 타입 표기(매개변수 타입과 반환 타입)
+2. 타입(숫자 타입, 불리언 타입, 화살표 타입)
 
 ```bnf
 // expressions

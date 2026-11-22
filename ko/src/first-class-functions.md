@@ -4,6 +4,10 @@
 
 이 장에서는 함수를 숫자와 똑같은 **값**으로 다루는 **일급 함수(first-class function)** 를 배웁니다. 먼저 "일급"이 무슨 뜻인지 살펴보고, VAE에 일급 함수를 더한 언어 FVAE를 정의합니다. 함수가 값이 되려면 함수의 코드뿐 아니라 함수가 정의될 때의 환경도 함께 기억해야 한다는 사실을 발견하게 되는데, 이것이 바로 **클로저(closure)** 입니다. 클로저는 이 책의 나머지 부분 내내 등장하는 핵심 개념입니다.
 
+이 장에서 만들 `FVAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="FVAE"></div>
+
 ## 일급 함수
 
 ### 일급 시민
@@ -85,14 +89,14 @@ map (\x -> x * 2) [1, 2, 3]                   -- [2, 4, 6]
 
 이제 VAE를 확장해, F1VAE의 1차 함수 대신 **일급 함수**가 있는 언어 **FVAE**를 만들겠습니다. FVAE 프로그램은 다음과 같이 생겼습니다.
 
-```fvae
+```fvae,run
 /* FVAE */
 val addN = n => m => n + m;
 val add3 = addN(3);
 add3(5) // 3 + 5 = 8
 ```
 
-```fvae
+```fvae,run
 /* FVAE */
 val inc = x => x + 1;
 val twice = f => n => f(f(n));
@@ -158,7 +162,7 @@ enum Expr:
 
 예를 들어 다음 FVAE 프로그램을 **파싱**하면
 
-```fvae
+```fvae,run
 /* FVAE */
 val addN = n => m => n + m;
 val add3 = addN(3);
@@ -185,7 +189,7 @@ Val("addN",
 
 위 프로그램을 계산해 봅시다.
 
-```fvae
+```fvae,run
 /* FVAE */
 val addN = n => m => n + m;
 val add3 = addN(3);
@@ -258,18 +262,18 @@ v_1 = \langle \lambda \texttt{m}.(\texttt{n} + \texttt{m}), {\color{green}[\text
 <div style="text-align:center">
 <svg viewBox="-8 -8 412 126" width="100%" style="max-width: 560px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="환경의 addN과 add3는 각각 클로저를 가리키고, add3의 클로저는 n ↦ 3인 환경을 기억한다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="first-class-functions-fig-1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
-<rect x="0.0" y="40.0" width="82.1" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="0.0" y="40.0" width="82.1" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="52.1" y1="40.0" x2="52.1" y2="92.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="26.1" y="58.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">addN</text>
 <circle cx="67.1" cy="53.0" r="4"/>
 <line x1="0.0" y1="66.0" x2="82.1" y2="66.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="26.1" y="84.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">add3</text>
 <circle cx="67.1" cy="79.0" r="4"/>
-<rect x="140.0" y="0.0" width="163.4" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="140.0" y="0.0" width="163.4" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="275.4" y1="0.0" x2="275.4" y2="30.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="207.7" y="20.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">λn.λm.(n + m)</text>
 <circle cx="289.4" cy="15.0" r="4"/>
-<rect x="140.0" y="80.0" width="136.3" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="140.0" y="80.0" width="136.3" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="248.3" y1="80.0" x2="248.3" y2="110.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="194.2" y="100.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">λm.(n + m)</text>
 <circle cx="262.3" cy="95.0" r="4"/>
@@ -278,7 +282,7 @@ v_1 = \langle \lambda \texttt{m}.(\texttt{n} + \texttt{m}), {\color{green}[\text
 <line x1="289.4" y1="15.0" x2="359.4" y2="15.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#first-class-functions-fig-1)"/>
 <text x="373.4" y="22.0" font-size="20">∅</text>
 <line x1="262.3" y1="95.0" x2="332.3" y2="95.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#first-class-functions-fig-1)"/>
-<rect x="338.3" y="82.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="338.3" y="82.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="366.3" y1="82.0" x2="366.3" y2="108.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="352.3" y="100.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">n</text>
 <text x="381.3" y="100.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
@@ -292,7 +296,7 @@ VAE와 F1VAE에서 **값**은 **숫자**였습니다.
 type Value = BigInt
 ```
 
-FVAE에서 **값**은 (1) **숫자** \\( n \\)이거나 (2) **클로저** \\( \langle \lambda x.e, \sigma \rangle \\)입니다.
+FVAE에서 **값**은 (1) **숫자** \\( n \\)이거나(2) **클로저** \\( \langle \lambda x.e, \sigma \rangle \\)입니다.
 
 ```scala
 enum Value:
@@ -320,13 +324,7 @@ def interp(expr: Expr, env: Env): Value = ???
 
 ### 의미 정의의 틀
 
-FVAE를 위해 해야 할 일도 두 가지입니다. (1) 인터프리터를 구현하고,
-
-```scala
-def interp(expr: Expr, env: Env): Value = ???
-```
-
-(2) 환경을 이용하는 자연 의미(natural semantics)을 정의합니다.
+FVAE를 위해 해야 할 일도 두 가지입니다. (1) 위에서 모양만 적어 둔 인터프리터 `interp`를 구현하고, (2) 환경을 이용하는 자연 의미(natural semantics)을 정의합니다.
 
 \\[
 \boxed{\sigma \vdash e \Rightarrow v}
@@ -365,8 +363,6 @@ def interp(expr: Expr, env: Env): Value = expr match
 덧셈과 곱셈은 VAE의 규칙을 그대로 가져와 \\( n \\)을 \\( v \\)로 바꾸면 될까요?
 
 ```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
   case Add(l, r) => interp(l, env) + interp(r, env)
   case Mul(l, r) => interp(l, env) * interp(r, env)
 ```
@@ -390,8 +386,6 @@ def interp(expr: Expr, env: Env): Value = expr match
 **아닙니다!** 더하거나 곱할 수 있는 것은 **숫자**뿐이지, 임의의 **값**이 아닙니다. 클로저 두 개를 더한다는 것은 의미가 없습니다. 실제로 위 Scala 코드는 `Value`에 `+`가 정의되어 있지 않아 컴파일조차 되지 않습니다. 두 값이 모두 숫자일 때만 계산하고, 그렇지 않으면 오류를 내야 합니다.
 
 ```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
   case Add(l, r) => (interp(l, env), interp(r, env)) match
     case (NumV(l), NumV(r)) => NumV(l + r)
     case (l, r) => error(s"invalid operation: ${l.str} + ${r.str}")
@@ -420,7 +414,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 결과가 클로저라면 이 규칙들의 전제를 만족할 수 없으므로 계산이 막히고, 인터프리터는 `invalid operation` 오류를 냅니다.
 
-#### 보조 함수로 중복 없애기
+### 보조 함수로 중복 없애기
 
 그런데 `Add`와 `Mul`의 코드가 연산자만 빼고 똑같습니다. <a id="g-helper-function"></a>보조 함수(helper function)를 만들어 중복을 없애 봅시다. 이 함수는
 
@@ -437,32 +431,12 @@ def numBOp(op: BOp[BigInt], x: String): BOp[Value] = (l, r) =>
 
 `BOp[T]`는 `T` 두 개를 받아 `T`를 돌려주는 함수의 타입입니다. `numBOp`가 **함수를 받아 함수를 돌려주는** 고차 함수(higher-order function)라는 점이 재미있습니다. 우리가 지금 구현하려는 일급 함수를 Scala에서 바로 활용하고 있는 셈입니다.
 
-이 코드는 Scala 문법을 이용해 더 짧게 쓸 수 있습니다. 먼저 받은 인자를 그대로 패턴 매칭하는 `(l, r) => (l, r) match`는 `(_, _) match`로 줄일 수 있습니다.
+이 코드는 Scala 문법을 이용해 더 짧게 쓸 수 있습니다.
 
-```scala
-type BOp[T] = (T, T) => T
-def numBOp(op: BOp[BigInt], x: String): BOp[Value] = (_, _) match
-  case (NumV(l), NumV(r)) => NumV(op(l, r))
-  case (l, r) => error(s"invalid operation: ${l.str} $x ${r.str}")
-```
+- 받은 인자를 그대로 패턴 매칭하는 `(l, r) => (l, r) match`는 `(_, _) match`로 줄일 수 있습니다.
+- 더 나아가 Scala에서는 기대하는 타입이 함수 타입이면 `case`들만 나열해서 패턴 매칭 익명 함수를 만들 수 있습니다. 그래서 `(_, _) match`마저 지우고 `=` 바로 아래에 `case` 두 줄만 남겨도 됩니다.
 
-더 나아가 Scala에서는 기대하는 타입이 함수 타입이면 `case`들만 나열해서 패턴 매칭 익명 함수를 만들 수 있습니다.
-
-```scala
-type BOp[T] = (T, T) => T
-def numBOp(op: BOp[BigInt], x: String): BOp[Value] =
-  case (NumV(l), NumV(r)) => NumV(op(l, r))
-  case (l, r) => error(s"invalid operation: ${l.str} $x ${r.str}")
-```
-
-이제 값에 대한 덧셈과 곱셈을 다음과 같이 정의할 수 있습니다. `_ + _`는 `(a, b) => a + b`의 줄임말입니다.
-
-```scala
-val numAdd: BOp[Value] = numBOp(_ + _, "+")
-val numMul: BOp[Value] = numBOp(_ * _, "*")
-```
-
-이 보조 함수들로 인터프리터를 정리하면 다음과 같습니다. 규칙은 그대로입니다.
+이제 값에 대한 덧셈과 곱셈을 `numBOp(_ + _, "+")`, `numBOp(_ * _, "*")`로 정의할 수 있습니다. `_ + _`는 `(a, b) => a + b`의 줄임말입니다. 줄인 `numBOp`와 이 보조 함수들로 인터프리터를 정리하면 다음과 같습니다. 규칙은 그대로입니다.
 
 ```scala
 type BOp[T] = (T, T) => T
@@ -484,8 +458,6 @@ def interp(expr: Expr, env: Env): Value = expr match
 익명 함수 \\( \lambda x.e \\)는 어떤 값으로 계산될까요? 앞에서 본 대로 함수와 **현재 환경**을 묶은 클로저를 만들면 됩니다.
 
 ```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
   case Fun(p, b) => CloV(p, b, env)
 ```
 
@@ -501,19 +473,11 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 ### 함수 적용
 
-함수 적용 \\( e_0(e_1) \\)은 세 단계로 계산합니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case App(f, e) => ???
-```
+함수 적용 \\( e_0(e_1) \\)은 세 단계로 계산합니다. `case App(f, e) => ???`의 자리를 한 단계씩 채워 봅시다.
 
 **첫째**, **함수 식** \\( e_0 \\)을 계산하고 그 결과가 **클로저** \\( \langle \lambda x.e_2, \sigma' \rangle \\)인지 확인합니다. 클로저가 아니라면, 예를 들어 `1(2)`처럼 숫자를 호출하려 한다면 `not a function` 오류를 냅니다.
 
 ```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
   case App(f, e) => interp(f, env) match
     case CloV(p, b, fenv) => ...
     case v                => error(s"not a function: ${v.str}")
@@ -521,17 +485,9 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 클로저 안의 환경 \\( \sigma' \\)는 정적 스코핑을 위해 함수가 **정의된 곳**에서 담아 둔 환경입니다. 현재 환경 \\( \sigma \\) 대신 다른 <a id="g-metavariable"></a>메타변수(metavariable) \\( \sigma' \\)를 쓰는 이유는 일반적으로 두 환경이 다를 수 있기 때문입니다. 코드에서 이 환경의 이름이 `fenv`인 것도 같은 이유입니다(F1VAE의 함수 환경과는 관계없이, "함수의 환경"이라는 뜻입니다).
 
-**둘째**, **인자 식** \\( e_1 \\)을 현재 환경 \\( \sigma \\)에서 계산해 그 값을 \\( v_1 \\)이라고 합니다.
+**둘째**, **인자 식** \\( e_1 \\)을 현재 환경 \\( \sigma \\)에서 계산해 그 값을 \\( v_1 \\)이라고 합니다. 위 코드의 `...` 자리에 `interp(e, env)`가 들어갑니다.
 
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case App(f, e) => interp(f, env) match
-    case CloV(p, b, fenv) => ... interp(e, env) ...
-    case v                => error(s"not a function: ${v.str}")
-```
-
-**셋째**, **몸통 식** \\( e_2 \\)를 계산합니다. 이때 쓰는 환경은 현재 환경 \\( \sigma \\)가 아니라, **클로저에 담긴 환경** \\( \sigma' \\)에 매개변수 \\( x \mapsto v_1 \\)을 더한 \\( \sigma'[x \mapsto v_1] \\)입니다.
+**셋째**, **몸통 식** \\( e_2 \\)를 계산합니다. 이때 쓰는 환경은 현재 환경 \\( \sigma \\)가 아니라, **클로저에 담긴 환경** \\( \sigma' \\)에 매개변수 \\( x \mapsto v_1 \\)을 더한 \\( \sigma'[x \mapsto v_1] \\)입니다. 세 단계를 모두 채우면 다음과 같습니다.
 
 ```scala
 def interp(expr: Expr, env: Env): Value = expr match
@@ -555,15 +511,13 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 > **생각해 보기** `addN(3)(5)`를 이 규칙으로 계산해 보세요. 바깥 `App`의 함수 식 `addN(3)`을 계산하면 클로저 \\( \langle \lambda \texttt{m}.(\texttt{n} + \texttt{m}), [\texttt{n} \mapsto 3] \rangle \\)가 나오고, 몸통 `n + m`은 \\( [\texttt{n} \mapsto 3, \texttt{m} \mapsto 5] \\)에서 계산되어 `8`이 됩니다. 클로저가 `n`을 기억하고 있다는 것이 보이나요?
 
-### 함수 적용 (동적 스코핑)
+### 함수 적용(동적 스코핑)
 
-[1차 함수](./first-order-functions.md) 장에서처럼 FVAE에도 **동적 스코핑**을 정의할 수 있습니다. 클로저에 담긴 환경 \\( \sigma' \\) 대신 함수 **호출 위치**의 현재 환경 \\( \sigma \\)를 확장해 몸통을 계산하면 됩니다.
+[1차 함수](./first-order-functions.md) 장에서처럼 FVAE에도 **동적 스코핑**을 정의할 수 있습니다. 클로저에 담긴 환경 \\( \sigma' \\) 대신 함수 **호출 위치**의 현재 환경 \\( \sigma \\)를 확장해 몸통을 계산하면 됩니다. 정적 스코핑과 달라지는 곳은 `CloV` 경우의 한 줄뿐입니다.
 
 ```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
   case App(f, e) => interp(f, env) match
-    case CloV(p, b, fenv) => interp(b, env + (p -> interp(e, env)))
+    case CloV(p, b, fenv) => interp(b, env + (p -> interp(e, env)))   // fenv 대신 env
     case v                => error(s"not a function: ${v.str}")
 ```
 
@@ -579,7 +533,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 다음 프로그램으로 두 방식을 비교해 봅시다. 프로그램은 같고 결과만 다릅니다.
 
-```fvae
+```fvae,run
 /* FVAE (static scoping) */
 val x = 3;
 val f = y => x * y;
@@ -587,7 +541,7 @@ val x = 4;
 f(5) // 3 * 5 = 15
 ```
 
-```fvae
+```fvae,run
 /* FVAE (dynamic scoping) */
 val x = 3;
 val f = y => x * y;
@@ -632,7 +586,7 @@ f(5) // 4 * 5 = 20
 <div style="text-align:center">
 <svg viewBox="-8 -2 481 258" width="100%" style="max-width: 600px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="f(5)의 몸통을 정적 스코핑은 클로저가 기억한 σ0을 확장해 계산하고(15), 동적 스코핑은 호출 위치의 σ1을 확장해 계산한다(20)" font-family="sans-serif" fill="currentColor">
 <defs><marker id="first-class-functions-fig-2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
-<rect x="0.0" y="30.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="0.0" y="30.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="28.0" y1="30.0" x2="28.0" y2="82.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="14.0" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="43.0" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">4</text>
@@ -641,18 +595,18 @@ f(5) // 4 * 5 = 20
 <circle cx="43.0" cy="69.0" r="4"/>
 <text x="0.0" y="22.0" font-size="16" font-family="Times New Roman, Times, serif" font-style="italic">σ<tspan baseline-shift="sub" font-size="11">1</tspan></text>
 <text x="30.0" y="22.0" font-size="13" opacity="0.75">(호출 위치)</text>
-<rect x="130.0" y="41.0" width="136.3" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="130.0" y="41.0" width="136.3" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="238.3" y1="41.0" x2="238.3" y2="71.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="184.2" y="61.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">λy.(x * y)</text>
 <circle cx="252.3" cy="56.0" r="4"/>
 <path d="M43.0,69.0 C73.0,69.0 100,56 122,56" fill="none" stroke="currentColor" stroke-width="1.8" marker-end="url(#first-class-functions-fig-2)"/>
 <line x1="252.3" y1="56.0" x2="312.3" y2="56.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#first-class-functions-fig-2)"/>
-<rect x="318.3" y="43.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="318.3" y="43.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="346.3" y1="43.0" x2="346.3" y2="69.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="332.3" y="61.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="361.3" y="61.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <text x="318.3" y="35.0" font-size="16" font-family="Times New Roman, Times, serif" font-style="italic">σ<tspan baseline-shift="sub" font-size="11">0</tspan></text>
-<rect x="0.0" y="170.0" width="58.0" height="78.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="0.0" y="170.0" width="58.0" height="78.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="28.0" y1="170.0" x2="28.0" y2="248.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="14.0" y="188.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="43.0" y="188.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">4</text>
@@ -665,7 +619,7 @@ f(5) // 4 * 5 = 20
 <text x="0.0" y="160.0" font-size="15" font-family="Times New Roman, Times, serif">동적: σ<tspan baseline-shift="sub" font-size="10">1</tspan>[y ↦ 5]</text>
 <text x="70.0" y="210.0" font-size="15">x * y ⇒ 20</text>
 <line x1="30.0" y1="86.0" x2="30.0" y2="146.0" stroke="currentColor" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#first-class-functions-fig-2)"/>
-<rect x="318.3" y="170.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="318.3" y="170.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="346.3" y1="170.0" x2="346.3" y2="222.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="332.3" y="188.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="361.3" y="188.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>

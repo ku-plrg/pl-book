@@ -29,7 +29,23 @@
 - [Subtype Polymorphism](./subtype-polymorphism.md)
 - [Type Inference](./type-inference.md)
 
-# Part III. Type Soundness in Lean
+# Part III. Advanced Type Systems
+
+- [Classes and Inheritance](./classes.md)
+- [Bounded Polymorphism and Variance](./bounded-polymorphism.md)
+- [Type Classes](./type-classes.md)
+- [Linear Types and Ownership](./linear-types.md)
+- [Gradual Typing](./gradual-typing.md)
+
+# Part IV. Type Soundness in Lean
+
+- [Machine-Checked Proofs](./lean-intro.md)
+- [Fuel and Result Classification](./lean-fuel.md)
+- [Allowed Errors and Recursion](./lean-errors.md)
+- [Scopes of Type Names](./lean-scopes.md)
+- [Two Subtyping Relations](./lean-subtyping.md)
+- [Logical Relations](./lean-logical-relations.md)
+- [Soundness of Type Inference](./lean-inference.md)
 
 ---
 

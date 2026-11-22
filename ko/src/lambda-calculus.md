@@ -4,13 +4,17 @@
 
 이 장에서는 두 가지를 배웁니다. 먼저 다른 문법으로 표현할 수 있는 문법인 **문법 설탕(syntactic sugar)** 과, 그것을 걷어내는 변환인 <a id="g-desugaring"></a>**설탕 제거(desugaring)** 를 살펴봅니다. 그다음 이 생각을 끝까지 밀어붙여, 변수와 함수와 함수 호출만 남긴 아주 작은 언어인 <a id="g-lambda-calculus"></a>**람다 계산(lambda calculus)** 에 도착합니다. 놀랍게도 이 작은 언어만으로 숫자와 참·거짓, 나아가 컴퓨터가 할 수 있는 모든 계산을 표현할 수 있습니다.
 
+이 장에서 만들 `FAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="FAE"></div>
+
 ## 문법 설탕
 
 ### `val`이 꼭 필요할까?
 
 다음 FVAE 식을 봅시다.
 
-```fvae
+```fvae,run
 /* FVAE */
 val x = 1; x + 2
 ```
@@ -19,7 +23,7 @@ val x = 1; x + 2
 
 이번에는 다음 식을 봅시다.
 
-```fvae
+```fvae,run
 /* FVAE */
 (x => x + 2)(1)
 ```

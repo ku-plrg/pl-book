@@ -4,23 +4,27 @@
 
 그 언어는 **TFAE**, 즉 [일급 함수](./first-class-functions.md) 장의 FAE에 **타입 시스템**을 더한 언어입니다. TFAE를 만들면서 두 가지를 함께 정의합니다. 하나는 식이 언제 타입이 맞는지를 정하는 <a id="g-typing-rule"></a>**타입 규칙**(typing rule)이고, 다른 하나는 그 규칙대로 동작하는 Scala **타입 검사기** `typeCheck`입니다. 마지막으로 인터프리터와 자연 의미(natural semantics)를 어떻게 고치면 되는지, 그리고 연산 의미와 타입 규칙이 어떻게 닮았고 어떻게 다른지 비교해 봅니다.
 
+이 장에서 만들 `TFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="TFAE"></div>
+
 ## TFAE: 타입 시스템을 더한 FAE
 
 TFAE를 정의하기 전에, 다음 FAE 식들의 타입을 짐작해 봅시다.
 
-```fae
+```fae,run
 /* FAE */ 42
 ```
 
 이 식은 **수**를 만들어 내므로, 타입을 `Number`라고 부르기로 합시다.
 
-```fae
+```fae,run
 /* FAE */ x => x + 1
 ```
 
 이 식은 함수 값을 만들어 냅니다. 그냥 "함수"라고만 하면 될까요? 아닙니다. 더 자세히 말할 수 있습니다. 이 함수는 **수** 타입의 인자를 받아서 **수**를 돌려주어야 합니다. 이런 타입을 `Number => Number`라고 쓰고 <a id="g-arrow-type"></a>**화살표 타입**(arrow type)이라고 부릅니다.
 
-```fae
+```fae,run
 /* FAE */ x => x
 ```
 
@@ -47,7 +51,7 @@ val x: Number = 42; x + 1    // == `((x: Number) => x + 1)(42)`
 
 하지만 `val`을 문법 설탕이 아니라 언어의 기능으로 **직접 정의**한다면, 변수의 타입을 초기값으로부터 짐작할 수 있습니다. `42`가 `Number`이니 `x`도 당연히 `Number`입니다.
 
-```tfae
+```tfae,run
 /* TFAE */
 val x = 42; x + 1            // x is `Number` type because of `42`
 ```
@@ -211,16 +215,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 정리하면 타입 검사기는 (1) \\(\Gamma\\)에서 \\(e_1\\)과 \\(e_2\\)의 타입이 \\(\texttt{num}\\)인지 확인하고, (2) \\(e_1 + e_2\\)의 타입으로 \\(\texttt{num}\\)을 돌려줍니다. 규칙의 전제 두 개가 코드의 `mustSame` 두 줄에, 결론의 \\(\texttt{num}\\)이 마지막 줄의 `NumT`에 그대로 대응합니다.
 
-곱셈도 완전히 같습니다.
-
-```scala
-def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
-  ...
-  case Mul(left, right) =>
-    mustSame(typeCheck(left, tenv), NumT)
-    mustSame(typeCheck(right, tenv), NumT)
-    NumT
-```
+곱셈도 완전히 같습니다. 위 코드의 `case Add(left, right) =>`를 `case Mul(left, right) =>`로 바꾸기만 하면 됩니다.
 
 \\[
 \begin{prooftree}
@@ -256,7 +251,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 이 규칙은 초기값에서 알아낸 \\(x\\)의 타입을 \\(\Gamma\\)에 저장합니다. 예를 들어 다음 식에서는 `1: Number`이므로 `tenv`에 `x: Number`가 들어갑니다.
 
-```tfae
+```tfae,run
 /* TFAE */ val x = 1; x + 2      // `x: Number` in `tenv` <- `1: Number`
 ```
 
@@ -324,7 +319,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 \end{prooftree}
 \\]
 
-```tfae
+```tfae,run
 /* TFAE */ (x: Number) => x     // Number => Number
 ```
 
@@ -351,7 +346,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 \end{prooftree}
 \\]
 
-```tfae
+```tfae,run
 /* TFAE */ ((x: Number) => x)(1) // Number
 ```
 
@@ -394,7 +389,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 규칙을 이어 붙여 <a id="g-typing-derivation-tree"></a>**타입 유도 트리**를 그려 보면 식 전체의 타입을 확인할 수 있습니다. 먼저 다음 식을 봅시다.
 
-```tfae
+```tfae,run
 /* TFAE */ val x = 1; x + 2              // 3: Number
 ```
 
@@ -415,7 +410,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 다음은 함수 적용이 들어간 식입니다.
 
-```tfae
+```tfae,run
 /* TFAE */ ((x: Number) => x)(2) * 3     // 6: Number
 ```
 
@@ -442,7 +437,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 <div style="text-align:center">
 <svg viewBox="0 0 620 190" width="100%" style="max-width: 620px" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="15">
 <defs><marker id="arr-tc19" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="100" y="40" width="140" height="62" fill="#2a408e"/>
+<rect rx="3" x="100" y="40" width="140" height="62" fill="#2a408e"/>
 <text x="170.0" y="67.0" text-anchor="middle" fill="#fff">Type</text>
 <text x="170.0" y="85.0" text-anchor="middle" fill="#fff">Checker</text>
 <polyline points="240,52 500,52" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc19)"/>
@@ -456,7 +451,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 <text x="40" y="170" text-anchor="middle" fill="currentColor" font-weight="bold">Program</text>
 <polyline points="80,140 170,140 170,104" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc19)"/>
 <polyline points="80,164 368,164" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc19)"/>
-<rect x="370" y="114" width="140" height="62" fill="#2a408e"/>
+<rect rx="3" x="370" y="114" width="140" height="62" fill="#2a408e"/>
 <text x="440.0" y="150.0" text-anchor="middle" fill="#fff">Interpreter</text>
 <polyline points="510,145 540,145" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-tc19)"/>
 <text x="548" y="150" text-anchor="start" fill="currentColor" font-weight="bold">Result</text>

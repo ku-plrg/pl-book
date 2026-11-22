@@ -4,6 +4,10 @@
 
 이 장에서는 재귀 함수와 그 짝꿍인 <a id="g-conditional"></a>**조건문(conditional)** 을 배웁니다. 먼저 지금까지 만든 언어들에서 재귀가 어떻게 되는지(또는 왜 안 되는지) 살펴봅니다. 그다음 FAE에서 재귀 함수를 만드는 두 가지 길을 걷습니다. 하나는 새 문법 없이 `mkRec`이라는 도우미 함수로 재귀를 만들어 내는 길이고, 다른 하나는 재귀 함수 정의 문법을 언어에 직접 추가해 **RFAE**라는 새 언어를 만드는 길입니다.
 
+이 장에서 만들 `RFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="RFAE"></div>
+
 ## 재귀와 조건문
 
 **재귀 함수**는 자기 자신을 호출하는 함수로, 리스트나 트리 같은 <a id="g-inductive-data-structure"></a>**귀납적 자료 구조(inductive data structure)** 를 처리하는 **반복 과정**에 특히 유용합니다.
@@ -47,7 +51,7 @@ fn sum(n: i32) -> i32 { if n < 1 {0} else {n + sum(n-1)} }
 
 [1차 함수](./first-order-functions.md) 장의 F1VAE는 사실 이미 재귀 함수를 지원합니다.
 
-```f1vae
+```f1vae,run
 /* F1VAE */
 def sum(n) = n + sum(n + -1);
 sum(10)
@@ -117,12 +121,12 @@ FAE의 함수는 **정적 스코핑(static scoping)** 를 따릅니다. 함수 `
 <div style="text-align:center">
 <svg viewBox="-8 1 512 132" width="100%" style="max-width: 600px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="val sum의 클로저는 sum이 아직 없는 빈 환경을 기억하므로 몸통의 sum은 자유 식별자가 된다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="recursive-functions-fig-1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
-<rect x="0.0" y="30.0" width="73.1" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="0.0" y="30.0" width="73.1" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="43.1" y1="30.0" x2="43.1" y2="56.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="21.5" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">sum</text>
 <circle cx="58.1" cy="43.0" r="4"/>
 <text x="0.0" y="22.0" font-size="13" opacity="0.75">val 다음의 환경</text>
-<rect x="130.0" y="28.0" width="366.3" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="130.0" y="28.0" width="366.3" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="468.3" y1="28.0" x2="468.3" y2="58.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="299.1" y="47.9" text-anchor="middle" font-size="14" font-family="ui-monospace, Menlo, monospace">λn.(if (n &lt; 1) 0 else n + sum(n + -1))</text>
 <circle cx="482.3" cy="43.0" r="4"/>
@@ -338,7 +342,7 @@ fac(5) // 5 * 4 * 3 * 2 * 1 = 120
 
 `mkRec`을 다시 들여다봅시다.
 
-```fae
+```fae,run
 /* FAE + conditionals */
 body => {
   val fX = fY => body(x => fY(fY)(x));
@@ -348,7 +352,7 @@ body => {
 
 여기서 `val`을 펼치고 이름을 정리하면 다음과 같은 식이 되는데, 이것을 <a id="g-z-combinator"></a>**Z 조합자(Z combinator)** 라고 부릅니다.
 
-```fae
+```fae,run
 /* FAE + conditionals */
 f => (x => f(v => x(x)(v))) (x => f(v => x(x)(v)))
 ```
@@ -368,7 +372,7 @@ f => (x => f(x(x))) (x => f(x(x)))
 
 FAE에서 재귀 함수를 지원하는 두 번째 방법은 언어에 **재귀 함수 정의** 문법을 직접 추가하는 것입니다. **RFAE**는 FAE에 **재귀**와 **조건문**을 더한 언어입니다.
 
-```rfae
+```rfae,run
 /* RFAE */
 def sum(n) = if (n < 1) 0 else n + sum(n + -1);
 sum(10) // 55
@@ -382,14 +386,14 @@ RFAE를 만들려면 FAE의 식에 다음 세 가지를 더해야 합니다.
 
 재귀 함수 정의는 네 부분으로 이루어집니다.
 
-- 함수 이름 (위의 예에서 `sum`)
-- 매개변수 이름 (`n`)
-- 함수 몸통 식 (`if (n < 1) 0 else n + sum(n + -1)`)
+- 함수 이름(위의 예에서 `sum`)
+- 매개변수 이름(`n`)
+- 함수 몸통 식(`if (n < 1) 0 else n + sum(n + -1)`)
 - <a id="g-scope-expression"></a>스코프 식(scope expression) (`sum(10)`)
 
 F1VAE의 함수 정의와 달리, RFAE의 재귀 함수 정의는 그 자체가 **식**이라는 점에 주의하세요. 따라서 식이 올 수 있는 곳이라면 어디에나 쓸 수 있습니다. 정의된 함수는 스코프 식 안에서만 쓸 수 있습니다.
 
-```rfae
+```rfae,run
 /* RFAE */
 2 * {
   def sum(n) = if (n < 1) 0 else n + sum(n + -1);
@@ -543,15 +547,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 \end{prooftree}
 \\]
 
-새 환경에는 함수 이름 \\( x_0 \\)가 클로저 \\( \langle \lambda x_1.e_2, ? \rangle \\)에 묶여 있어야 합니다. 그럼 이 클로저가 기억할 환경은 무엇이어야 할까요?
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Rec(n, p, b, s) =>
-    val newEnv: Env = env + (n -> CloV(p, b, ???))
-    interp(s, newEnv)
-```
+새 환경에는 함수 이름 \\( x_0 \\)가 클로저 \\( \langle \lambda x_1.e_2, ? \rangle \\)에 묶여 있어야 합니다. 코드로는 `???` 줄이 `val newEnv: Env = env + (n -> CloV(p, b, ???))`가 됩니다. 그럼 이 클로저가 기억할 환경은 무엇이어야 할까요?
 
 \\[
 \begin{prooftree}
@@ -562,15 +558,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 \end{prooftree}
 \\]
 
-FAE에서 재귀가 안 됐던 이유를 떠올려 봅시다. 클로저의 환경에 함수 자신의 이름이 없었기 때문이었죠. 그러니 클로저가 기억할 환경은 \\( x_0 \\)가 이미 들어 있는 환경, 즉 **\\( \sigma' \\) 자기 자신**이어야 합니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Rec(n, p, b, s) =>
-    val newEnv: Env = env + (n -> CloV(p, b, newEnv)) // not working
-    interp(s, newEnv)
-```
+FAE에서 재귀가 안 됐던 이유를 떠올려 봅시다. 클로저의 환경에 함수 자신의 이름이 없었기 때문이었죠. 그러니 클로저가 기억할 환경은 \\( x_0 \\)가 이미 들어 있는 환경, 즉 **\\( \sigma' \\) 자기 자신**이어야 합니다. 코드로는 남은 `???`에 `newEnv`를 넣어 `val newEnv: Env = env + (n -> CloV(p, b, newEnv))`라고 쓰고 싶지만, 이 코드는 동작하지 않습니다.
 
 \\[
 \begin{prooftree}
@@ -586,7 +574,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 <div style="text-align:center">
 <svg viewBox="-8 -28 428 118" width="100%" style="max-width: 440px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="σ′의 x0은 클로저를 가리키고, 그 클로저는 다시 σ′ 자신을 가리키는 순환 구조" font-family="sans-serif" fill="currentColor">
 <defs><marker id="recursive-functions-fig-2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
-<rect x="0.0" y="30.0" width="144.1" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="0.0" y="30.0" width="144.1" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="34.1" y1="30.0" x2="34.1" y2="82.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="17.0" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">…</text>
 <text x="89.1" y="48.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">σ의 바인딩</text>
@@ -594,7 +582,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 <text x="17.0" y="74.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x₀</text>
 <circle cx="89.1" cy="69.0" r="4"/>
 <text x="0.0" y="22.0" font-size="16" font-family="Times New Roman, Times, serif" font-style="italic">σ'</text>
-<rect x="220.0" y="41.0" width="100.2" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="220.0" y="41.0" width="100.2" height="30.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="292.2" y1="41.0" x2="292.2" y2="71.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="256.1" y="61.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">λx₁.e₂</text>
 <circle cx="306.2" cy="56.0" r="4"/>
@@ -604,7 +592,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 </svg>
 </div>
 
-\\( \sigma' \\)가 자기 자신을 포함하는 순환적인 정의입니다. 수학적인 자연 의미에서는 이런 방정식을 만족하는 \\( \sigma' \\)를 생각하면 되므로 문제가 없습니다. 하지만 위의 Scala 코드는 동작하지 않습니다. `newEnv`를 정의하는 식 안에서 아직 정의되지 않은 `newEnv`를 쓰고 있기 때문입니다.
+\\( \sigma' \\)가 자기 자신을 포함하는 순환적인 정의입니다. 수학적인 자연 의미에서는 이런 방정식을 만족하는 \\( \sigma' \\)를 생각하면 되므로 문제가 없습니다. 하지만 앞의 Scala 코드는 동작하지 않습니다. `newEnv`를 정의하는 식 안에서 아직 정의되지 않은 `newEnv`를 쓰고 있기 때문입니다.
 
 여기서 다시 **η-확장**으로 `newEnv`의 계산을 **미루는** 아이디어를 씁니다. 클로저가 환경(`Env`) 자체 대신, 부르면 환경을 만들어 주는 <a id="g-environment-factory"></a>**환경 팩토리(environment factory)** (`() => Env`)를 갖게 하는 것입니다.
 

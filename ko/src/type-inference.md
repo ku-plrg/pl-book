@@ -4,15 +4,19 @@
 
 이 장에서는 바로 그 일, 즉 **타입 추론**(type inference)을 배웁니다. 먼저 세 가지 예제(`sum`, `app`, `id`)를 손으로 따라가며 타입 추론이 어떤 식으로 동작하는지 감을 잡고, 이어서 `TRFAE`에 타입 추론을 더한 언어 `TIFAE`의 타입 규칙과 타입 검사기를 차근차근 정의합니다. 그 과정에서 타입 추론의 심장이라 할 수 있는 <a id="g-unification"></a>**타입 단일화**(type unification)와, 타입 표기 없이도 매개변수 다형성을 누리게 해 주는 <a id="g-let-polymorphism"></a>**let-다형성**(let-polymorphism)을 만나게 됩니다. OCaml, Haskell, Scala, Rust 같은 언어에서 타입을 일일이 적지 않아도 되는 이유가 바로 여기에 있습니다.
 
+이 장에서 만들 `TIFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="TIFAE"></div>
+
 ## 타입 추론이란
 
 앞의 두 장에서 우리는 **다형성**(polymorphism), 즉 하나의 대상을 여러 타입으로 쓰는 방법을 배웠습니다. 다형성에는 [매개변수 다형성](./parametric-polymorphism.md)(parametric polymorphism), [서브타입 다형성](./subtype-polymorphism.md)(subtype polymorphism), 임시 다형성(ad-hoc polymorphism) 등 여러 종류가 있었고, `TFAE`에 매개변수 다형성을 더한 `PTFAE`와 서브타입 다형성을 더한 `STFAE`를 정의했습니다. 이 언어들은 모두 프로그래머가 타입을 꼼꼼히 적어 준다는 전제 위에 서 있었습니다. 이번에는 그 전제를 걷어 내 봅시다.
 
-> **정의 (타입 추론)** 타입 추론은 식의 타입을 자동으로 알아내는 과정입니다.
+> **정의(타입 추론)** 타입 추론은 식의 타입을 자동으로 알아내는 과정입니다.
 
 **타입 추론 알고리즘**의 목표는 프로그래머가 준 명시적인 **타입 표기**(type annotation) 없이 식의 타입을 알아내는 것입니다. 다음 `RFAE` 식을 생각해 봅시다.
 
-```rfae
+```rfae,run
 /* RFAE */
 def sum(x) = if (x < 1) 0 else x + sum(x + -1);
 sum
@@ -100,7 +104,7 @@ def                                  타입 환경: x: T1, sum: T1 => T2
 
 결국 타입 추론은 프로그래머 대신 다음 `TRFAE` 프로그램의 타입 표기를 채워 넣은 셈입니다.
 
-```trfae
+```trfae,run
 /* TRFAE */
 def sum(x: Number): Number = if (x < 1) 0 else x + sum(x + -1);
 sum
@@ -110,7 +114,7 @@ sum
 
 이번에는 고차 함수가 들어간 `FAE` 식입니다.
 
-```fae
+```fae,run
 /* FAE */
 val app = n => f => f(n);
 app(42)(x => x)
@@ -196,7 +200,7 @@ app(42)((x: Number) => x)
 
 세 번째 예제는 항등 함수를 두 번, 서로 다른 타입의 인자에 적용합니다.
 
-```fae
+```fae,run
 /* FAE */
 val id = x => x;
 val n = id(42);
@@ -293,7 +297,7 @@ val : T3
       └─ b : T3
 ```
 
-```ptfae
+```ptfae,run
 /* PTFAE */
 val id = forall[T] { (x: T) => x }
 val n = id[Number](42)
@@ -568,7 +572,7 @@ def typeCheck(e: Expr, tenv: TypeEnv, sol: Solution): (Type, Solution) = e match
 
 이제 미뤄 두었던 `unify`를 정의할 차례입니다.
 
-> **정의 (타입 단일화)** 타입 단일화는 두 타입이 같아지도록 해를 갱신하는 과정입니다. 두 타입을 같게 만들 수 없으면 실패하고 예외를 던집니다.
+> **정의(타입 단일화)** 타입 단일화는 두 타입이 같아지도록 해를 갱신하는 과정입니다. 두 타입을 같게 만들 수 없으면 실패하고 예외를 던집니다.
 
 \\[
 \mathtt{unify} : (\mathbb{T} \times \mathbb{T} \times \Psi) \rightharpoonup \Psi
@@ -908,7 +912,7 @@ def typeCheck(e: Expr, tenv: TypeEnv, sol: Solution): (Type, Solution) = e match
 
 그런데 왜 타입 환경의 자유 타입 변수를 빼야 할까요? 다음 예를 봅시다.
 
-```tifae
+```tifae,run
 /* TIFAE */
 x => {
   // tyenv = [x: T1]  and  solution = [T1 -> _]    (T1 is free in tyenv)

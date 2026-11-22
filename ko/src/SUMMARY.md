@@ -29,7 +29,23 @@
 - [서브타입 다형성](./subtype-polymorphism.md)
 - [타입 추론](./type-inference.md)
 
-# 3부. Lean으로 증명하는 타입 안전성
+# 3부. 고급 타입 시스템
+
+- [클래스와 상속](./classes.md)
+- [유계 다형성과 변성](./bounded-polymorphism.md)
+- [타입 클래스](./type-classes.md)
+- [선형 타입과 소유권](./linear-types.md)
+- [점진적 타입](./gradual-typing.md)
+
+# 4부. Lean으로 증명하는 타입 안전성
+
+- [기계로 확인하는 증명](./lean-intro.md)
+- [연료와 결과 분류](./lean-fuel.md)
+- [허용된 오류와 재귀](./lean-errors.md)
+- [타입 이름의 스코프](./lean-scopes.md)
+- [두 가지 서브타입 관계](./lean-subtyping.md)
+- [논리 관계](./lean-logical-relations.md)
+- [타입 추론의 건전성](./lean-inference.md)
 
 ---
 

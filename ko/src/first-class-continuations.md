@@ -4,6 +4,10 @@
 
 이번 장에서는 이 아이디어를 언어 안으로 끌어들입니다. 프로그래머가 컨티뉴에이션을 **값**으로 붙잡아 변수에 담고, 나중에 그 값을 호출해서 프로그램의 **제어 흐름**(control flow)을 바꿀 수 있게 하는 것, 이것이 <a id="g-first-class-continuation"></a>**일급 컨티뉴에이션**(first-class continuation)입니다. 우리는 \\(\textsf{FAE}\\)에 일급 컨티뉴에이션을 더한 \\(\textsf{KFAE}\\)를 정의하고, 그 인터프리터와 작은 걸음 의미를 만든 뒤, 일급 컨티뉴에이션으로 `return`, `break`, `continue` 같은 **제어문**(control statement)을 표현하는 방법을 살펴봅니다.
 
+이 장에서 만들 `KFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="KFAE"></div>
+
 ## 일급 컨티뉴에이션
 
 ### 다시 보기: 일급 시민
@@ -99,14 +103,14 @@ do
 
 이제 \\(\textsf{FAE}\\)에 일급 컨티뉴에이션을 붙잡는 새 키워드 `vcc`를 더해 \\(\textsf{KFAE}\\)로 확장해 봅시다. 앞의 Racket 예는 \\(\textsf{KFAE}\\)로 이렇게 씁니다.
 
-```kfae
+```kfae,run
 /* KFAE */
 2 * { vcc k; 3 + k(5) }
 ```
 
 조금 더 복잡한 예도 있습니다. 이 예는 뒤에서 자세히 살펴봅니다.
 
-```kfae
+```kfae,run
 /* KFAE */
 {
   vcc done;
@@ -125,7 +129,7 @@ do
 
 \\(\textsf{KFAE}\\)를 위해 \\(\textsf{FAE}\\)의 **식**에 다음 하나를 더합니다.
 
-1. 일급 컨티뉴에이션 (`vcc`)
+1. 일급 컨티뉴에이션(`vcc`)
 
 구체 문법(concrete syntax)은 다음과 같이 확장합니다.
 
@@ -155,14 +159,14 @@ enum Expr:
 
 다음 \\(\textsf{KFAE}\\) 식의 결과는 무엇일까요?
 
-```kfae
+```kfae,run
 /* KFAE */
 2 * { vcc k; 3 + k(5) }
 ```
 
 `k`는 `{ vcc k; ... }` 블록의 컨티뉴에이션, 곧 "블록의 결과에 2를 곱하기"입니다. 이것을 함수로 쓰면 `x => 2 * x`입니다.
 
-```kfae
+```kfae,run
 /* KFAE */
 // k is a continuation that can be represented as `x => 2 * x`
 2 * { vcc k; 3 + k(5) } // 2 * 5 = 10
@@ -170,7 +174,7 @@ enum Expr:
 
 결과는 `10`입니다. 이것을 똑같은 일을 하는 **함수**와 비교해 보면 차이가 선명해집니다.
 
-```fae
+```fae,run
 /* FAE */
 2 * { val k = x => 2 * x; 3 + k(5) } // 2 * (3 + 10) = 26
 ```
@@ -187,7 +191,7 @@ enum Expr:
 <text x="60" y="62" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">k(5)</text>
 <path d="M86,57 L158,57" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#kfae-f1-m0)"/>
 <text x="122" y="50" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">5</text>
-<rect x="160" y="38" width="100" height="38" fill="#2a408e"/>
+<rect rx="3" x="160" y="38" width="100" height="38" fill="#2a408e"/>
 <text x="210" y="62" text-anchor="middle" fill="#fff" font-size="14" font-family="ui-monospace, Menlo, monospace">2 * x</text>
 <path d="M210,76 C210,110 140,118 96,118" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#kfae-f1-m0)"/>
 <text x="222" y="104" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">10</text>
@@ -201,7 +205,7 @@ enum Expr:
 <text x="390" y="62" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">k(5)</text>
 <path d="M416,57 L488,57" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#kfae-f1-m0)"/>
 <text x="452" y="50" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">5</text>
-<rect x="490" y="38" width="100" height="38" fill="#2a408e"/>
+<rect rx="3" x="490" y="38" width="100" height="38" fill="#2a408e"/>
 <text x="540" y="62" text-anchor="middle" fill="#fff" font-size="14" font-family="ui-monospace, Menlo, monospace">2 * …</text>
 <text x="540" y="94" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">k에 저장된 남은 계산</text>
 <text x="390" y="124" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" opacity="0.45">3 + …</text>
@@ -222,7 +226,7 @@ enum Expr:
 
 이제 앞에서 미뤄 둔 예를 봅시다.
 
-```kfae
+```kfae,run
 /* KFAE */
 {
   vcc done;        // done = x => x
@@ -406,31 +410,31 @@ s_0 = 2 :: \blacksquare
 <svg viewBox="0 0 640 215" width="100%" style="max-width: 620px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="예제 1의 App2,κ 걸음. 직전 상태의 값 스택에는 5, 붙잡은 컨티뉴에이션 값, 3, 2가 있다. 그 컨티뉴에이션 값은 Vcc에서 붙잡은 상태 κ0 = (*) :: □, s0 = 2 :: ■이다. 직후에는 지금의 κ와 s를 버리고 붙잡은 상태 위에 5를 올린다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="kfae-f2-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <text x="100" y="24" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">App<tspan baseline-shift="sub" font-size="72%">2</tspan>,κ 직전</text>
-<rect x="14" y="82" width="76" height="26" fill="#2a408e"/>
+<rect rx="3" x="14" y="82" width="76" height="26" fill="#2a408e"/>
 <text x="52.0" y="99.5" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">(@)</text>
-<rect x="14" y="108" width="76" height="26" fill="#2a408e"/>
+<rect rx="3" x="14" y="108" width="76" height="26" fill="#2a408e"/>
 <text x="52.0" y="125.5" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">(+)</text>
-<rect x="14" y="134" width="76" height="26" fill="#2a408e"/>
+<rect rx="3" x="14" y="134" width="76" height="26" fill="#2a408e"/>
 <text x="52.0" y="151.5" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M10,160 L94,160" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="104" y="56" width="92" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="104" y="56" width="92" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="150.0" y="73.5" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">5</text>
-<rect x="104" y="82" width="92" height="26" fill="#2a408e"/>
+<rect rx="3" x="104" y="82" width="92" height="26" fill="#2a408e"/>
 <text x="150.0" y="99.5" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">⟨κ<tspan baseline-shift="sub" font-size="72%">0</tspan> ‖ s<tspan baseline-shift="sub" font-size="72%">0</tspan>⟩</text>
-<rect x="104" y="108" width="92" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="104" y="108" width="92" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="150.0" y="125.5" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">3</text>
-<rect x="104" y="134" width="92" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="104" y="134" width="92" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="150.0" y="151.5" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">2</text>
 <path d="M100,160 L200,160" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="52" y="180" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ</text>
 <text x="150" y="180" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">s</text>
-<rect x="256" y="52" width="130" height="136" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="256" y="52" width="130" height="136" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
 <text x="321" y="24" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">붙잡아 둔 상태</text>
 <text x="321" y="44" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">(Vcc에서)</text>
-<rect x="268" y="134" width="50" height="26" fill="#2a408e"/>
+<rect rx="3" x="268" y="134" width="50" height="26" fill="#2a408e"/>
 <text x="293.0" y="151.5" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M264,160 L322,160" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="330" y="134" width="44" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="330" y="134" width="44" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="352.0" y="151.5" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">2</text>
 <path d="M326,160 L378,160" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="293" y="180" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ<tspan baseline-shift="sub" font-size="72%">0</tspan></text>
@@ -439,12 +443,12 @@ s_0 = 2 :: \blacksquare
 <path d="M390,120 L450,120" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#kfae-f2-m0)"/>
 <text x="420" y="112" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.9">5를 올림</text>
 <text x="540" y="24" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">App<tspan baseline-shift="sub" font-size="72%">2</tspan>,κ 직후</text>
-<rect x="470" y="134" width="60" height="26" fill="#2a408e"/>
+<rect rx="3" x="470" y="134" width="60" height="26" fill="#2a408e"/>
 <text x="500.0" y="151.5" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">(*)</text>
 <path d="M466,160 L534,160" fill="none" stroke="currentColor" stroke-width="2.2"/>
-<rect x="556" y="108" width="60" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="556" y="108" width="60" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="586.0" y="125.5" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">5</text>
-<rect x="556" y="134" width="60" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="556" y="134" width="60" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="586.0" y="151.5" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">2</text>
 <path d="M552,160 L620,160" fill="none" stroke="currentColor" stroke-width="2.2"/>
 <text x="500" y="180" text-anchor="middle" fill="currentColor" font-size="13" font-style="italic" opacity="0.8">κ<tspan baseline-shift="sub" font-size="72%">0</tspan></text>
@@ -545,7 +549,7 @@ while (cond) body
 <div style="text-align:center">
 <svg viewBox="0 0 540 300" width="100%" style="max-width: 500px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="반복문의 제어 흐름: 조건이 참이면 본문으로 들어가고, 본문이 끝나거나 continue(e)를 부르면 다시 조건으로 돌아간다. 조건이 거짓이거나 break(e)를 부르면 반복문 다음 계산으로 간다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="kfae-f3-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="60" y="18" width="380" height="210" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="60" y="18" width="380" height="210" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
 <text x="72" y="38" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">vcc break;</text>
 <rect x="190" y="50" width="120" height="34" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="250" y="72" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">cond</text>

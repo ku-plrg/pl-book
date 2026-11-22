@@ -4,6 +4,10 @@
 
 이 장에서는 상태를 바꾸는 두 번째 방법인 **변경 가능한 변수(mutable variable)** 를 다룹니다. 상자 없이 변수 자체에 새 값을 대입하는 것입니다. FAE에 변경 가능한 변수를 더한 언어 MFAE를 정의하고, 그 구체 문법과 추상 문법, 인터프리터와 자연 의미를 차례로 만들어 봅니다. 마지막으로 함수에 인자를 넘기는 두 가지 방식인 <a id="g-call-by-value"></a>**값에 의한 호출(call-by-value)** 과 <a id="g-call-by-reference"></a>**참조에 의한 호출(call-by-reference)** 을 비교합니다. 둘의 차이는 변수를 바꿀 수 있을 때 비로소 눈에 보이기 시작합니다.
 
+이 장에서 만들 `MFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="MFAE"></div>
+
 ## 변경 가능한 변수란
 
 **변경 가능한 변수**는 초기화한 뒤에도 값을 바꿀 수 있는 변수입니다. Scala에서는 `val` 대신 `var`로 변수를 정의하면 됩니다.
@@ -31,7 +35,7 @@ f(5)             // 5 + 3 == 8 : Int
 
 이제 FAE를 확장해 변경 가능한 변수를 지원하는 MFAE를 만들어 봅시다. 먼저 MFAE 프로그램이 어떻게 생겼는지 보겠습니다.
 
-```mfae
+```mfae,run
 /* MFAE */
 var x = 5;
 x;        // 5
@@ -39,7 +43,7 @@ x = 8;
 x         // 8
 ```
 
-```mfae
+```mfae,run
 /* MFAE */
 var y = 1;
 var f = x => { x = x + y; x * x };
@@ -106,7 +110,7 @@ enum Expr:
 
 첫 번째 예를 한 줄씩 따라가 봅시다. 처음에는 환경과 메모리가 모두 비어 있습니다.
 
-```mfae
+```mfae,run
 /* MFAE */
 var x = 5;
 x;
@@ -126,7 +130,7 @@ x
 
 이번에는 함수가 섞인 두 번째 예를 따라가 봅시다.
 
-```mfae
+```mfae,run
 /* MFAE */
 var y = 1;
 var f = x => {
@@ -163,16 +167,16 @@ f(5)
 <text x="30" y="112" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">f ↦ a<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
 <text x="385" y="22" text-anchor="middle" fill="currentColor" font-size="15">메모리 M</text>
 <text x="255" y="44" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">0</tspan></text>
-<rect x="220" y="52" width="70" height="40" fill="#2a408e"/>
+<rect rx="3" x="220" y="52" width="70" height="40" fill="#2a408e"/>
 <text x="255" y="78" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <text x="335" y="44" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="300" y="52" width="70" height="40" fill="#2a408e"/>
+<rect rx="3" x="300" y="52" width="70" height="40" fill="#2a408e"/>
 <text x="335" y="78" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">v</text>
 <text x="435" y="44" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="400" y="52" width="70" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.6"/>
+<rect rx="3" x="400" y="52" width="70" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.6"/>
 <text x="435" y="78" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace" opacity="0.6">6</text>
 <text x="515" y="44" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">3</tspan></text>
-<rect x="480" y="52" width="70" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.6"/>
+<rect rx="3" x="480" y="52" width="70" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.6"/>
 <text x="515" y="78" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace" opacity="0.6">8</text>
 <text x="475" y="115" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">아무도 가리키지 않음</text>
 <path d="M92,70 L217,70" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#mfae-f1-m0)"/>
@@ -360,7 +364,7 @@ def interp(expr: Expr, env: Env, mem: Mem): (Value, Mem) = expr match
 
 하지만 MFAE의 의미를 다르게 정의할 수도 있습니다. **참조에 의한 호출**(call-by-reference, CBR) 전략에서는 인자 식이 식별자일 때 새 주소를 만들지 않고, 매개변수가 그 식별자의 **주소**를 그대로 가리키게 합니다. 둘의 차이를 두 변수의 값을 맞바꾸려는 다음 프로그램으로 확인해 봅시다.
 
-```mfae
+```mfae,run
 /* MFAE */
 var f = x => y => {
   var t = x;
@@ -401,20 +405,20 @@ f(a)(b); a; b
 <div style="text-align:center">
 <svg viewBox="0 0 640 262" width="100%" style="max-width: 620px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="y = t까지 실행한 뒤의 상태. 값에 의한 호출에서는 x, y가 복사본 a3, a4를 가리켜 a, b의 칸 a1, a2는 3과 7 그대로이다. 참조에 의한 호출에서는 a와 x가 a1을, b와 y가 a2를 함께 가리켜 a1은 7, a2는 3으로 바뀐다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="mfae-f2-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<text x="150" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">값에 의한 호출 (CBV)</text>
-<rect x="170" y="44" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="150" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">값에 의한 호출(CBV)</text>
+<rect rx="3" x="170" y="44" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="200" y="66" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <text x="240" y="65" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="170" y="86" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="170" y="86" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="200" y="108" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">7</text>
 <text x="240" y="107" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="170" y="128" width="60" height="32" fill="#2a408e"/>
+<rect rx="3" x="170" y="128" width="60" height="32" fill="#2a408e"/>
 <text x="200" y="150" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">7</text>
 <text x="240" y="149" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">3</tspan></text>
-<rect x="170" y="170" width="60" height="32" fill="#2a408e"/>
+<rect rx="3" x="170" y="170" width="60" height="32" fill="#2a408e"/>
 <text x="200" y="192" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <text x="240" y="191" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">4</tspan></text>
-<rect x="170" y="212" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="170" y="212" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="200" y="234" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <text x="240" y="233" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">5</tspan></text>
 <text x="50" y="65" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">a</text>
@@ -428,14 +432,14 @@ f(a)(b); a; b
 <text x="50" y="233" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">t</text>
 <path d="M64,228 L167,228" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#mfae-f2-m0)"/>
 <path d="M320,40 L320,250" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-<text x="480" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">참조에 의한 호출 (CBR)</text>
-<rect x="500" y="62" width="60" height="32" fill="#2a408e"/>
+<text x="480" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">참조에 의한 호출(CBR)</text>
+<rect rx="3" x="500" y="62" width="60" height="32" fill="#2a408e"/>
 <text x="530" y="84" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">7</text>
 <text x="570" y="83" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="500" y="146" width="60" height="32" fill="#2a408e"/>
+<rect rx="3" x="500" y="146" width="60" height="32" fill="#2a408e"/>
 <text x="530" y="168" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <text x="570" y="167" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="500" y="212" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="500" y="212" width="60" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="530" y="234" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <text x="570" y="233" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">3</tspan></text>
 <text x="380" y="60" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">a</text>

@@ -54,7 +54,7 @@
 
 이 책은 **고려대학교 COSE212: 프로그래밍 언어** 강의의 교재로 쓰였으며, 강의 일정과 슬라이드는
 [강의 홈페이지](https://plrg.korea.ac.kr/courses/cose212/)에서 볼 수 있습니다. 강의에서는 1부와
-2부를 다루고, 3부는 더 깊이 공부하고 싶은 사람을 위한 심화 내용입니다.
+2부를 다루고, 3부와 4부는 더 깊이 공부하고 싶은 사람을 위한 심화 내용입니다.
 
 ## 이 프로그램은 무엇을 할까요
 
@@ -290,7 +290,7 @@ P4도 같은 방식의 P4-SpecTec을 공식 명세 작성 도구로 받아들이
 <text x="60" y="30" text-anchor="middle" font-style="italic" font-family="serif" font-size="18">P</text>
 <text x="60" y="54" text-anchor="middle" font-weight="bold" font-size="16">Program</text>
 <line x1="108" y1="42" x2="158" y2="42" stroke="currentColor" stroke-width="2.5" marker-end="url(#arr-Interpreter)"/>
-<rect x="160" y="12" width="170" height="60" fill="#2a408e"/>
+<rect rx="3" x="160" y="12" width="170" height="60" fill="#2a408e"/>
 <text x="245" y="48" text-anchor="middle" fill="#ffffff" font-size="17">Interpreter</text>
 <line x1="332" y1="42" x2="380" y2="42" stroke="currentColor" stroke-width="2.5" marker-end="url(#arr-Interpreter)"/>
 <text x="430" y="47" text-anchor="middle" font-weight="bold" font-size="16">Result</text>
@@ -310,7 +310,7 @@ P4도 같은 방식의 P4-SpecTec을 공식 명세 작성 도구로 받아들이
 <text x="60" y="30" text-anchor="middle" font-style="italic" font-family="serif" font-size="18">P</text>
 <text x="60" y="54" text-anchor="middle" font-weight="bold" font-size="16">Program</text>
 <line x1="108" y1="42" x2="158" y2="42" stroke="currentColor" stroke-width="2.5" marker-end="url(#arr-Compiler)"/>
-<rect x="160" y="12" width="170" height="60" fill="#2a408e"/>
+<rect rx="3" x="160" y="12" width="170" height="60" fill="#2a408e"/>
 <text x="245" y="48" text-anchor="middle" fill="#ffffff" font-size="17">Compiler</text>
 <line x1="332" y1="42" x2="380" y2="42" stroke="currentColor" stroke-width="2.5" marker-end="url(#arr-Compiler)"/>
 <text x="430" y="30" text-anchor="middle" font-style="italic" font-family="serif" font-size="18">P'</text>
@@ -350,7 +350,7 @@ P4도 같은 방식의 P4-SpecTec을 공식 명세 작성 도구로 받아들이
 <line x1="462" y1="46" x2="488" y2="46" stroke="currentColor" stroke-width="2.2" marker-end="url(#arr-intro-method)"/>
 <rect x="490" y="16" width="140" height="60" rx="6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="6 4"/>
 <text x="560" y="42" text-anchor="middle" font-weight="bold" font-size="16">타입 시스템</text>
-<text x="560" y="62" text-anchor="middle" font-size="12" opacity="0.85">타입 규칙과 검사기 (2부)</text>
+<text x="560" y="62" text-anchor="middle" font-size="12" opacity="0.85">타입 규칙과 검사기(2부)</text>
 <path d="M560,78 L560,108 L75,108 L75,80" fill="none" stroke="currentColor" stroke-width="1.8" marker-end="url(#arr-intro-method)"/>
 <text x="318" y="132" text-anchor="middle" font-size="13">다음 장: 기능을 하나 더한 언어로 다시</text>
 </svg>
@@ -370,7 +370,7 @@ P4도 같은 방식의 P4-SpecTec을 공식 명세 작성 도구로 받아들이
 그 언어가 어디서 자라났는지를 보여 줍니다. 상자를 누르면 그 장으로, 주황색 상자(수업 프로젝트)를 누르면 과제 설명으로 갑니다.
 
 <div style="text-align:center">
-<svg class="lang-map" viewBox="0 0 680 440" width="100%" style="max-width: 640px" role="img" aria-label="AE에서 TIFAE까지 장마다 자라나는 언어의 지도와 세 가지 수업 프로젝트" fill="currentColor" font-family="sans-serif">
+<svg class="lang-map" viewBox="0 0 680 652" width="100%" style="max-width: 640px" role="img" aria-label="AE에서 TIFAE까지 장마다 자라나는 언어의 지도와 세 가지 수업 프로젝트" fill="currentColor" font-family="sans-serif">
 <defs><marker id="arr-intro-map" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
 <text x="10" y="18" font-size="13" font-weight="bold" opacity="0.85">1부. 타입 없는 언어</text>
 <g font-family="ui-monospace, Menlo, monospace" text-anchor="middle">
@@ -391,9 +391,9 @@ P4도 같은 방식의 P4-SpecTec을 공식 명세 작성 도구로 받아들이
 <a href="./parametric-polymorphism.html"><rect x="10" y="292" width="90" height="44" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="55" y="313" font-size="14" font-weight="bold">PTFAE</text><text x="55" y="329" font-size="11" font-family="sans-serif">18장</text></a>
 <a href="./subtype-polymorphism.html"><rect x="120" y="292" width="90" height="44" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="165" y="313" font-size="14" font-weight="bold">STFAE</text><text x="165" y="329" font-size="11" font-family="sans-serif">19장</text></a>
 <a href="./type-inference.html"><rect x="260" y="292" width="90" height="44" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="305" y="313" font-size="14" font-weight="bold">TIFAE</text><text x="305" y="329" font-size="11" font-family="sans-serif">20장</text></a>
-<a class="proj" href="https://github.com/ku-plrg-classroom/docs/tree/main/cose212/mini-fsharp" target="_blank"><rect x="574" y="28" width="100" height="44" rx="14" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="625" y="48" font-size="13">MiniFSharp</text><text x="625" y="64" font-size="11" font-family="sans-serif">5장 뒤 프로젝트</text></a>
-<a class="proj" href="https://github.com/ku-plrg-classroom/docs/tree/main/cose212/mini-python" target="_blank"><rect x="574" y="110" width="100" height="44" rx="14" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="625" y="130" font-size="13">MiniPython</text><text x="625" y="146" font-size="11" font-family="sans-serif">13장 뒤 프로젝트</text></a>
-<a class="proj" href="https://github.com/ku-plrg-classroom/docs/tree/main/cose212/mini-scala" target="_blank"><rect x="574" y="292" width="100" height="44" rx="14" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="625" y="312" font-size="13">MiniScala</text><text x="625" y="328" font-size="11" font-family="sans-serif">18장 뒤 프로젝트</text></a>
+<a class="proj" href="https://github.com/ku-plrg-classroom/docs/tree/main/cose212/mini-fsharp" target="_blank"><rect x="574" y="28" width="100" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="625" y="48" font-size="13">MiniFSharp</text><text x="625" y="64" font-size="11" font-family="sans-serif">5장 뒤 프로젝트</text></a>
+<a class="proj" href="https://github.com/ku-plrg-classroom/docs/tree/main/cose212/mini-python" target="_blank"><rect x="574" y="110" width="100" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="625" y="130" font-size="13">MiniPython</text><text x="625" y="146" font-size="11" font-family="sans-serif">13장 뒤 프로젝트</text></a>
+<a class="proj" href="https://github.com/ku-plrg-classroom/docs/tree/main/cose212/mini-scala" target="_blank"><rect x="574" y="292" width="100" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="625" y="312" font-size="13">MiniScala</text><text x="625" y="328" font-size="11" font-family="sans-serif">18장 뒤 프로젝트</text></a>
 </g>
 <g stroke="currentColor" stroke-width="1.6" fill="none">
 <line x1="85" y1="50" x2="100" y2="50" marker-end="url(#arr-intro-map)"/>
@@ -421,9 +421,25 @@ P4도 같은 방식의 P4-SpecTec을 공식 명세 작성 도구로 받아들이
 <g class="proj"><rect x="450" y="238" width="14" height="14" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <text x="472" y="250" font-size="12">수업 프로젝트</text></g>
 <line x1="10" y1="358" x2="672" y2="358" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>
-<text x="10" y="380" font-size="13" font-weight="bold" opacity="0.85">3부. Lean으로 증명하는 타입 안전성</text>
-<rect x="10" y="390" width="534" height="44" rx="5" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
-<text x="277" y="417" text-anchor="middle" font-size="13" opacity="0.6">준비 중: 2부 언어들의 타입 안전성을 Lean 4로 증명합니다</text>
+<text x="10" y="380" font-size="13" font-weight="bold" opacity="0.85">3부. 고급 타입 시스템</text>
+<g font-family="ui-monospace, Menlo, monospace" text-anchor="middle">
+<a href="./classes.html"><rect x="10" y="390" width="90" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="55" y="411" font-size="14" font-weight="bold">FJ</text><text x="55" y="427" font-size="11" font-family="sans-serif">21장</text></a>
+<a href="./bounded-polymorphism.html"><rect x="120" y="390" width="90" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="165" y="411" font-size="14" font-weight="bold">BTFAE</text><text x="165" y="427" font-size="11" font-family="sans-serif">22장</text></a>
+<a href="./type-classes.html"><rect x="230" y="390" width="90" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="275" y="411" font-size="14" font-weight="bold">TCFAE</text><text x="275" y="427" font-size="11" font-family="sans-serif">23장</text></a>
+<a href="./linear-types.html"><rect x="340" y="390" width="90" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="385" y="411" font-size="14" font-weight="bold">LTFAE</text><text x="385" y="427" font-size="11" font-family="sans-serif">24장</text></a>
+<a href="./gradual-typing.html"><rect x="450" y="390" width="90" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="495" y="411" font-size="14" font-weight="bold">GTFAE</text><text x="495" y="427" font-size="11" font-family="sans-serif">25장</text></a>
+</g>
+<line x1="10" y1="452" x2="672" y2="452" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>
+<text x="10" y="474" font-size="13" font-weight="bold" opacity="0.85">4부. Lean으로 증명하는 타입 안전성</text>
+<g font-family="sans-serif">
+<a href="./lean-intro.html"><rect x="10" y="484" width="325" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="22" y="506" font-size="12" opacity="0.75">26장</text><text x="60" y="506" font-size="14" font-weight="bold">기계로 확인하는 증명</text></a>
+<a href="./lean-fuel.html"><rect x="10" y="526" width="325" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="22" y="548" font-size="12" opacity="0.75">27장</text><text x="60" y="548" font-size="14" font-weight="bold">연료와 결과 분류</text><text x="323" y="548" font-size="12" text-anchor="end" font-family="ui-monospace, Menlo, monospace" opacity="0.75">TFAE</text></a>
+<a href="./lean-errors.html"><rect x="10" y="568" width="325" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="22" y="590" font-size="12" opacity="0.75">28장</text><text x="60" y="590" font-size="14" font-weight="bold">허용된 오류와 재귀</text><text x="323" y="590" font-size="12" text-anchor="end" font-family="ui-monospace, Menlo, monospace" opacity="0.75">TRFAE</text></a>
+<a href="./lean-scopes.html"><rect x="10" y="610" width="325" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="22" y="632" font-size="12" opacity="0.75">29장</text><text x="60" y="632" font-size="14" font-weight="bold">타입 이름의 스코프</text><text x="323" y="632" font-size="12" text-anchor="end" font-family="ui-monospace, Menlo, monospace" opacity="0.75">ATFAE</text></a>
+<a href="./lean-subtyping.html"><rect x="345" y="484" width="325" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="357" y="506" font-size="12" opacity="0.75">30장</text><text x="395" y="506" font-size="14" font-weight="bold">두 가지 서브타입 관계</text><text x="658" y="506" font-size="12" text-anchor="end" font-family="ui-monospace, Menlo, monospace" opacity="0.75">STFAE</text></a>
+<a href="./lean-logical-relations.html"><rect x="345" y="526" width="325" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="357" y="548" font-size="12" opacity="0.75">31장</text><text x="395" y="548" font-size="14" font-weight="bold">논리 관계</text><text x="658" y="548" font-size="12" text-anchor="end" font-family="ui-monospace, Menlo, monospace" opacity="0.75">PTFAE</text></a>
+<a href="./lean-inference.html"><rect x="345" y="568" width="325" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="357" y="590" font-size="12" opacity="0.75">32장</text><text x="395" y="590" font-size="14" font-weight="bold">타입 추론의 건전성</text><text x="658" y="590" font-size="12" text-anchor="end" font-family="ui-monospace, Menlo, monospace" opacity="0.75">TIFAE</text></a>
+</g>
 </svg>
 </div>
 
@@ -470,12 +486,36 @@ P4도 같은 방식의 P4-SpecTec을 공식 명세 작성 도구로 받아들이
 - [타입 추론](./type-inference.md)(`TIFAE`)에서 타입 변수와 타입 단일화를 써서, 프로그래머가 타입을
   적지 않아도 타입을 알아내는 방법을 배웁니다.
 
-### 3부. Lean으로 증명하는 타입 안전성 (준비 중)
+### 3부. 고급 타입 시스템
+
+3부(21장부터 25장까지)는 강의에서 다루지 않는 심화 내용으로, 2부의 방법 그대로 실제 언어의
+타입 기능을 하나씩 정의하고 구현합니다.
+
+- [클래스와 상속](./classes.md)(`FJ`)에서 Java의 클래스, 상속, 캐스트를 Featherweight Java로
+  정의합니다.
+- [유계 다형성과 변성](./bounded-polymorphism.md)(`BTFAE`)에서 매개변수 다형성과 서브타입 다형성을
+  합치고, `List[+A]` 같은 변성을 다룹니다.
+- [타입 클래스](./type-classes.md)(`TCFAE`)에서 Haskell의 타입 클래스, Scala의 `given`, Rust의
+  trait 뒤에 있는 임시 다형성을 다룹니다.
+- [선형 타입과 소유권](./linear-types.md)(`LTFAE`)에서 값을 한 번만 쓰게 하는 타입으로 Rust의
+  소유권이 막아 주는 메모리 버그를 설명합니다.
+- [점진적 타입](./gradual-typing.md)(`GTFAE`)에서 TypeScript의 `any`처럼 정적 타입과 동적 타입을
+  섞어 쓰는 방법을 다룹니다.
+
+### 4부. Lean으로 증명하는 타입 안전성
 
 2부에서는 "타입 검사를 통과한 프로그램은 실행 중에 타입 오류를 내지 않는다"는 타입
-안전성을 배우지만, 그 증명은 손으로 따라가는 수준에 머뭅니다. 3부에서는 증명 보조기인
-Lean 4를 써서, 2부의 타입 있는 언어들의 타입 안전성을 기계로 검증되는 증명으로 직접
-작성해 볼 예정입니다. 지금은 준비 중입니다.
+안전성을 배우지만, 그 증명은 손으로 따라가는 수준에 머뭅니다. 4부(26장부터 32장까지)에서는
+증명 보조기 Lean 4로 2부 언어들의 타입 안전성을 기계로 검증되는 증명으로 씁니다. Lean 자체는
+가르치지 않고, [기계로 확인하는 증명](./lean-intro.md)에서 알고 와야 할 것과 공부할 자료를
+안내합니다. 장은 언어별이 아니라 새로 필요한 증명 아이디어별로 나뉩니다.
+
+- [연료와 결과 분류](./lean-fuel.md): 모든 증명의 공통 틀(`TFAE`)
+- [허용된 오류와 재귀](./lean-errors.md): 0으로 나누기와 재귀 클로저(`TRFAE`)
+- [타입 이름의 스코프](./lean-scopes.md): 전역이 아닌 타입 이름(`ATFAE`)
+- [두 가지 서브타입 관계](./lean-subtyping.md): 알고리즘적 규칙과 선언적 규칙(`STFAE`)
+- [논리 관계](./lean-logical-relations.md): 귀납만으로는 부족할 때(`PTFAE`)
+- [타입 추론의 건전성](./lean-inference.md): 추론 결과가 옳다는 증명(`TIFAE`)
 
 ## 이 책을 읽는 방법
 

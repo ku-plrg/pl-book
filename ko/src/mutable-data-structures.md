@@ -9,6 +9,10 @@
 
 변경은 더 **효율적인** 프로그램을 쓰게 도와주지만, 프로그램을 **이해하기 어렵게** 만들고 **실수하기 쉽게** 만들기도 합니다. 이 장에서는 그중 변경 가능한 자료 구조를 배웁니다. FAE에 가장 단순한 변경 가능한 자료 구조인 <a id="g-box"></a>**상자(box)** 를 더한 언어 **BFAE**를 만들고, 그 의미를 정하기 위해 <a id="g-memory"></a>**메모리(memory)** 라는 새로운 개념을 도입합니다. 변경 가능한 변수는 다음 장 [변경 가능한 변수](./mutable-variables.md)에서 다룹니다.
 
+이 장에서 만들 `BFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="BFAE"></div>
+
 ## 변경 가능한 자료 구조
 
 **변경 가능한 자료 구조**는 만든 뒤에도 그 **내용**을 **고칠** 수 있는 자료 구조입니다. Scala에서 불변 맵과 변경 가능한 맵을 비교해 봅시다.
@@ -42,7 +46,7 @@ box.content           // 8
 
 이제 FAE를 **BFAE**로 확장해서 변경 가능한 상자를 지원해 봅시다.
 
-```bfae
+```bfae,run
 /* BFAE */
 val box = Box(5);
 box.get;        // 5
@@ -50,7 +54,7 @@ box.set(8);
 box.get         // 8
 ```
 
-```bfae
+```bfae,run
 /* BFAE */
 val box = Box(1);
 val f   = x => x + box.get;
@@ -65,7 +69,7 @@ f(3)            // 3 + 2 = 5
 
 BFAE를 만들려면 FAE의 식에 다음 세 가지를 더해야 합니다.
 
-1. **상자 만들기** (`Box`)
+1. **상자 만들기**(`Box`)
 2. **상자 연산**: 내용물 읽기(`get`)와 내용물 쓰기(`set`)
 3. 식의 <a id="g-sequence"></a>**순차 실행(sequence)**
 
@@ -117,7 +121,7 @@ enum Expr:
 
 다음 BFAE 식은 어떻게 계산해야 할까요?
 
-```bfae
+```bfae,run
 /* BFAE */
 val box = Box(5);
 box.get;    // 5
@@ -151,7 +155,7 @@ M \in \mathbb{A} \xrightarrow{\text{fin}} \mathbb{V}
 
 조금 더 복잡한 예를 봅시다.
 
-```bfae
+```bfae,run
 /* BFAE */
 val a = Box(1);
 val f = x => x + a.get;
@@ -192,10 +196,10 @@ f(5)
   <text x="40" y="133" fill="currentColor">f ↦ ⟨λx…⟩</text>
   <text x="40" y="183" fill="currentColor">b ↦ a₁</text>
   <text x="475" y="22" text-anchor="middle" fill="currentColor" font-family="serif" font-size="18">메모리 M</text>
-  <rect x="340" y="70" width="120" height="44" fill="#2a408e"/>
+  <rect rx="3" x="340" y="70" width="120" height="44" fill="#2a408e"/>
   <text x="400" y="98" text-anchor="middle" fill="white">3</text>
   <text x="400" y="136" text-anchor="middle" fill="currentColor">a₀</text>
-  <rect x="490" y="70" width="120" height="44" fill="#2a408e"/>
+  <rect rx="3" x="490" y="70" width="120" height="44" fill="#2a408e"/>
   <text x="550" y="98" text-anchor="middle" fill="white">a₀</text>
   <text x="550" y="136" text-anchor="middle" fill="currentColor">a₁</text>
   <path d="M112,78 C200,70 280,88 336,90" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#bfae-arr)"/>
@@ -264,7 +268,7 @@ def interp(expr: Expr, env: Env, mem: Mem): (Value, Mem) = expr match
 
 왜 이렇게까지 해야 할까요? 다음 예를 봅시다.
 
-```bfae
+```bfae,run
 /* BFAE */
 val x = Box(5);
 { x.set(8); 2 } + x.get // 2 + 8 = 10 -- NOT 2 + 5 = 7
@@ -284,9 +288,9 @@ val x = Box(5);
 <text x="602.0" y="34" text-anchor="middle" fill="currentColor" font-size="15" font-style="italic">M<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
 <rect x="560" y="44" width="84" height="36" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="602.0" y="67" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">a<tspan baseline-shift="sub" font-size="72%">0</tspan> ↦ 8</text>
-<rect x="124" y="44" width="170" height="36" fill="#2a408e"/>
+<rect rx="3" x="124" y="44" width="170" height="36" fill="#2a408e"/>
 <text x="209.0" y="67" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">{ x.set(8); 2 }</text>
-<rect x="438" y="44" width="92" height="36" fill="#2a408e"/>
+<rect rx="3" x="438" y="44" width="92" height="36" fill="#2a408e"/>
 <text x="484.0" y="67" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">x.get</text>
 <path d="M94,62.0 L122,62.0" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#bfae-f2-m0)"/>
 <path d="M294,62.0 L322,62.0" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#bfae-f2-m0)"/>

@@ -9,11 +9,15 @@
 
 이 장의 목표는 \\(\textsf{FAE}\\)를 지연 계산 언어 \\(\textsf{LFAE}\\)로 확장하면서 인터프리터와 자연 의미(natural semantics)를 함께 정의하고, 마지막에 두 지연 계산 방식의 차이를 살펴보는 것입니다.
 
+이 장에서 만들 `LFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="LFAE"></div>
+
 ## 지연 계산이란
 
 지금까지 우리가 정의한 언어는 모두 즉시 계산을 따랐습니다. 어떤 식이 실제로 필요한지 따지지 않고 만나는 대로 계산합니다. 다음 두 \\(\textsf{FAE}\\) 프로그램을 봅시다. (`val`은 문법 설탕으로 지원한다고 가정합니다.)
 
-```fae
+```fae,run
 /* FAE */
 val x = 1 + 2;
 val y = z + 3;                // error -- free identifier: z
@@ -131,7 +135,7 @@ take 10 nats              -- [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 이제 \\(\textsf{FAE}\\)를 확장해 지연 계산을 지원하는 \\(\textsf{LFAE}\\)를 만들어 봅시다. 앞의 두 예제를 \\(\textsf{LFAE}\\)로 실행하면 결과가 달라져야 합니다.
 
-```lfae
+```lfae,run
 /* LFAE */
 val x = 1 + 2;
 val y = z + 3;
@@ -139,7 +143,7 @@ x * 2
 // error (FAE) vs. 6 (LFAE)
 ```
 
-```lfae
+```lfae,run
 /* LFAE */
 val f = x => y => x * 2;
 f(1 + 2)(z + 3)
@@ -181,7 +185,7 @@ enum Value:
 
 식 값에는 식만이 아니라 **환경도 함께** 넣어야 올바르게 계산할 수 있습니다. 왜 그런지 예를 봅시다.
 
-```lfae
+```lfae,run
 /* LFAE */
 val y = 3;
 // [ y -> 3 ]
@@ -196,7 +200,7 @@ inc(y * 2)
 
 만약 인자 식 `y * 2`만 넘긴다면, `inc`의 본문에서 `x`를 계산할 때 `y`는 `inc`가 정의될 당시의 환경에서 찾아져 `3`이 되고 결과는 `7`이 됩니다. 하지만 `inc(y * 2)`를 쓴 곳에서 `y`는 분명히 `5`였습니다. 정적 스코핑(static scoping)을 지키려면 인자 식이 **쓰인 곳의 환경**도 함께 넘겨야 합니다.
 
-```lfae
+```lfae,run
 /* LFAE */
 val y = 3;
 // [ y -> 3 ]
@@ -220,7 +224,7 @@ inc(y * 2)
 <circle cx="82" cy="61" r="4.5" fill="currentColor"/>
 <text x="30" y="98" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">y ↦ 3</text>
 <text x="325" y="26" text-anchor="middle" fill="currentColor" font-size="14">식 값</text>
-<rect x="240" y="40" width="170" height="42" fill="#2a408e"/>
+<rect rx="3" x="240" y="40" width="170" height="42" fill="#2a408e"/>
 <text x="250" y="66" text-anchor="start" fill="#fff" font-size="14" font-family="ui-monospace, Menlo, monospace">⟨⟨ y * 2,</text>
 <circle cx="350" cy="61" r="4.5" fill="#fff"/>
 <text x="374" y="66" text-anchor="start" fill="#fff" font-size="14" font-family="ui-monospace, Menlo, monospace">⟩⟩</text>
@@ -258,14 +262,10 @@ def interp(expr: Expr, env: Env): Value = expr match
 \end{prooftree}
 \\]
 
-우리는 인자 식 \\(e_1\\)의 계산을, 본문 \\(e_2\\)에서 매개변수 \\(x\\)가 쓰일 때까지 미루고 싶습니다. 그래서 \\(e_1\\)을 계산하는 대신 식 값 \\(\langle\mkern-3mu\langle e_1, \sigma \rangle\mkern-3mu\rangle\\)로 감싸서 매개변수에 묶습니다.
+우리는 인자 식 \\(e_1\\)의 계산을, 본문 \\(e_2\\)에서 매개변수 \\(x\\)가 쓰일 때까지 미루고 싶습니다. 그래서 \\(e_1\\)을 계산하는 대신 식 값 \\(\langle\mkern-3mu\langle e_1, \sigma \rangle\mkern-3mu\rangle\\)로 감싸서 매개변수에 묶습니다. 위 코드에서 `CloV` 경우의 한 줄만 바뀝니다.
 
 ```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case App(f, e) => interp(f, env) match
-    case CloV(p, b, fenv) => interp(b, fenv + (p -> ExprV(e, env)))
-    case v                => error(s"not a function: ${v.str}")
+    case CloV(p, b, fenv) => interp(b, fenv + (p -> ExprV(e, env)))   // interp(e, env) 대신 ExprV(e, env)
 ```
 
 \\[
@@ -415,7 +415,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 함수 적용으로 돌아가 봅시다. 다음 예는 지금까지 만든 인터프리터에서 오류가 납니다.
 
-```lfae
+```lfae,run
 /* LFAE */
 (f => f(1))(x => x+1) // error -- not a function (expression value in f)
 ```
@@ -442,7 +442,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 \end{prooftree}
 \\]
 
-```lfae
+```lfae,run
 /* LFAE */
 (f => f(1))(x => x+1) // 2
 ```
@@ -484,9 +484,9 @@ def f(x: => Int): Int = { x + x + x }   // Call-by-Name
 f(get)                                  // 1 + 2 + 3 = 6
 ```
 
+`count`와 `get`을 똑같이 새로 정의한 뒤 `f` 대신 `lazy val`을 쓰면 결과가 달라집니다.
+
 ```scala
-var count: Int = 0
-def get: Int = { count += 1; count }
 lazy val x: Int = get                   // Call-by-Need
 x + x + x                               // 1 + 1 + 1 = 3
 ```
@@ -496,17 +496,17 @@ CBN에서는 `x`를 쓸 때마다 `get`이 다시 불려 `count`가 1, 2, 3으�
 <div style="text-align:center">
 <svg viewBox="0 0 640 245" width="100%" style="max-width: 620px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="이름에 의한 호출에서는 x를 쓸 때마다 get을 실행해 1, 2, 3을 얻어 합이 6이다. 필요에 의한 호출에서는 처음 한 번만 get을 실행하고 결과 1을 캐시에 저장해 재사용하므로 합이 3이다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="lfae-f2-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<text x="155" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">이름에 의한 호출 (CBN)</text>
+<text x="155" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">이름에 의한 호출(CBN)</text>
 <rect x="90" y="40" width="130" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="155" y="65" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">⟨⟨get, σ⟩⟩</text>
 <text x="55" y="192" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">첫째 x</text>
-<rect x="25" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="25" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="55" y="163" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
 <text x="155" y="192" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">둘째 x</text>
-<rect x="125" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="125" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="155" y="163" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">2</text>
 <text x="255" y="192" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">셋째 x</text>
-<rect x="225" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="225" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="255" y="163" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <path d="M120,80 L62,137" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#lfae-f2-m0)"/>
 <path d="M155,80 L155,137" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#lfae-f2-m0)"/>
@@ -516,20 +516,20 @@ CBN에서는 `x`를 쓸 때마다 `get`이 다시 불려 `count`가 1, 2, 3으�
 <text x="228" y="108" text-anchor="start" fill="currentColor" font-size="12" font-family="ui-monospace, Menlo, monospace">get</text>
 <text x="155" y="228" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">1 + 2 + 3 = 6</text>
 <path d="M320,40 L320,225" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-<text x="485" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">필요에 의한 호출 (CBN′)</text>
+<text x="485" y="22" text-anchor="middle" fill="currentColor" font-size="15" font-weight="bold">필요에 의한 호출(CBN′)</text>
 <rect x="390" y="40" width="190" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="442" y="65" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">⟨⟨get, σ⟩⟩</text>
-<rect x="495" y="40" width="85" height="40" fill="#2a408e"/>
+<rect rx="3" x="495" y="40" width="85" height="40" fill="#2a408e"/>
 <text x="537" y="65" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">Some(1)</text>
 <text x="537" y="96" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">캐시</text>
 <text x="385" y="192" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">첫째 x</text>
-<rect x="355" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="355" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="385" y="163" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
 <text x="485" y="192" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">둘째 x</text>
-<rect x="455" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="455" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="485" y="163" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
 <text x="585" y="192" text-anchor="middle" fill="currentColor" font-size="12" opacity="0.8">셋째 x</text>
-<rect x="555" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="555" y="140" width="60" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="585" y="163" text-anchor="middle" fill="currentColor" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
 <path d="M430,80 L390,137" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#lfae-f2-m0)"/>
 <path d="M520,102 L490,137" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#lfae-f2-m0)"/>

@@ -13,7 +13,7 @@
 <defs><marker id="arr-cc1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <text x="180" y="22" text-anchor="middle" fill="currentColor" font-weight="bold">Source Code <tspan font-weight="normal">(String)</tspan></text>
 <polyline points="180,30 180,62" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc1)"/>
-<rect x="110" y="64" width="140" height="80" fill="#2a408e"/>
+<rect rx="3" x="110" y="64" width="140" height="80" fill="#2a408e"/>
 <text x="180.0" y="109.0" text-anchor="middle" fill="#fff">Compiler</text>
 <polyline points="180,144 180,176" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc1)"/>
 <text x="180" y="198" text-anchor="middle" fill="currentColor" font-weight="bold">Machine Code <tspan font-weight="normal">(String)</tspan></text>
@@ -27,47 +27,47 @@
 <defs><marker id="arr-cc2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <text x="380" y="26" text-anchor="middle" fill="currentColor" font-weight="bold">Source Code <tspan font-weight="normal">(String)</tspan></text>
 <polyline points="380,34 380,56" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
-<rect x="295" y="58" width="170" height="42" fill="#2a408e"/>
+<rect rx="3" x="295" y="58" width="170" height="42" fill="#2a408e"/>
 <text x="380.0" y="84.0" text-anchor="middle" fill="#fff">Parser</text>
-<rect x="20" y="64" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
+<rect rx="3" x="20" y="64" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
 <text x="30" y="84" text-anchor="start" fill="currentColor" font-weight="bold">1D-to-2D</text>
 <polyline points="222,79 293,79" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
 <polyline points="380,102 380,124" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
 <text x="380" y="142" text-anchor="middle" fill="currentColor" font-weight="bold">AST <tspan font-weight="normal">(Abstract Syntax Tree)</tspan></text>
 <polyline points="380,150 380,172" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
-<rect x="295" y="174" width="170" height="42" fill="#2a408e"/>
+<rect rx="3" x="295" y="174" width="170" height="42" fill="#2a408e"/>
 <text x="380.0" y="200.0" text-anchor="middle" fill="#fff">IR Generator</text>
-<rect x="20" y="180" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
+<rect rx="3" x="20" y="180" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
 <text x="30" y="200" text-anchor="start" fill="currentColor" font-weight="bold">Simple-yet-General Form</text>
 <polyline points="222,195 293,195" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
 <polyline points="380,218 380,240" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
 <text x="380" y="258" text-anchor="middle" fill="currentColor" font-weight="bold">IR <tspan font-weight="normal">(Intermediate Representation)</tspan></text>
 <polyline points="380,266 380,288" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
-<rect x="295" y="290" width="170" height="42" fill="#2a408e"/>
+<rect rx="3" x="295" y="290" width="170" height="42" fill="#2a408e"/>
 <text x="380.0" y="316.0" text-anchor="middle" fill="#fff">Asm Generator</text>
-<rect x="20" y="296" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
+<rect rx="3" x="20" y="296" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
 <text x="30" y="316" text-anchor="start" fill="currentColor" font-weight="bold">Arch-specific Form</text>
 <polyline points="222,311 293,311" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
 <polyline points="380,334 380,356" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
 <text x="380" y="374" text-anchor="middle" fill="currentColor" font-weight="bold">Assembly</text>
 <polyline points="380,382 380,404" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
-<rect x="295" y="406" width="170" height="42" fill="#2a408e"/>
+<rect rx="3" x="295" y="406" width="170" height="42" fill="#2a408e"/>
 <text x="380.0" y="432.0" text-anchor="middle" fill="#fff">Printer</text>
-<rect x="20" y="412" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
+<rect rx="3" x="20" y="412" width="200" height="30" fill="currentColor" fill-opacity="0.12"/>
 <text x="30" y="432" text-anchor="start" fill="currentColor" font-weight="bold">Bit-Sequence</text>
 <polyline points="222,427 293,427" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
 <polyline points="380,450 380,472" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
 <text x="380" y="490" text-anchor="middle" fill="currentColor" font-weight="bold">Machine Code <tspan font-weight="normal">(String)</tspan></text>
 <polyline points="515,137 584,137" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
-<rect x="586" y="117" width="150" height="40" fill="#2a408e"/>
+<rect rx="3" x="586" y="117" width="150" height="40" fill="#2a408e"/>
 <text x="661.0" y="142.0" text-anchor="middle" fill="#fff">Type Checker</text>
 <text x="661" y="177" text-anchor="middle" fill="currentColor">(Optional)</text>
 <polyline points="545,246 604,246" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
 <polyline points="604,260 545,260" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr-cc2)"/>
-<rect x="606" y="233" width="140" height="40" fill="#2a408e"/>
+<rect rx="3" x="606" y="233" width="140" height="40" fill="#2a408e"/>
 <text x="676.0" y="258.0" text-anchor="middle" fill="#fff">Optimization</text>
 <polyline points="676,273 676,305" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
-<rect x="606" y="307" width="140" height="40" fill="#2a408e"/>
+<rect rx="3" x="606" y="307" width="140" height="40" fill="#2a408e"/>
 <text x="676.0" y="332.0" text-anchor="middle" fill="#fff">IR Analyzer</text>
 </svg>
 </div>
@@ -83,10 +83,10 @@
 | `mov d, s` | `s`를 `d`에 복사 |
 | `add d, s1, s2` | `d` ← `s1` + `s2` |
 | `mul d, s1, s2` | `d` ← `s1` × `s2` |
-| `jmp s` | 레이블 `s`로 (또는 `s`에 든 주소로) 점프 |
+| `jmp s` | 레이블 `s`로(또는 `s`에 든 주소로) 점프 |
 | `lt d, s1, s2` | `s1` < `s2`이면 `d` ← 1, 아니면 0 |
 | `jz s, L` | `s`가 0이면 `L`로 점프 |
-| `ld d, s, i` | `d` ← 주소 `s` + `i`의 메모리 (**load**) |
+| `ld d, s, i` | `d` ← 주소 `s` + `i`의 메모리(**load**) |
 | `st d, i, s` | 주소 `d` + `i`의 메모리 ← `s` (**store**) |
 | `L:` | <a id="g-label"></a>**레이블**(label): 다음 줄의 주소에 붙인 이름 |
 
@@ -111,7 +111,7 @@ FAE를 이 IR로 어떻게 컴파일할 수 있을까요? FAE에는 있지만 IR
 | FAE | 저수준 IR | 필요한 단계 |
 |---|---|---|
 | 중첩된 식 | 명령어 하나에 연산 하나 | **ANF** |
-| 분기 (`if`) | 조건부 점프 | **ANF**, 레이블 |
+| 분기(`if`) | 조건부 점프 | **ANF**, 레이블 |
 | 함수와 호출 | 레이블과 점프 | **CPS**, **람다 끌어올리기** |
 | 캡처된 변수 | 메모리의 배열 | **클로저 변환** |
 | 무한히 많은 이름 | 몇 개 안 되는 레지스터 | **레지스터 할당** |
@@ -202,19 +202,19 @@ HALT:
 <div style="text-align:center">
 <svg viewBox="0 0 640 340" width="100%" style="max-width: 600px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="분기를 컴파일한 IR의 제어 흐름: START 블록에서 x1이 0이 아니면 바로 아래 then 갈래로, 0이면 L1로 점프한다. then 갈래는 jmp L2로, L1은 그대로 이어서 L2로 간다. L2는 if의 컨티뉴에이션이다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="cc-f3-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="240" y="10" width="160" height="68" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="240" y="10" width="160" height="68" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="250" y="31" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">START:</text>
 <text x="258" y="49" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">lt x1, 1, 2</text>
 <text x="258" y="67" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jz x1, L1</text>
-<rect x="60" y="120" width="170" height="68" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="60" y="120" width="170" height="68" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="78" y="141" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">add x3, 1, 2</text>
 <text x="78" y="159" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov x2, x3</text>
 <text x="78" y="177" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jmp L2</text>
-<rect x="410" y="120" width="170" height="68" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="410" y="120" width="170" height="68" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="420" y="141" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">L1:</text>
 <text x="428" y="159" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mul x4, 3, 4</text>
 <text x="428" y="177" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov x2, x4</text>
-<rect x="230" y="225" width="180" height="86" fill="#2a408e"/>
+<rect rx="3" x="230" y="225" width="180" height="86" fill="#2a408e"/>
 <text x="240" y="246" text-anchor="start" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">L2:</text>
 <text x="248" y="264" text-anchor="start" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">mul x5, x2, 5</text>
 <text x="248" y="282" text-anchor="start" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">mov r1, x5</text>
@@ -364,22 +364,22 @@ HALT:
 <div style="text-align:center">
 <svg viewBox="0 0 600 290" width="100%" style="max-width: 560px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="함수 호출은 점프: START에서 r1에 3, r2에 K1을 넣고 F1로 점프한다. F1은 결과를 r1에 넣고 r2에 든 K1으로 점프해 반환한다. K1은 결과를 r1에 넣고 HALT로 점프한다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="cc-f4-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="20" y="40" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="20" y="40" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="30" y="61" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">START:</text>
 <text x="38" y="79" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov r1, 3</text>
 <text x="38" y="97" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov r2, K1</text>
 <text x="38" y="115" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jmp F1</text>
-<rect x="330" y="40" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="330" y="40" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="340" y="61" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">F1:</text>
 <text x="348" y="79" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mul x1, r1, 2</text>
 <text x="348" y="97" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov r1, x1</text>
 <text x="348" y="115" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jmp r2</text>
-<rect x="330" y="190" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="330" y="190" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="340" y="211" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">K1:</text>
 <text x="348" y="229" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">add x2, r1, 1</text>
 <text x="348" y="247" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov r1, x2</text>
 <text x="348" y="265" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jmp HALT</text>
-<rect x="20" y="210" width="170" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="20" y="210" width="170" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="30" y="231" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">HALT:</text>
 <path d="M190,81 L327,81" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#cc-f4-m0)"/>
 <text x="258" y="72" text-anchor="middle" fill="currentColor" font-size="13">호출 = 점프</text>
@@ -525,12 +525,12 @@ HALT:
 <div style="text-align:center">
 <svg viewBox="0 0 600 175" width="100%" style="max-width: 560px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="F2가 클로저 [F1, x]를 만든 뒤의 메모리: 할당 전 hp였던 주소 x1에서 두 칸에 F1과 1이 저장되고, r1은 x1을, hp는 그 다음 빈 칸을 가리킨다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="cc-f5-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="111" y="62" width="98" height="40" fill="#2a408e"/>
+<rect rx="3" x="111" y="62" width="98" height="40" fill="#2a408e"/>
 <text x="160" y="88" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">F1</text>
-<rect x="211" y="62" width="98" height="40" fill="#2a408e"/>
+<rect rx="3" x="211" y="62" width="98" height="40" fill="#2a408e"/>
 <text x="260" y="88" text-anchor="middle" fill="#fff" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
-<rect x="311" y="62" width="98" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
-<rect x="411" y="62" width="98" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect rx="3" x="311" y="62" width="98" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect rx="3" x="411" y="62" width="98" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
 <text x="80" y="88" text-anchor="middle" fill="currentColor" font-size="16">…</text>
 <text x="530" y="88" text-anchor="middle" fill="currentColor" font-size="16">…</text>
 <text x="160" y="26" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">x1 = r1</text>
@@ -595,16 +595,16 @@ add x4, x2, x3
 <text x="30" y="139" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">mul x3, 4, 5</text>
 <text x="30" y="175" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">add x4, x2, x3</text>
 <text x="290" y="30" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">x1</text>
-<rect x="281" y="51" width="18" height="58" rx="9" fill="#2a408e"/>
+<rect x="281" y="51" width="18" height="58" rx="4" fill="#2a408e"/>
 <text x="290" y="210" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">r1</text>
 <text x="345" y="30" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">x2</text>
-<rect x="336" y="87" width="18" height="94" rx="9" fill="#2a408e"/>
+<rect x="336" y="87" width="18" height="94" rx="4" fill="#2a408e"/>
 <text x="345" y="210" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">r1</text>
 <text x="400" y="30" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">x3</text>
-<rect x="391" y="123" width="18" height="58" rx="9" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect x="391" y="123" width="18" height="58" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="400" y="210" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">r2</text>
 <text x="455" y="30" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">x4</text>
-<rect x="446" y="159" width="18" height="22" rx="9" fill="#2a408e"/>
+<rect x="446" y="159" width="18" height="22" rx="4" fill="#2a408e"/>
 <text x="455" y="210" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">r1</text>
 <path d="M20,192 L500,192" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
 </svg>
@@ -749,22 +749,22 @@ HALT:
 <div style="text-align:center">
 <svg viewBox="0 0 620 290" width="100%" style="max-width: 580px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="일급 컨티뉴에이션을 컴파일한 IR의 제어 흐름: START에서 F1로, F1은 r2를 무시하고 K1로, K1은 HALT로 점프한다. K2는 아무도 점프하지 않는 죽은 코드이다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="cc-f7-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="20" y="30" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="20" y="30" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="30" y="51" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">START:</text>
 <text x="38" y="69" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov r1, 5</text>
 <text x="38" y="87" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" opacity="0.4">mov r2, K2</text>
 <text x="38" y="105" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jmp F1</text>
-<rect x="240" y="48" width="110" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="240" y="48" width="110" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="250" y="69" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">F1:</text>
 <text x="258" y="87" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jmp K1</text>
-<rect x="420" y="30" width="180" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="420" y="30" width="180" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="430" y="51" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">K1:</text>
 <text x="438" y="69" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mul x1, 2, r1</text>
 <text x="438" y="87" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">mov r1, x1</text>
 <text x="438" y="105" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">jmp HALT</text>
-<rect x="450" y="200" width="120" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="450" y="200" width="120" height="32" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="460" y="221" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold">HALT:</text>
-<rect x="160" y="180" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.5"/>
+<rect rx="3" x="160" y="180" width="170" height="86" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.5"/>
 <text x="170" y="201" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="bold" opacity="0.5">K2:</text>
 <text x="178" y="219" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" opacity="0.5">add x2, 3, r1</text>
 <text x="178" y="237" text-anchor="start" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace" opacity="0.5">mov r1, x2</text>
@@ -773,7 +773,7 @@ HALT:
 <path d="M350,71 L417,71" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#cc-f7-m0)"/>
 <path d="M510,112 L510,197" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#cc-f7-m0)"/>
 <path d="M330,221 C380,221 400,150 440,115" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#cc-f7-m0)" opacity="0.5"/>
-<text x="245" y="280" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">아무도 점프하지 않음 (죽은 코드)</text>
+<text x="245" y="280" text-anchor="middle" fill="currentColor" font-size="13" opacity="0.8">아무도 점프하지 않음(죽은 코드)</text>
 </svg>
 </div>
 

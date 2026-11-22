@@ -10,6 +10,10 @@
 정의한 언어를 Scala로 **구현**합니다. 문자열을 트리로 바꾸는 <a id="g-parser"></a>파서(parser)와, 트리를 받아 결과
 값을 계산하는 인터프리터(interpreter)를 만들어 봅니다.
 
+이 장에서 만들 `AE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="AE"></div>
+
 ## 프로그래밍 언어란
 
 프로그래밍 언어를 정의한다는 것은 무엇을 정한다는 뜻일까요? 이 책에서는 다음과 같이
@@ -32,13 +36,13 @@
 <text x="60" y="40" text-anchor="middle" font-style="italic" font-family="serif" font-size="18">P</text>
 <text x="60" y="62" text-anchor="middle" font-weight="bold">프로그램</text>
 <line x1="105" y1="50" x2="148" y2="50" stroke="currentColor" stroke-width="2.2" marker-end="url(#arr-pipe)"/>
-<rect x="150" y="25" width="120" height="50" fill="#2a408e"/>
+<rect rx="3" x="150" y="25" width="120" height="50" fill="#2a408e"/>
 <text x="210" y="55" text-anchor="middle" fill="#ffffff">파서</text>
 <line x1="272" y1="50" x2="318" y2="50" stroke="currentColor" stroke-width="2.2" marker-end="url(#arr-pipe)"/>
 <text x="380" y="46" text-anchor="middle" font-weight="bold">추상 문법 트리</text>
 <text x="380" y="66" text-anchor="middle" font-weight="bold">(AST)</text>
 <line x1="442" y1="50" x2="488" y2="50" stroke="currentColor" stroke-width="2.2" marker-end="url(#arr-pipe)"/>
-<rect x="490" y="25" width="120" height="50" fill="#2a408e"/>
+<rect rx="3" x="490" y="25" width="120" height="50" fill="#2a408e"/>
 <text x="550" y="55" text-anchor="middle" fill="#ffffff">인터프리터</text>
 <line x1="612" y1="50" x2="655" y2="50" stroke="currentColor" stroke-width="2.2" marker-end="url(#arr-pipe)"/>
 <text x="700" y="55" text-anchor="middle" font-weight="bold">결과</text>
@@ -150,7 +154,7 @@
 각 단계에서 비단말 기호 하나를 규칙의 오른쪽 중 하나로 바꾸었습니다. 이런 과정을 유도
 (derivation)라고 부릅니다.
 
-#### 모호성: 결합 방향과 우선순위
+### 모호성: 결합 방향과 우선순위
 
 그런데 이 문법에는 문제가 하나 있습니다. `1 + 2 * 3`을 생각해 봅시다. 이 문자열은
 `<expr> "+" <expr>`로 보고 오른쪽 `<expr>`를 `2 * 3`으로 풀 수도 있고, `<expr> "*" <expr>`로
@@ -474,7 +478,7 @@ e \to e' \to e'' \to \ldots \to n
 > 썼습니다. 의미를 정의한다는 것은 결국 프로그램의 기호를 우리가 이미 아는 수학 연산으로
 > 설명하는 일입니다.
 
-#### 유도 트리
+### 유도 트리
 
 이 규칙들로 \\( \vdash (1 \mathbin{\texttt{+}} 2) \mathbin{\texttt{&#42;}} 3 \Rightarrow 9 \\)임을 증명해 봅시다.
 맨 아래 결론에서 시작해서, 각 판단을 결론으로 가지는 규칙을 찾아 위로 쌓아 올리면 됩니다.
@@ -593,7 +597,7 @@ e \to e' \to e'' \to \ldots \to n
 정수 \\( n \\)에 대해서는 규칙이 없습니다. 정수는 이미 계산이 끝난 값이어서 더 줄어들 수 없기
 때문입니다.
 
-#### 환원 과정
+### 환원 과정
 
 이 규칙들로 \\( (1 \mathbin{\texttt{+}} 2) \mathbin{\texttt{&#42;}} 3 \to^\ast 9 \\)임을 보여 봅시다. 여기서
 \\( \to^\ast \\)는 \\( \to \\)의 <a id="g-reflexive-transitive-closure"></a>**반사 전이 폐포**(reflexive-transitive closure)로, "0번 이상
@@ -738,7 +742,7 @@ val f: X => Y = ...
 parser1 ^^ f  // Parser[Y]  (apply `f` to the result of `parser1`)
 ```
 
-#### 예제: 정수 리스트 파서
+### 예제: 정수 리스트 파서
 
 연습 삼아 대괄호 안에 쉼표로 구분한 정수 리스트를 파싱해 봅시다.
 
@@ -839,7 +843,7 @@ parseAll(expr, "1 + 2 * 3").get // Add(Num(1),Mul(Num(2),Num(3))) : Expr
 평범한 재귀 하강 파서라면 무한 루프에 빠지지만, `PackratParser`는 왼쪽 재귀를 처리할 수 있도록
 만들어져 있어서 괜찮습니다. 파서를 모두 `PackratParser`(`P`)로 선언한 것도 그 때문입니다.
 
-#### 제공되는 파서 쓰기
+### 제공되는 파서 쓰기
 
 여기까지 읽고 파서 조합기가 조금 어렵게 느껴졌다면 안심하세요. 파서 조합기의 세부 사항은 **몰라도
 됩니다.** 이 책과 강의 과제에서 다루는 모든 언어의 **파서는 미리 제공**됩니다. 파서를 쓰고 싶으면
@@ -896,42 +900,24 @@ z.str    // "(1 + (2 * 3))" : String
 
 ```scala
 type Value = BigInt
-def interp(expr: Expr): Value = ???
-```
-
-`???`는 "아직 구현하지 않음"을 나타내는 Scala의 표현입니다. 이제 이 자리를 채워 봅시다. 규칙이
-추상 문법의 경우마다 하나씩 있었으니, `expr`를 패턴 매칭해서 경우마다 `case`를 하나씩 둡니다.
-
-```scala
-type Value = BigInt
 def interp(expr: Expr): Value = expr match
   case Num(n)    => ???
   case Add(l, r) => ???
   case Mul(l, r) => ???
 ```
 
-\\( \texttt{Num} \\) 규칙은 정수 \\( n \\)이 그대로 \\( n \\)이 된다고 말합니다.
+규칙이 추상 문법의 경우마다 하나씩 있었으니, `expr`를 패턴 매칭해서 경우마다 `case`를 하나씩
+둡니다. `???`는 "아직 구현하지 않음"을 나타내는 Scala의 표현입니다. 이제 규칙을 하나씩 보면서 이
+자리를 채워 봅시다.
 
-```scala
-type Value = BigInt
-def interp(expr: Expr): Value = expr match
-  case Num(n)    => n
-  case Add(l, r) => ???
-  case Mul(l, r) => ???
-```
+- \\( \texttt{Num} \\) 규칙은 정수 \\( n \\)이 그대로 \\( n \\)이 된다고 말합니다. 그러니
+  `case Num(n) => n`입니다.
+- \\( \texttt{Add} \\) 규칙은 두 부분식을 각각 계산한 결과(전제)를 더한다(결론)고 말합니다. 전제의
+  "부분식을 계산한다"는 `interp`를 재귀적으로 부르는 것에 해당하므로
+  `case Add(l, r) => interp(l) + interp(r)`입니다.
+- \\( \texttt{Mul} \\) 규칙도 마찬가지로 `case Mul(l, r) => interp(l) * interp(r)`입니다.
 
-\\( \texttt{Add} \\) 규칙은 두 부분식을 각각 계산한 결과(전제)를 더한다(결론)고 말합니다. 전제의
-"부분식을 계산한다"는 `interp`를 재귀적으로 부르는 것에 해당합니다.
-
-```scala
-type Value = BigInt
-def interp(expr: Expr): Value = expr match
-  case Num(n)    => n
-  case Add(l, r) => interp(l) + interp(r)
-  case Mul(l, r) => ???
-```
-
-\\( \texttt{Mul} \\) 규칙도 마찬가지입니다.
+세 자리를 모두 채우면 다음과 같습니다.
 
 ```scala
 type Value = BigInt
@@ -959,7 +945,7 @@ interp(Expr("1+2*3")) // interp(Add(Num(1), Mul(Num(2), Num(3)))) = 7
 <text x="0.0" y="137.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
 <rect x="-20.5" y="63.0" width="41.1" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5" rx="4"/>
 <text x="0.0" y="81.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">Num</text>
-<rect x="26.5" y="66.0" width="19.5" height="20.0" fill="#2f4fb8" rx="10"/>
+<rect x="26.5" y="66.0" width="19.5" height="20.0" fill="#2f4fb8" rx="4"/>
 <text x="36.3" y="80.5" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">1</text>
 <line x1="120.0" y1="89.0" x2="80.0" y2="119.0" stroke="currentColor" stroke-width="1.4"/>
 <line x1="120.0" y1="89.0" x2="160.0" y2="119.0" stroke="currentColor" stroke-width="1.4"/>
@@ -967,21 +953,21 @@ interp(Expr("1+2*3")) // interp(Add(Num(1), Mul(Num(2), Num(3)))) = 7
 <text x="80.0" y="193.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">2</text>
 <rect x="59.5" y="119.0" width="41.1" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5" rx="4"/>
 <text x="80.0" y="137.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">Num</text>
-<rect x="106.5" y="122.0" width="19.5" height="20.0" fill="#2f4fb8" rx="10"/>
+<rect x="106.5" y="122.0" width="19.5" height="20.0" fill="#2f4fb8" rx="4"/>
 <text x="116.3" y="136.5" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">2</text>
 <line x1="160.0" y1="145.0" x2="160.0" y2="175.0" stroke="currentColor" stroke-width="1.4"/>
 <text x="160.0" y="193.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">3</text>
 <rect x="139.5" y="119.0" width="41.1" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5" rx="4"/>
 <text x="160.0" y="137.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">Num</text>
-<rect x="186.5" y="122.0" width="19.5" height="20.0" fill="#2f4fb8" rx="10"/>
+<rect x="186.5" y="122.0" width="19.5" height="20.0" fill="#2f4fb8" rx="4"/>
 <text x="196.3" y="136.5" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">3</text>
 <rect x="99.5" y="63.0" width="41.1" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5" rx="4"/>
 <text x="120.0" y="81.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">Mul</text>
-<rect x="146.5" y="66.0" width="19.5" height="20.0" fill="#2f4fb8" rx="10"/>
+<rect x="146.5" y="66.0" width="19.5" height="20.0" fill="#2f4fb8" rx="4"/>
 <text x="156.3" y="80.5" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">6</text>
 <rect x="39.5" y="7.0" width="41.1" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5" rx="4"/>
 <text x="60.0" y="25.0" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">Add</text>
-<rect x="86.5" y="10.0" width="19.5" height="20.0" fill="#2f4fb8" rx="10"/>
+<rect x="86.5" y="10.0" width="19.5" height="20.0" fill="#2f4fb8" rx="4"/>
 <text x="96.3" y="24.5" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">7</text>
 </svg>
 </div>

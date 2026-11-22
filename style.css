@@ -69,3 +69,43 @@ svg.lang-map a, svg.lang-map a:hover, svg.lang-map a text { text-decoration: non
 svg.lang-map a, svg.lang-map a:link, svg.lang-map a:visited { color: var(--fg) !important; }
 svg.lang-map .proj, svg.lang-map a.proj:link, svg.lang-map a.proj:visited { color: var(--proj) !important; }
 svg.lang-map a.proj:hover rect { stroke: var(--proj); fill: color-mix(in srgb, var(--proj) 12%, transparent); }
+
+/* runnable code blocks and playgrounds (runner.js) */
+.run-button { color: var(--icons); }
+.run-button:hover { color: var(--links); }
+code.run[contenteditable]:focus { outline: 1px solid var(--links); outline-offset: 2px; }
+pre.run-output { margin-top: -0.6em; padding: 0.5em 0.9em; border-left: 3px solid var(--links);
+  background: var(--quote-bg); font-size: 0.85em; white-space: pre-wrap; }
+pre.run-output.error { border-left-color: #c0392b; }
+div.playground { border: 1px solid var(--quote-border); border-radius: 4px; padding: 0.6em 0.9em; margin: 1.2em 0; }
+div.playground pre { margin: 0.4em 0; }
+div.playground pre.run-output { margin-top: 0.4em; }
+.playground-head { display: flex; align-items: center; gap: 0.8em; font-weight: bold; }
+.playground-hint { font-weight: normal; font-size: 0.8em; opacity: 0.7; margin-right: auto; }
+.playground-head .run-button { background: none; border: 1px solid var(--quote-border); border-radius: 4px;
+  padding: 0.2em 0.6em; cursor: pointer; }
+
+/* CodeMirror editors (book-editor.js): same grammar as the course website */
+.pl-editor { margin: 0.4em 0; }
+pre > .pl-editor { margin: 0; }
+.pl-editor .cm-editor { background: var(--quote-bg); border-radius: 4px; font-size: 0.875em; }
+.pl-editor .cm-editor.cm-focused { outline: 1px solid var(--links); }
+.pl-editor .cm-scroller { font-family: var(--mono-font, ui-monospace, Menlo, monospace); line-height: 1.5; }
+.pl-editor .cm-content { padding: 0.6em 0; caret-color: var(--fg); }
+.pl-editor .cm-line { padding: 0 0.9em; }
+.pl-editor .cm-cursor { border-left-color: var(--fg); }
+.pl-editor .cm-gutters { background: transparent; border-right: 1px solid var(--quote-border); color: var(--icons); }
+.pl-editor .cm-activeLine { background: color-mix(in srgb, var(--links) 6%, transparent); }
+.pl-editor .cm-activeLineGutter { background: transparent; }
+.pl-editor .cm-selectionBackground, .pl-editor .cm-focused .cm-selectionBackground { background: color-mix(in srgb, var(--links) 25%, transparent) !important; }
+.pl-editor .cm-matchingBracket { background: color-mix(in srgb, var(--links) 20%, transparent); outline: none; }
+.light .pl-editor .tok-keyword, .rust .pl-editor .tok-keyword { color: #8959a8; }
+.light .pl-editor .tok-number, .light .pl-editor .tok-bool, .rust .pl-editor .tok-number, .rust .pl-editor .tok-bool { color: #f5871f; }
+.light .pl-editor .tok-string, .rust .pl-editor .tok-string { color: #718c00; }
+.light .pl-editor .tok-comment, .rust .pl-editor .tok-comment { color: #8e908c; }
+.navy .pl-editor .tok-keyword, .coal .pl-editor .tok-keyword, .ayu .pl-editor .tok-keyword { color: #b294bb; }
+.navy .pl-editor .tok-number, .coal .pl-editor .tok-number, .ayu .pl-editor .tok-number,
+.navy .pl-editor .tok-bool, .coal .pl-editor .tok-bool, .ayu .pl-editor .tok-bool { color: #de935f; }
+.navy .pl-editor .tok-string, .coal .pl-editor .tok-string, .ayu .pl-editor .tok-string { color: #b5bd68; }
+.navy .pl-editor .tok-comment, .coal .pl-editor .tok-comment, .ayu .pl-editor .tok-comment { color: #969896; }
+.pl-editor .cm-editor:not(.cm-focused) .cm-activeLine { background: transparent; }

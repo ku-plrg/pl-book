@@ -57,12 +57,14 @@ hljs.registerLanguage("pl", function (hljs) {
   return {
     name: "COSE212 languages",
     aliases: ["ae", "vae", "f1vae", "fvae", "fae", "rfae", "bfae", "mfae", "lfae", "fae-cps",
-              "kfae", "tfae", "trfae", "atfae", "ptfae", "stfae", "tifae", "minifsharp"],
+              "kfae", "tfae", "trfae", "atfae", "ptfae", "stfae", "tifae", "minifsharp",
+              "fj", "btfae", "tcfae", "ltfae", "gtfae"],
     keywords: {
-      keyword: "val var def if else enum case match forall vcc Box exit lazy let rec in fun with then",
+      keyword: "val var def if else enum case match forall vcc Box exit lazy let rec in fun with then " +
+               "class extends new this super return trait impl instance where drop",
       literal: "true false",
       built_in: "get set",
-      type: "Number Boolean String Unit Any Nothing Top Bot",
+      type: "Number Boolean String Unit Any Nothing Top Bot Object Dyn",
     },
     contains: [
       hljs.C_LINE_COMMENT_MODE,
@@ -82,6 +84,30 @@ hljs.registerLanguage("bnf", function (hljs) {
       { className: "type", begin: /<[A-Za-z0-9_\-]+>/ },
       { className: "string", begin: /"/, end: /"/ },
       { className: "keyword", begin: /::=|\||\*|\+|\?|\[|\]/ },
+    ],
+  };
+});
+
+hljs.registerLanguage("lean", function (hljs) {
+  return {
+    name: "Lean 4",
+    aliases: ["lean4"],
+    keywords: {
+      keyword: "def theorem lemma example abbrev inductive structure class instance where match with fun " +
+               "let have show from by at if then else do return namespace section end open import variable " +
+               "mutual private protected noncomputable deriving termination_by decreasing_by calc in " +
+               "intro intros exact apply refine rfl constructor cases rcases obtain induction generalizing " +
+               "simp simp_all simpa omega decide contradiction trivial rw subst left right exists unfold " +
+               "split assumption exfalso by_cases revert specialize injection congr funext first repeat " +
+               "all_goals any_goals try using only next case nofun nomatch",
+      literal: "true false none some",
+      type: "Prop Type Sort Nat Int Bool String List Option Except True False",
+    },
+    contains: [
+      hljs.COMMENT("--", "$"),
+      hljs.COMMENT("/-", "-/"),
+      hljs.QUOTE_STRING_MODE,
+      hljs.C_NUMBER_MODE,
     ],
   };
 });

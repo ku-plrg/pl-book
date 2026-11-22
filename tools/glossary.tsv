@@ -286,7 +286,6 @@ let-다형성	let-polymorphism
 타입 클래스	type class
 타입 제약	type constraint
 타입 환경	type environment
-타입의 동등성	type equivalence
 타입 오류	type error
 타입 추론	type inference
 타입 인스턴스화	type instantiation
@@ -330,3 +329,156 @@ Z 조합자	Z combinator
 타입이 맞는	well-typed
 람다 끌어올리기	lambda lifting
 클로저 변환	closure conversion
+클래스	class
+객체	object
+상속	inheritance
+오버라이드	override
+동적 디스패치	dynamic dispatch
+캐스트	cast
+구조로 정하는 서브타입	structural subtyping
+이름으로 정하는 서브타입	nominal subtyping
+클래스 테이블	class table
+객체 값	object value
+열린 재귀	open recursion
+업캐스트	upcast
+다운캐스트	downcast
+엉뚱한 캐스트	stupid cast
+오버라이드 규칙	override rule
+보존	preservation
+진행	progress
+인터페이스	interface
+유계 다형성	bounded polymorphism
+경계	bound
+상한 경계	upper bound
+하한 경계	lower bound
+유계 정량화	bounded quantification
+F-유계 다형성	F-bounded polymorphism
+노출	exposure
+최소 타입	minimal typing
+결정 불가능	undecidable
+좁히기 보조 정리	narrowing lemma
+변성	variance
+타입 생성자	type constructor
+양의 위치	positive position
+음의 위치	negative position
+선언 지점 변성	declaration-site variance
+사용 지점 변성	use-site variance
+와일드카드	wildcard
+존재 타입	existential type
+딕셔너리 전달	dictionary passing
+딕셔너리	dictionary
+클래스 선언	class declaration
+인스턴스 선언	instance declaration
+메서드 시그니처	method signature
+한정 타입	qualified type
+문맥 바운드	context bound
+매개변수성	parametricity
+이항 메서드	binary method
+인스턴스 해소	instance resolution
+정교화	elaboration
+함의	entailment
+선택 함수	selector
+일관성	coherence
+겹치는 인스턴스	overlapping instance
+고아 인스턴스	orphan instance
+고아 규칙	orphan rule
+기본 타입 지정	defaulting
+타입 소거	type erasure
+가상 메서드 테이블	virtual method table
+슈퍼클래스	superclass
+단형화	monomorphization
+특수화	specialization
+트레이트	trait
+선형 타입	linear type
+소유자	owner
+이동	move
+구조 규칙	structural rule
+약화	weakening
+축약	contraction
+교환	exchange
+부분구조적 타입 시스템	substructural type system
+비제한	unrestricted
+아핀 타입	affine type
+관련 타입	relevant type
+순서 타입	ordered type
+한정자	qualifier
+타입 환경 나누기	context splitting
+담는 규칙	containment rule
+불변식	invariant
+빌림	borrowing
+공유 빌림	shared borrow
+가변 빌림	mutable borrow
+별칭과 변경의 배타성	aliasing xor mutability
+수명	lifetime
+유일성 타입	uniqueness type
+점진적 타입	gradual typing
+동적 타입	dynamic type
+타입 일관성	type consistency
+매칭	matching
+정확도	precision
+점진적 보장	gradual guarantee
+정적 점진적 보장	static gradual guarantee
+동적 점진적 보장	dynamic gradual guarantee
+캐스트 계산법	cast calculus
+캐스트 삽입	cast insertion
+블레임	blame
+블레임 레이블	blame label
+양의 블레임	positive blame
+음의 블레임	negative blame
+블레임 정리	blame theorem
+그라운드 타입	ground type
+프록시	proxy
+선택적 타입	optional typing
+가드 의미	guarded semantics
+트랜지언트 의미	transient semantics
+증명 보조기	proof assistant
+커널	kernel
+충실성	faithfulness
+연료	fuel
+허용된 오류	allowed error
+반례	counterexample
+옆조건	side condition
+전술	tactic
+귀납 타입	inductive type
+귀납적 명제	inductive proposition
+구조적 재귀	structural recursion
+역전	inversion
+목표	goal
+따름정리	corollary
+주정리	main theorem
+연관 리스트	association list
+종료 검사	termination check
+결과 분류	result classification
+값의 타입	value typing
+환경의 타입	environment typing
+정준 형태	canonical forms
+중첩 귀납	nested inductive
+엄격하게 양의 위치	strictly positive position
+보조정리	lemma
+열린 식	open expression
+닫힌 식	closed expression
+순환 환경	cyclic environment
+재귀 클로저	recursive closure
+공귀납	coinduction
+타입 정의 맵	type-definition map
+신선성	freshness
+탈출 검사	escape check
+정칙성	regularity
+선언적	declarative
+허용 가능한 규칙	admissible rule
+논리 관계	logical relation
+타입 변수 해석	type variable interpretation
+비서술적	impredicative
+유니버스	universe
+기본 보조정리	fundamental lemma
+의미 치환 보조정리	semantic substitution lemma
+단계 지표 논리 관계	step-indexed logical relation
+모델	model
+표준 모델	canonical model
+좋은 해	good solution
+좋은 환경	good environment
+랭크 함수	rank function
+대입 보조정리	substitution lemma
+선언적 타입 체계	declarative type system
+주 타입	principal type
+서브클래스	subclass

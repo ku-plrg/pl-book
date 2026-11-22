@@ -4,6 +4,10 @@
 
 이 장에서는 이름, 즉 <a id="g-identifier"></a>**식별자(identifier)** 를 다룹니다. 먼저 식별자가 프로그램 안에서 어떤 역할을 하는지, 어디서 정의되고 어디서 쓰이며 어디까지 유효한지를 정확한 용어로 정리합니다. 그다음 AE에 변수를 더한 언어 VAE를 정의하고, 변수의 값을 기억해 두는 <a id="g-environment"></a>**환경(environment)** 을 이용해 인터프리터와 자연 의미(natural semantics)을 함께 만들어 봅니다. 여기서 익히는 개념들(묶는 출현, 스코프, 자유 식별자, 섀도잉, 환경)은 앞으로 함수, 클로저, 타입 시스템을 다룰 때까지 계속 쓰이므로 이 장을 단단히 다져 두는 것이 좋습니다.
 
+이 장에서 만들 `VAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="VAE"></div>
+
 ## 식별자란
 
 **식별자**는 프로그램 안의 어떤 요소에 붙인 **이름**입니다. Scala만 봐도 여러 종류의 식별자가 있습니다.
@@ -68,7 +72,7 @@ add(x, b)
 
 <div style="text-align:center">
 <svg viewBox="-8 -8 572 682" width="100%" style="max-width: 600px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="여섯 묶는 출현 각각의 스코프. 묶는 출현은 채운 상자, 스코프는 파란 영역" font-family="sans-serif" fill="currentColor">
-<rect x="0.0" y="0.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
+<rect rx="3" x="0.0" y="0.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
 <text x="12.0" y="20.0" font-size="14" font-weight="bold">1. 첫 줄의 x</text>
 <rect x="8.0" y="63.7" width="242.8" height="136.2" fill="#2f4fb8" fill-opacity="0.12" stroke="#2f4fb8" stroke-width="1.6" rx="3"/>
 <text x="240.8" y="195.9" text-anchor="end" font-size="12" font-weight="bold" fill="#2f4fb8">스코프</text>
@@ -123,7 +127,7 @@ add(x, b)
 <text x="51.1" y="193.0" font-size="13" font-family="ui-monospace, Menlo, monospace">,</text>
 <text x="66.8" y="193.0" font-size="13" font-family="ui-monospace, Menlo, monospace">b</text>
 <text x="74.6" y="193.0" font-size="13" font-family="ui-monospace, Menlo, monospace">)</text>
-<rect x="284.0" y="0.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
+<rect rx="3" x="284.0" y="0.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
 <text x="296.0" y="20.0" font-size="14" font-weight="bold">2. y</text>
 <rect x="292.0" y="101.7" width="242.8" height="98.2" fill="#2f4fb8" fill-opacity="0.12" stroke="#2f4fb8" stroke-width="1.6" rx="3"/>
 <text x="524.8" y="195.9" text-anchor="end" font-size="12" font-weight="bold" fill="#2f4fb8">스코프</text>
@@ -178,7 +182,7 @@ add(x, b)
 <text x="335.1" y="193.0" font-size="13" font-family="ui-monospace, Menlo, monospace">,</text>
 <text x="350.8" y="193.0" font-size="13" font-family="ui-monospace, Menlo, monospace">b</text>
 <text x="358.6" y="193.0" font-size="13" font-family="ui-monospace, Menlo, monospace">)</text>
-<rect x="0.0" y="226.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
+<rect rx="3" x="0.0" y="226.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
 <text x="12.0" y="246.0" font-size="14" font-weight="bold">3. 함수 이름 add</text>
 <rect x="23.7" y="346.6" width="148.9" height="41.2" fill="#2f4fb8" fill-opacity="0.12" stroke="#2f4fb8" stroke-width="1.6" rx="3"/>
 <rect x="8.0" y="403.6" width="78.4" height="22.2" fill="#2f4fb8" fill-opacity="0.12" stroke="#2f4fb8" stroke-width="1.6" rx="3"/>
@@ -235,7 +239,7 @@ add(x, b)
 <text x="66.8" y="419.0" font-size="13" font-family="ui-monospace, Menlo, monospace">b</text>
 <text x="74.6" y="419.0" font-size="13" font-family="ui-monospace, Menlo, monospace">)</text>
 <text x="96.4" y="402.0" text-anchor="middle" font-size="18" font-weight="bold" fill="#2f4fb8">+</text>
-<rect x="284.0" y="226.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
+<rect rx="3" x="284.0" y="226.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
 <text x="296.0" y="246.0" font-size="14" font-weight="bold">4. 매개변수 a</text>
 <rect x="307.7" y="346.6" width="148.9" height="41.2" fill="#2f4fb8" fill-opacity="0.12" stroke="#2f4fb8" stroke-width="1.6" rx="3"/>
 <text x="458.5" y="383.9" font-size="12" font-weight="bold" fill="#2f4fb8">스코프</text>
@@ -290,7 +294,7 @@ add(x, b)
 <text x="335.1" y="419.0" font-size="13" font-family="ui-monospace, Menlo, monospace">,</text>
 <text x="350.8" y="419.0" font-size="13" font-family="ui-monospace, Menlo, monospace">b</text>
 <text x="358.6" y="419.0" font-size="13" font-family="ui-monospace, Menlo, monospace">)</text>
-<rect x="0.0" y="452.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
+<rect rx="3" x="0.0" y="452.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
 <text x="12.0" y="472.0" font-size="14" font-weight="bold">5. 매개변수 b</text>
 <rect x="23.7" y="572.6" width="148.9" height="41.2" fill="#2f4fb8" fill-opacity="0.12" stroke="#2f4fb8" stroke-width="1.6" rx="3"/>
 <text x="174.5" y="609.9" font-size="12" font-weight="bold" fill="#2f4fb8">스코프</text>
@@ -345,7 +349,7 @@ add(x, b)
 <text x="51.1" y="645.0" font-size="13" font-family="ui-monospace, Menlo, monospace">,</text>
 <text x="66.8" y="645.0" font-size="13" font-family="ui-monospace, Menlo, monospace">b</text>
 <text x="74.6" y="645.0" font-size="13" font-family="ui-monospace, Menlo, monospace">)</text>
-<rect x="284.0" y="452.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
+<rect rx="3" x="284.0" y="452.0" width="272.0" height="214.0" fill="none" stroke="currentColor" stroke-width="1"/>
 <text x="296.0" y="472.0" font-size="14" font-weight="bold">6. 본문 안의 x</text>
 <rect x="307.7" y="591.6" width="109.7" height="22.2" fill="#2f4fb8" fill-opacity="0.12" stroke="#2f4fb8" stroke-width="1.6" rx="3"/>
 <text x="419.4" y="609.9" font-size="12" font-weight="bold" fill="#2f4fb8">스코프</text>
@@ -649,7 +653,7 @@ add(x, b)
 
 이제 이 개념들을 우리의 언어에 적용해 봅시다. AE를 확장해 **변수**가 있는 언어 **VAE**를 만들겠습니다. VAE 프로그램은 다음과 같이 생겼습니다.
 
-```vae
+```vae,run
 /* VAE */
 val x = 1 + 2;  // x = 1 + 2 = 3
 val y = x + 3;  // y = x + 3 = 3 + 3 = 6
@@ -696,7 +700,7 @@ x    y    get_name    getName    add42
 
 중괄호 블록 `{ e }`, 변수 정의 `val x = e; e`, 그리고 변수 이름 `x`입니다. 블록이 왜 필요한지는 변수 정의의 스코프를 보면 알 수 있습니다. **변수 정의는 새로운 스코프를 만듭니다.** `val x = e1; e2`에서 `x`의 스코프는 `;` 뒤의 `e2` 전체입니다. 그래서 앞의 예제는
 
-```vae
+```vae,run
 /* VAE */
 val x = 1 + 2;
 val y = x + 3;
@@ -705,7 +709,7 @@ y + 4
 
 다음과 같은 뜻입니다.
 
-```vae
+```vae,run
 /* VAE */
 val x = 1 + 2;
 { // scope of x
@@ -772,12 +776,12 @@ Expr("val a = 1; val b = 2; a + b")
 - 각 **가리는 식별자**에서 그것이 **가리는 식별자**로 가는 **점선 화살표**
 - 각 **자유 식별자**에 **X 표시**
 
-```vae
+```vae,run
 /* VAE */
 val x = 1; x
 ```
 
-```vae
+```vae,run
 /* VAE */
 val x = x + 1;
 val y = x * 2;
@@ -785,7 +789,7 @@ val x = y + x;
 x * z
 ```
 
-```vae
+```vae,run
 /* VAE */
 val x = 1;
 val y = {
@@ -823,7 +827,7 @@ x + y
 
 이제 VAE의 의미를 정의할 차례입니다. 다음 VAE 식을 계산해 봅시다.
 
-```vae
+```vae,run
 /* VAE */
 val x = 1; {      // [ x -> 1 ]
   val y = 2; {    // [ x -> 1, y -> 2 ]
@@ -852,13 +856,13 @@ val x = 1; {      // [ x -> 1 ]
 <text x="20.0" y="64.0" text-anchor="middle" font-size="22">∅</text>
 <line x1="40.0" y1="58.0" x2="140.0" y2="58.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#identifiers-fig-5)"/>
 <text x="90.0" y="48.0" text-anchor="middle" font-size="14" font-family="ui-monospace, Menlo, monospace">val x = 1</text>
-<rect x="150.0" y="45.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="150.0" y="45.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="178.0" y1="45.0" x2="178.0" y2="71.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="164.0" y="63.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="193.0" y="63.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
 <line x1="218.0" y1="58.0" x2="318.0" y2="58.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#identifiers-fig-5)"/>
 <text x="268.0" y="48.0" text-anchor="middle" font-size="14" font-family="ui-monospace, Menlo, monospace">val y = 2</text>
-<rect x="328.0" y="45.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="328.0" y="45.0" width="58.0" height="52.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="356.0" y1="45.0" x2="356.0" y2="97.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="342.0" y="63.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="371.0" y="63.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
@@ -949,13 +953,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 ### 숫자
 
-숫자는 환경과 상관없이 그 숫자 자신으로 계산됩니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  case Num(n)       => n
-  ...
-```
+숫자는 환경과 상관없이 그 숫자 자신으로 계산됩니다. 그러니 `case Num(n) => n`입니다.
 
 \\[
 \begin{prooftree}
@@ -969,14 +967,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 ### 덧셈과 곱셈
 
-덧셈은 두 부분식을 **같은 환경**에서 계산한 뒤 결과를 더합니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Add(l, r)    => interp(l, env) + interp(r, env)
-  ...
-```
+덧셈은 두 부분식을 **같은 환경**에서 계산한 뒤 결과를 더합니다. 그러니 `case Add(l, r) => interp(l, env) + interp(r, env)`입니다.
 
 \\[
 \begin{prooftree}
@@ -989,14 +980,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 이 규칙은 "환경 \\( \sigma \\) 아래에서 식 \\( e_1 \ \texttt{+}\  e_2 \\)는 숫자 \\( n_1 + n_2 \\)로 계산된다. 단, 환경 \\( \sigma \\) 아래에서 \\( e_1 \\)이 \\( n_1 \\)으로 계산되고, 환경 \\( \sigma \\) 아래에서 \\( e_2 \\)가 \\( n_2 \\)로 계산될 때"라고 읽습니다. 왼쪽의 \\( \texttt{+} \\)는 VAE 문법의 기호이고, 결과의 \\( + \\)는 수학의 덧셈이라는 차이에 주의하세요.
 
-곱셈도 똑같습니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Mul(l, r)    => interp(l, env) * interp(r, env)
-  ...
-```
+곱셈도 똑같이 `case Mul(l, r) => interp(l, env) * interp(r, env)`입니다.
 
 \\[
 \begin{prooftree}
@@ -1013,14 +997,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 이제 VAE에서 새로 생긴 경우입니다. \\( \texttt{val}\ x\ \texttt{=}\ e_1\texttt{;}\ e_2 \\)는 어떻게 계산해야 할까요? 차근차근 생각해 봅시다.
 
-먼저 초기화 식 \\( e_1 \\)을 현재 환경 \\( \sigma \\)에서 계산해 그 값을 \\( n_1 \\)이라고 합니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Val(x, e, b) => ... interp(e, env) ...
-  ...
-```
+먼저 초기화 식 \\( e_1 \\)을 현재 환경 \\( \sigma \\)에서 계산해 그 값을 \\( n_1 \\)이라고 합니다. 코드로는 `case Val(x, e, b) => ... interp(e, env) ...`까지 쓴 셈입니다.
 
 \\[
 \begin{prooftree}
@@ -1031,23 +1008,9 @@ def interp(expr: Expr, env: Env): Value = expr match
 \end{prooftree}
 \\]
 
-다음으로 현재 환경에 \\( x \mapsto n_1 \\)을 더한 새 환경을 만듭니다. 이를 \\( \sigma[x \mapsto n_1] \\)로 씁니다. 이 환경은 \\( x \\)에는 \\( n_1 \\)을, 나머지 식별자에는 \\( \sigma \\)와 같은 값을 대응시킵니다. \\( \sigma \\)에 이미 \\( x \\)가 있었다면 새 값으로 덮어씁니다. Scala에서는 `env + (x -> interp(e, env))`입니다.
+다음으로 현재 환경에 \\( x \mapsto n_1 \\)을 더한 새 환경을 만듭니다. 이를 \\( \sigma[x \mapsto n_1] \\)로 씁니다. 이 환경은 \\( x \\)에는 \\( n_1 \\)을, 나머지 식별자에는 \\( \sigma \\)와 같은 값을 대응시킵니다. \\( \sigma \\)에 이미 \\( x \\)가 있었다면 새 값으로 덮어씁니다. Scala에서는 `env + (x -> interp(e, env))`이므로, 이제 `case Val(x, e, b) => ... env + (x -> interp(e, env)) ...`이 됩니다.
 
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Val(x, e, b) => ... env + (x -> interp(e, env)) ...
-  ...
-```
-
-마지막으로 몸통 \\( e_2 \\)를 이 새 환경에서 계산한 값 \\( n_2 \\)가 전체 결과입니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Val(x, e, b) => interp(b, env + (x -> interp(e, env)))
-  ...
-```
+마지막으로 몸통 \\( e_2 \\)를 이 새 환경에서 계산한 값 \\( n_2 \\)가 전체 결과입니다. 그래서 `case Val(x, e, b) => interp(b, env + (x -> interp(e, env)))`로 완성됩니다.
 
 \\[
 \begin{prooftree}
@@ -1064,14 +1027,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 ### 변수 참조
 
-마지막으로 변수 \\( x \\)의 값은 환경에서 찾습니다. 환경에 \\( x \\)가 없다면 \\( x \\)는 자유 식별자이므로 오류를 냅니다.
-
-```scala
-def interp(expr: Expr, env: Env): Value = expr match
-  ...
-  case Id(x)        => env.getOrElse(x, error(s"free identifier: $x"))
-  ...
-```
+마지막으로 변수 \\( x \\)의 값은 환경에서 찾습니다. 환경에 \\( x \\)가 없다면 \\( x \\)는 자유 식별자이므로 오류를 냅니다. 그러니 `case Id(x) => env.getOrElse(x, error(s"free identifier: $x"))`입니다.
 
 \\[
 \begin{prooftree}
@@ -1082,6 +1038,8 @@ def interp(expr: Expr, env: Env): Value = expr match
 \\]
 
 "환경 \\( \sigma \\) 아래에서 식 \\( x \\)는 숫자 \\( \sigma(x) \\)로 계산된다. 단, 변수 \\( x \\)가 환경 \\( \sigma \\)의 <a id="g-domain"></a>정의역(domain) \\( \text{Dom}(\sigma) \\)에 있을 때." 전제가 만족되지 않으면 이 규칙을 쓸 수 없고, 다른 규칙도 없으므로 계산이 진행되지 않습니다. 인터프리터에서는 이것이 `free identifier` 오류에 해당합니다.
+
+다섯 자리를 모두 채운 인터프리터는 예제를 본 뒤 [전체 인터프리터](#전체-인터프리터) 절에 모아 두었습니다.
 
 ## 예제
 
@@ -1211,14 +1169,14 @@ def interp(expr: Expr, env: Env): Value = expr match
 <text x="20.0" y="92.0" text-anchor="middle" font-size="22">∅</text>
 <line x1="40.0" y1="86.0" x2="130.0" y2="86.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#identifiers-fig-6)"/>
 <text x="85.0" y="76.0" text-anchor="middle" font-size="14" font-family="ui-monospace, Menlo, monospace">val x = 1</text>
-<rect x="140.0" y="73.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="140.0" y="73.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="168.0" y1="73.0" x2="168.0" y2="99.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="154.0" y="91.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="183.0" y="91.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>
 <text x="140.0" y="65.0" font-size="16" font-family="Times New Roman, Times, serif" font-style="italic">σ<tspan baseline-shift="sub" font-size="11">0</tspan></text>
 <line x1="206.0" y1="80.0" x2="290.0" y2="40.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#identifiers-fig-6)"/>
 <text x="222.0" y="44.0" text-anchor="middle" font-size="14" font-family="ui-monospace, Menlo, monospace">val x = 2</text>
-<rect x="300.0" y="22.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="300.0" y="22.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="328.0" y1="22.0" x2="328.0" y2="48.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="314.0" y="40.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="343.0" y="40.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">2</text>
@@ -1226,7 +1184,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 <text x="370.0" y="40.0" font-size="15">⊢  x  ⇒  2   (중괄호 안의 x)</text>
 <line x1="206.0" y1="92.0" x2="290.0" y2="132.0" stroke="currentColor" stroke-width="1.8" marker-end="url(#identifiers-fig-6)"/>
 <text x="222.0" y="136.0" text-anchor="middle" font-size="14">그대로</text>
-<rect x="300.0" y="120.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="300.0" y="120.0" width="58.0" height="26.0" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <line x1="328.0" y1="120.0" x2="328.0" y2="146.0" stroke="currentColor" stroke-width="1.2"/>
 <text x="314.0" y="138.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">x</text>
 <text x="343.0" y="138.2" text-anchor="middle" font-size="15" font-family="ui-monospace, Menlo, monospace">1</text>

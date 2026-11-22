@@ -15,7 +15,7 @@
 
 [변경 가능한 변수](./mutable-variables.md)에서 다음 MFAE 식을 계산한 결과를 떠올려 봅시다.
 
-```mfae
+```mfae,run
 /* MFAE */
 var y = 1;
 var f = x => {
@@ -73,7 +73,7 @@ a + b       // 49
 4. `g`에서 빠져나오면 `g`의 스택 프레임이 **지워지고** `b`와 `c`의 칸이 해제됩니다. 돌려받은 5는 `f`의 지역 변수 `z`에 저장되는데, 마침 비워진 0x03을 다시 씁니다. `x + y.k + z`의 값은 42 + 1 + 5 = 48입니다.
 5. `f`에서 빠져나오면 `f`의 스택 프레임도 지워져 `x`, `y`, `z`의 칸이 해제됩니다. 맨 바깥의 `b`가 0x01에 48로 저장되고 `a + b`는 49입니다.
 
-| 주소 | 3단계 (`g` 안) | 4단계 (`g`에서 나온 뒤) | 5단계 (`f`에서 나온 뒤) |
+| 주소 | 3단계(`g` 안) | 4단계(`g`에서 나온 뒤) | 5단계(`f`에서 나온 뒤) |
 |---|---|---|---|
 | 0x00 | 1 (`a`) | 1 (`a`) | 1 (`a`) |
 | 0x01 | 42 (`f`의 `x`) | 42 (`f`의 `x`) | 48 (`b`) |
@@ -87,31 +87,31 @@ a + b       // 49
 <div style="text-align:center">
 <svg viewBox="0 0 520 290" width="100%" style="max-width: 480px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="g 안에 있을 때의 메모리: 0x00은 맨 바깥 프레임의 a, 0x01과 0x02는 f의 프레임, 0x03과 0x04는 g의 프레임이고, 0x02와 0x04에 저장된 주소가 힙의 0xFF와 0xFE를 가리킨다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="gc-f1-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<rect x="160" y="20" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="160" y="20" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="215" y="40" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">1</text>
 <text x="150" y="40" text-anchor="end" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0x00</text>
 <text x="80" y="40" text-anchor="end" fill="currentColor" font-size="13">a</text>
-<rect x="160" y="50" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="160" y="50" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="215" y="70" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">42</text>
 <text x="150" y="70" text-anchor="end" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0x01</text>
 <text x="80" y="70" text-anchor="end" fill="currentColor" font-size="13">f의 x</text>
-<rect x="160" y="80" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="160" y="80" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="215" y="100" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0xFF</text>
 <text x="150" y="100" text-anchor="end" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0x02</text>
 <text x="80" y="100" text-anchor="end" fill="currentColor" font-size="13">f의 y</text>
-<rect x="160" y="110" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="160" y="110" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="215" y="130" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">2</text>
 <text x="150" y="130" text-anchor="end" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0x03</text>
 <text x="80" y="130" text-anchor="end" fill="currentColor" font-size="13">g의 b</text>
-<rect x="160" y="140" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="160" y="140" width="110" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="215" y="160" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0xFE</text>
 <text x="150" y="160" text-anchor="end" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0x04</text>
 <text x="80" y="160" text-anchor="end" fill="currentColor" font-size="13">g의 c</text>
 <text x="215" y="190" text-anchor="middle" fill="currentColor" font-size="16">⋮</text>
-<rect x="160" y="200" width="110" height="30" fill="#2a408e"/>
+<rect rx="3" x="160" y="200" width="110" height="30" fill="#2a408e"/>
 <text x="215" y="220" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">Box(2)</text>
 <text x="150" y="220" text-anchor="end" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0xFE</text>
-<rect x="160" y="230" width="110" height="30" fill="#2a408e"/>
+<rect rx="3" x="160" y="230" width="110" height="30" fill="#2a408e"/>
 <text x="215" y="250" text-anchor="middle" fill="#fff" font-size="13" font-family="ui-monospace, Menlo, monospace">Box(1)</text>
 <text x="150" y="250" text-anchor="end" fill="currentColor" font-size="13" font-family="ui-monospace, Menlo, monospace">0xFF</text>
 <path d="M270,95 C335,95 335,245 274,245" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f1-m0)"/>
@@ -145,15 +145,7 @@ sum(1000, 0)
 
 호출할 때마다 스택 프레임을 하나씩 쌓는다면 스택에는 `x`와 `acc`의 쌍이 (1000, 0), (999, 1000), (998, 1999), ... 하는 식으로 계속 쌓여 갑니다. 스택 공간은 유한하므로, 스택 끝에 이르면(예를 들어 0xFE, 0xFF 칸에 (873, 118999)가 들어간 시점) 더 이상 프레임을 쌓을 수 없어 <a id="g-stack-overflow"></a>**스택 오버플로(stack overflow)** 오류로 실패하게 됩니다.
 
-그런데 정말 **모든 스택 프레임**을 남겨 둘 필요가 있을까요? **아닙니다!** 그리고 Scala는 <a id="g-tail-call"></a><a id="g-tail-call-optimization"></a>**꼬리 호출 최적화(tail-call optimization, TCO)** 를 지원합니다.
-
-```scala
-def sum(x: Int, acc: Int): Int =
-  if (x < 1) acc
-  else sum(x - 1, x + acc) // tail-call
-
-sum(1000, 0) // 500500
-```
+그런데 정말 **모든 스택 프레임**을 남겨 둘 필요가 있을까요? **아닙니다!** 그리고 Scala는 <a id="g-tail-call"></a><a id="g-tail-call-optimization"></a>**꼬리 호출 최적화(tail-call optimization, TCO)** 를 지원합니다. 그래서 위의 `sum(1000, 0)`은 스택 오버플로 없이 `500500`을 돌려줍니다.
 
 왜 그럴까요? 재귀 호출 `sum(x - 1, x + acc)`는 함수가 하는 **마지막 일**, 즉 **꼬리 위치(tail-call position)** 에 있습니다. 이 호출의 결과를 받아 더 계산할 것 없이 곧바로 돌려주기만 하면 된다는 뜻입니다. 그러니 호출하기 **전에** 현재 스택 프레임을 버려도 안전합니다. 이것이 꼬리 호출 최적화입니다. 실제로 이 최적화를 적용하면 스택에는 프레임이 하나만 남고, 그 안의 `x`와 `acc`가 (1000, 0), (999, 1000), ..., (0, 500500)으로 바뀌어 갈 뿐입니다.
 
@@ -168,9 +160,7 @@ def factorial(x: Int): Int =
 재귀 호출이 꼬리 위치에 있을까요? **아닙니다.** `factorial(x - 1)`을 계산한 뒤에 그 결과에 `x`를 곱해야 하기 때문입니다. 그러면 곱셈 순서를 바꾸면 어떨까요?
 
 ```scala
-def factorial(x: Int): Int =
-  if (x < 2) 1
-  else x * factorial(x - 1)
+  else x * factorial(x - 1)   // factorial(x - 1) * x의 순서만 바꿈
 ```
 
 이것도 **여전히 아닙니다!** 겉보기에는 재귀 호출이 맨 끝에 있지만, `factorial(x - 1)`의 결과에 `x`를 곱하는 일이 여전히 남아 있습니다.
@@ -337,32 +327,32 @@ b = null
 <svg viewBox="0 0 340 405" width="100%" style="max-width: 300px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="프로그램이 끝났을 때의 힙: 스택의 a는 C를 가리키고 b는 null이다. 도달할 수 없는 다섯 칸 B1, A1, B2와 서로를 가리키는 A2, A3이 빨간색으로 표시되어 있다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="gc-f2-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker><marker id="gc-f2-m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9412b"/></marker></defs>
 <text x="85" y="20" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">스택</text>
-<rect x="10" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="10" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="50" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">a</text>
-<rect x="22" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="22" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <circle cx="50" cy="73" r="4.5" fill="currentColor"/>
 <text x="120" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">b</text>
-<rect x="92" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="92" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <text x="120" y="80" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="200" y="70" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">* : null</text>
-<rect x="10" y="120" width="310" height="275" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="10" y="120" width="310" height="275" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="310" y="142" text-anchor="end" fill="currentColor" font-size="14" font-weight="bold">힙</text>
-<rect x="28" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="28" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="51.0" y="240" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="28" y="271" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">C</text>
-<rect x="110" y="210" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
+<rect rx="3" x="110" y="210" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
 <circle cx="133.0" cy="233.0" r="4.5" fill="#d9412b"/>
 <text x="110" y="271" text-anchor="start" fill="#d9412b" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="200" y="145" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
+<rect rx="3" x="200" y="145" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
 <circle cx="223.0" cy="168.0" r="4.5" fill="#d9412b"/>
 <text x="250" y="191" text-anchor="start" fill="#d9412b" font-size="13" opacity="0.9">B<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="238" y="235" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
+<rect rx="3" x="238" y="235" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
 <text x="261.0" y="265" text-anchor="middle" fill="#d9412b" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="238" y="296" text-anchor="start" fill="#d9412b" font-size="13" opacity="0.9">B<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="110" y="315" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
+<rect rx="3" x="110" y="315" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
 <circle cx="133.0" cy="338.0" r="4.5" fill="#d9412b"/>
 <text x="110" y="376" text-anchor="start" fill="#d9412b" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="215" y="315" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
+<rect rx="3" x="215" y="315" width="46" height="46" fill="none" stroke="#d9412b" stroke-width="2"/>
 <circle cx="238.0" cy="338.0" r="4.5" fill="#d9412b"/>
 <text x="215" y="376" text-anchor="start" fill="#d9412b" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">3</tspan></text>
 <path d="M50,73 L51,207" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f2-m0)"/>
@@ -408,32 +398,32 @@ Python, Swift, Perl, Objective-C 같은 많은 언어가 참조 횟수 세기로
 <svg viewBox="0 0 340 405" width="100%" style="max-width: 300px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="참조 횟수 세기를 마친 힙: C의 참조 횟수는 1이고, 서로를 가리키는 A2와 A3도 참조 횟수 1로 남아 참조 순환을 이룬다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="gc-f3-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <text x="85" y="20" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">스택</text>
-<rect x="10" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="10" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="50" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">a</text>
-<rect x="22" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="22" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <circle cx="50" cy="73" r="4.5" fill="currentColor"/>
 <text x="120" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">b</text>
-<rect x="92" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="92" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <text x="120" y="80" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="200" y="70" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">* : null</text>
-<rect x="10" y="120" width="310" height="275" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="10" y="120" width="310" height="275" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="310" y="142" text-anchor="end" fill="currentColor" font-size="14" font-weight="bold">힙</text>
 <rect x="92" y="290" width="190" height="92" rx="4" fill="none" stroke="#d9412b" stroke-width="2"/>
 <text x="187" y="284" text-anchor="middle" fill="#d9412b" font-size="14" font-weight="bold">참조 순환</text>
-<rect x="28" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="28" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="51.0" y="240" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="28" y="271" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">C</text>
-<rect x="18" y="200" width="20" height="20" fill="#2a408e"/>
+<rect rx="3" x="18" y="200" width="20" height="20" fill="#2a408e"/>
 <text x="28" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">1</text>
-<rect x="110" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="110" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="133.0" cy="338.0" r="4.5" fill="currentColor"/>
 <text x="110" y="376" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="100" y="305" width="20" height="20" fill="#2a408e"/>
+<rect rx="3" x="100" y="305" width="20" height="20" fill="#2a408e"/>
 <text x="110" y="320" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">1</text>
-<rect x="215" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="215" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="238.0" cy="338.0" r="4.5" fill="currentColor"/>
 <text x="215" y="376" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">3</tspan></text>
-<rect x="251" y="305" width="20" height="20" fill="#2a408e"/>
+<rect rx="3" x="251" y="305" width="20" height="20" fill="#2a408e"/>
 <text x="261" y="320" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">1</text>
 <path d="M50,73 L51,207" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f3-m0)"/>
 <path d="M133,338 C150,312 190,314 213,334" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f3-m0)"/>
@@ -481,44 +471,44 @@ Python, Swift, Perl, Objective-C 같은 많은 언어가 참조 횟수 세기로
 <svg viewBox="0 0 340 405" width="100%" style="max-width: 300px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="표시가 끝난 힙: 도달 가능한 세 칸 B1, A1, C는 검은색, B2와 순환을 이루는 A2, A3은 흰색으로 표시되어 있다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="gc-f4-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <text x="85" y="20" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">스택</text>
-<rect x="10" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="10" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="50" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">a</text>
-<rect x="22" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="22" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <circle cx="50" cy="73" r="4.5" fill="currentColor"/>
 <text x="120" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">b</text>
-<rect x="92" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="92" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <circle cx="120" cy="73" r="4.5" fill="currentColor"/>
 <text x="190" y="52" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">* : null</text>
-<rect x="190" y="68" width="14" height="14" fill="currentColor"/>
+<rect rx="3" x="190" y="68" width="14" height="14" fill="currentColor"/>
 <text x="210" y="80" text-anchor="start" fill="currentColor" font-size="13">검은색</text>
-<rect x="260" y="68" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="260" y="68" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="280" y="80" text-anchor="start" fill="currentColor" font-size="13">흰색</text>
-<rect x="10" y="120" width="310" height="275" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="10" y="120" width="310" height="275" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="310" y="142" text-anchor="end" fill="currentColor" font-size="14" font-weight="bold">힙</text>
-<rect x="28" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="28" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="51.0" y="240" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="28" y="271" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">C</text>
-<rect x="19" y="201" width="18" height="18" fill="currentColor"/>
-<rect x="110" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="19" y="201" width="18" height="18" fill="currentColor"/>
+<rect rx="3" x="110" y="210" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="133.0" cy="233.0" r="4.5" fill="currentColor"/>
 <text x="110" y="271" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="101" y="201" width="18" height="18" fill="currentColor"/>
-<rect x="200" y="145" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="101" y="201" width="18" height="18" fill="currentColor"/>
+<rect rx="3" x="200" y="145" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="223.0" cy="168.0" r="4.5" fill="currentColor"/>
 <text x="250" y="191" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">B<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="191" y="136" width="18" height="18" fill="currentColor"/>
-<rect x="238" y="235" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="191" y="136" width="18" height="18" fill="currentColor"/>
+<rect rx="3" x="238" y="235" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="261.0" y="265" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="238" y="296" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">B<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="229" y="226" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="110" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="229" y="226" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="110" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="133.0" cy="338.0" r="4.5" fill="currentColor"/>
 <text x="110" y="376" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="101" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="215" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="101" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="215" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="238.0" cy="338.0" r="4.5" fill="currentColor"/>
 <text x="215" y="376" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">3</tspan></text>
-<rect x="206" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="206" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <path d="M50,73 L51,207" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f4-m0)"/>
 <path d="M120,73 L221,143" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f4-m0)"/>
 <path d="M133,233 L77,233" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f4-m0)"/>
@@ -567,57 +557,57 @@ Python, Swift, Perl, Objective-C 같은 많은 언어가 참조 횟수 세기로
 <svg viewBox="0 0 620 420" width="100%" style="max-width: 600px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="복사 GC 5단계의 힙: to-space에 C&#x27;, B1&#x27;, A1&#x27;이 복사되어 모두 검은색이고, B1&#x27;은 A1&#x27;을, A1&#x27;은 C&#x27;을 가리킨다. from-space의 원래 칸 C, B1, A1에서 복사본으로 점선 전달 포인터가 이어져 있고, B2와 A2, A3은 흰색으로 남아 있다" font-family="sans-serif" fill="currentColor">
 <defs><marker id="gc-f5-m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker><marker id="gc-f5-m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f4fb8"/></marker></defs>
 <text x="315" y="20" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">스택</text>
-<rect x="240" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="240" y="28" width="150" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="280" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">a</text>
-<rect x="252" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="252" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <circle cx="280" cy="73" r="4.5" fill="currentColor"/>
 <text x="350" y="47" text-anchor="middle" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace" font-weight="bold">b</text>
-<rect x="322" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<rect rx="3" x="322" y="54" width="56" height="38" fill="none" stroke="currentColor" stroke-width="1.6"/>
 <circle cx="350" cy="73" r="4.5" fill="currentColor"/>
 <text x="420" y="52" text-anchor="start" fill="currentColor" font-size="14" font-family="ui-monospace, Menlo, monospace">* : null</text>
-<rect x="420" y="68" width="14" height="14" fill="currentColor"/>
+<rect rx="3" x="420" y="68" width="14" height="14" fill="currentColor"/>
 <text x="440" y="80" text-anchor="start" fill="currentColor" font-size="13">검은색</text>
-<rect x="490" y="68" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="490" y="68" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="510" y="80" text-anchor="start" fill="currentColor" font-size="13">흰색</text>
-<rect x="10" y="120" width="295" height="290" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="10" y="120" width="295" height="290" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="20" y="400" text-anchor="start" fill="currentColor" font-size="14" font-weight="bold">from-space</text>
-<rect x="315" y="120" width="295" height="290" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="315" y="120" width="295" height="290" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="600" y="400" text-anchor="end" fill="currentColor" font-size="14" font-weight="bold">to-space</text>
-<rect x="36" y="200" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="36" y="200" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="59.0" cy="223.0" r="4.5" fill="currentColor"/>
 <text x="36" y="261" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">C</text>
-<rect x="27" y="191" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="116" y="200" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="27" y="191" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="116" y="200" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="139.0" cy="223.0" r="4.5" fill="currentColor"/>
 <text x="116" y="261" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="107" y="191" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="196" y="150" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="107" y="191" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="196" y="150" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="219.0" cy="173.0" r="4.5" fill="currentColor"/>
 <text x="246" y="196" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">B<tspan baseline-shift="sub" font-size="72%">1</tspan></text>
-<rect x="187" y="141" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="226" y="228" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="187" y="141" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="226" y="228" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="249.0" y="258" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
 <text x="226" y="289" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">B<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="217" y="219" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="106" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="217" y="219" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="106" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="129.0" cy="338.0" r="4.5" fill="currentColor"/>
 <text x="106" y="376" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">2</tspan></text>
-<rect x="97" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="211" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="97" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="211" y="315" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="234.0" cy="338.0" r="4.5" fill="currentColor"/>
 <text x="211" y="376" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">3</tspan></text>
-<rect x="202" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<rect x="345" y="165" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="202" y="306" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<rect rx="3" x="345" y="165" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <text x="368.0" y="195" text-anchor="middle" fill="currentColor" font-size="18" font-family="ui-monospace, Menlo, monospace">*</text>
-<rect x="382" y="156" width="18" height="18" fill="currentColor"/>
+<rect rx="3" x="382" y="156" width="18" height="18" fill="currentColor"/>
 <text x="395" y="211" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">C′</text>
-<rect x="440" y="165" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="440" y="165" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="463.0" cy="188.0" r="4.5" fill="currentColor"/>
-<rect x="477" y="156" width="18" height="18" fill="currentColor"/>
+<rect rx="3" x="477" y="156" width="18" height="18" fill="currentColor"/>
 <text x="490" y="211" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">B<tspan baseline-shift="sub" font-size="72%">1</tspan>′</text>
-<rect x="535" y="165" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect rx="3" x="535" y="165" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2"/>
 <circle cx="558.0" cy="188.0" r="4.5" fill="currentColor"/>
-<rect x="572" y="156" width="18" height="18" fill="currentColor"/>
+<rect rx="3" x="572" y="156" width="18" height="18" fill="currentColor"/>
 <text x="585" y="211" text-anchor="start" fill="currentColor" font-size="13" opacity="0.9">A<tspan baseline-shift="sub" font-size="72%">1</tspan>′</text>
 <path d="M280,73 L360,162" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f5-m0)"/>
 <path d="M350,73 C390,80 455,110 460,162" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#gc-f5-m0)"/>

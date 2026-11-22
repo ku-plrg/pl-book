@@ -10,13 +10,17 @@
 4. ATFAE의 타입 검사기(type checker)와 타입 규칙(typing rule)을 정의합니다.
 5. 마지막으로, 처음 만든 타입 시스템에 숨어 있는 구멍을 찾아 타입 안전성(type soundness)을 회복합니다.
 
+이 장에서 만들 `ATFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="ATFAE"></div>
+
 ## 대수적 데이터 타입과 패턴 매칭
 
 ### 다시 보기: 타입
 
 [타입 시스템](./type-systems.md)에서 타입을 다음과 같이 정의했습니다.
 
-> **정의 (타입)**: 타입(type)은 값들의 집합입니다.
+> **정의(타입)**: 타입(type)은 값들의 집합입니다.
 
 예를 들어 Scala의 `Int`, `Boolean`, `Int => Int` 타입은 각각 다음과 같은 값들의 집합입니다.
 
@@ -39,7 +43,7 @@ f(42)                       // 43   : Int
 
 ### 곱 타입
 
-> **정의 (곱 타입)**: 곱 타입(product type) \\((\tau_1, \ldots, \tau_n)\\)은 각 \\(1 \leq i \leq n\\)에 대해 \\(v_i\\)의 타입이 \\(\tau_i\\)인 값 \\((v_1, \ldots, v_n)\\)들의 집합입니다.
+> **정의(곱 타입)**: 곱 타입(product type) \\((\tau_1, \ldots, \tau_n)\\)은 각 \\(1 \leq i \leq n\\)에 대해 \\(v_i\\)의 타입이 \\(\tau_i\\)인 값 \\((v_1, \ldots, v_n)\\)들의 집합입니다.
 
 곱 타입은 집합의 <a id="g-cartesian-product"></a>데카르트 곱(Cartesian product)에 해당합니다.
 
@@ -64,7 +68,7 @@ val perimeter: Int = 2 * (w + h)      // 2 * (10 + 20) = 60
 
 ### 합집합 타입
 
-> **정의 (합집합 타입)**: <a id="g-union-type"></a>합집합 타입(union type) \\(\tau_1 \mid \ldots \mid \tau_n\\)은 타입이 \\(\tau_1, \ldots, \tau_n\\) 중 하나인 값들의 집합입니다.
+> **정의(합집합 타입)**: <a id="g-union-type"></a>합집합 타입(union type) \\(\tau_1 \mid \ldots \mid \tau_n\\)은 타입이 \\(\tau_1, \ldots, \tau_n\\) 중 하나인 값들의 집합입니다.
 
 이름 그대로 집합의 합집합에 해당합니다.
 
@@ -88,7 +92,7 @@ val x: Square | Triangle = 42     // Is this a square or a triangle?
 
 ### 합 타입
 
-> **정의 (합 타입)**: <a id="g-sum-type"></a>합 타입(sum type) \\(x_1(\tau_1) + \ldots + x_n(\tau_n)\\)은 배리언트(variant) \\(x_i(\tau_i)\\) (\\(1 \leq i \leq n\\))들로 이루어집니다. 각 배리언트 \\(x_i(\tau_i)\\)에서 \\(x_i\\)는 생성자(constructor)로, 타입 \\(\tau_i\\)의 값 \\(v\\)를 받아 합 타입의 값 \\(x_i(v)\\)를 만드는 함수입니다.
+> **정의(합 타입)**: <a id="g-sum-type"></a>합 타입(sum type) \\(x_1(\tau_1) + \ldots + x_n(\tau_n)\\)은 배리언트(variant) \\(x_i(\tau_i)\\) (\\(1 \leq i \leq n\\))들로 이루어집니다. 각 배리언트 \\(x_i(\tau_i)\\)에서 \\(x_i\\)는 생성자(constructor)로, 타입 \\(\tau_i\\)의 값 \\(v\\)를 받아 합 타입의 값 \\(x_i(v)\\)를 만드는 함수입니다.
 
 합 타입은 값마다 어느 배리언트에서 왔는지 <a id="g-tag"></a>꼬리표(tag)를 붙여 둔 합집합, 즉 <a id="g-tagged-union"></a>꼬리표 붙은 합집합(tagged union)에 해당합니다.
 
@@ -124,7 +128,7 @@ val y: Shape = Triangle(42)               // It is a triangle
 <text x="150" y="148" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">...</text>
 <text x="150" y="212" text-anchor="middle" font-size="14">= Int: 42는 정사각형? 삼각형?</text>
 <text x="465" y="28" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-weight="bold">Shape</text>
-<rect x="330" y="45" width="270" height="140" rx="14" fill="none" stroke="currentColor" stroke-width="1.8"/>
+<rect x="330" y="45" width="270" height="140" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
 <polyline points="465,52 465,178" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="6 4"/>
 <text x="397" y="70" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" opacity="0.8">Square(Int)</text>
 <text x="533" y="70" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" opacity="0.8">Triangle(Int)</text>
@@ -140,7 +144,7 @@ val y: Shape = Triangle(42)               // It is a triangle
 
 ### 대수적 데이터 타입
 
-> **정의 (대수적 데이터 타입)**: 대수적 데이터 타입 \\(x_1(\tau_{1,1}, \ldots, \tau_{1,m_1}) + \ldots + x_n(\tau_{n,1}, \ldots, \tau_{n,m_n})\\)은 곱 타입들의 **재귀적인** 합 타입입니다.
+> **정의(대수적 데이터 타입)**: 대수적 데이터 타입 \\(x_1(\tau_{1,1}, \ldots, \tau_{1,m_1}) + \ldots + x_n(\tau_{n,1}, \ldots, \tau_{n,m_n})\\)은 곱 타입들의 **재귀적인** 합 타입입니다.
 
 정의를 하나씩 뜯어 보면, 각 배리언트가 여러 값을 묶은 곱 타입을 담고(\\(x_i(\tau_{i,1}, \ldots, \tau_{i,m_i})\\)), 그런 배리언트들을 합 타입으로 모았으며, 배리언트 안에 자기 자신의 타입이 다시 나올 수 있다는(재귀적) 뜻입니다. "대수적"이라는 이름도 곱(\\(\times\\))과 합(\\(+\\))으로 타입을 만든다는 데서 왔습니다.
 
@@ -197,7 +201,7 @@ val t2: Tree = Node(Leaf(1), 2, Node(Leaf(3), 4, Leaf(5)))
 
 값을 만들었으면 다시 분해할 수도 있어야겠지요.
 
-> **정의 (패턴 매칭)**: 패턴 매칭(pattern matching)은 대수적 데이터 타입의 값이 합 타입의 어느 배리언트에 속하는지 알아내고, 그 안에 든 데이터를 꺼내는 방법입니다.
+> **정의(패턴 매칭)**: 패턴 매칭(pattern matching)은 대수적 데이터 타입의 값이 합 타입의 어느 배리언트에 속하는지 알아내고, 그 안에 든 데이터를 꺼내는 방법입니다.
 
 예를 들어 트리에 든 모든 값을 더하는 함수 `sum`을 `Tree` 타입에 대한 패턴 매칭(`match`)으로 정의할 수 있습니다.
 
@@ -244,7 +248,7 @@ type tree = Leaf of int | Node of tree * int * tree
 
 이제 TRFAE를 확장해 대수적 데이터 타입과 패턴 매칭을 지원하는 ATFAE를 만들어 봅시다. ATFAE 프로그램은 다음과 같이 생겼습니다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum Tree {
   case Leaf(Number)
@@ -258,7 +262,7 @@ Leaf(42) match {
 
 ATFAE를 만들려면 TRFAE의 식을 다음 네 가지로 확장해야 합니다.
 
-1. 여러 매개변수를 받는 함수 (예: `Node(l, v, r)`처럼 생성자는 여러 값을 받습니다)
+1. 여러 매개변수를 받는 함수(예: `Node(l, v, r)`처럼 생성자는 여러 값을 받습니다)
 2. 대수적 데이터 타입
 3. 패턴 매칭
 4. <a id="g-type-name"></a>타입 이름(type name) (예: 매개변수 타입으로 쓰는 `Tree`)
@@ -267,7 +271,7 @@ ATFAE를 만들려면 TRFAE의 식을 다음 네 가지로 확장해야 합니�
 
 생성자 `Node`는 값 세 개를 받습니다. 그러니 함수도 여러 매개변수를 받을 수 있게 하는 것이 자연스럽습니다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 def add(x: Number, y: Number): Number = x + y;
 val twice = (f: (Number, Number) => Number, n: Number) => f(n, n);
@@ -367,7 +371,7 @@ enum Type:
 
 예를 들어 다음 ATFAE 프로그램은
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum Tree { case Leaf(Number); case Node(Tree, Number, Tree) }
 Leaf(42) match { case Leaf(v) => v; case Node(l, v, r) => v }
@@ -466,7 +470,7 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 생성자는 클로저처럼 <a id="g-first-class-value"></a>일급 값(first-class value)이라는 점이 재미있습니다. 변수에 담았다가 나중에 부를 수도 있습니다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum Tree { case Leaf(Number); case Node(Tree, Number, Tree) }
 val mk = Leaf;       // mk -> <Leaf> (constructor value)
@@ -515,7 +519,7 @@ def f(t: Tree): Number = t match {
 
 **예제 1.** 다음 프로그램의 실행을 자연 의미로 따라가 봅시다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum A { case B(Boolean); case C(Number) }
 C(42) match { case B(b) => b; case C(n) => n < 0 }
@@ -573,7 +577,7 @@ C(42) match { case B(b) => b; case C(n) => n < 0 }
 
 **예제 2.** 대수적 데이터 타입으로 AE의 추상 문법을 정의하고, 재귀 함수와 패턴 매칭으로 그 인터프리터를 ATFAE 안에서 구현할 수 있습니다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum Expr {
   case Num(Number)
@@ -592,7 +596,7 @@ Scala로 짰던 인터프리터와 거의 똑같지요? 이처럼 어떤 언어�
 
 **예제 3.** 숫자 리스트 타입과 그 원소의 합을 구하는 함수도 정의할 수 있습니다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum NumList {
   case Nil()
@@ -609,7 +613,7 @@ sum(Cons(1, Cons(2, Cons(3, Nil()))))         // 1 + 2 + 3 = 6
 
 **예제 4.** [재귀 함수의 타입](./typing-recursive-functions.md)에서 TFAE로는 `mkRec`을 정의할 수 없었습니다. `fY`의 타입 `T`가 `T = T => Number => Number`라는 재귀 타입이어야 했기 때문입니다. 그런데 대수적 데이터 타입은 재귀 타입이므로, 이제 ATFAE에서는 `mkRec`을 정의할 수 있습니다!
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum T { case T(T => Number => Number) }
 val mkRec = (body: (Number => Number) => Number => Number) => {
@@ -900,8 +904,8 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 <div style="text-align:center">
 <svg viewBox="0 0 670 170" width="100%" style="max-width: 640px; letter-spacing: normal; word-spacing: normal" role="img" aria-label="enum Tree의 본문을 검사하는 타입 환경: 변수 부분에는 생성자 Leaf와 Node의 타입이, 타입 이름 부분에는 Tree의 배리언트 정보가 들어 있다" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="15" fill="currentColor">
 <defs><marker id="algebraic-data-types-3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<text x="175" y="24" text-anchor="middle" font-weight="bold">변수의 타입 (vars)</text>
-<text x="500" y="24" text-anchor="middle" font-weight="bold">타입 이름의 배리언트 (tys)</text>
+<text x="175" y="24" text-anchor="middle" font-weight="bold">변수의 타입(vars)</text>
+<text x="500" y="24" text-anchor="middle" font-weight="bold">타입 이름의 배리언트(tys)</text>
 <rect x="20" y="40" width="310" height="72" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <polyline points="20,76 330,76" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <polyline points="78,40 78,112" fill="none" stroke="currentColor" stroke-width="1.5"/>
@@ -986,10 +990,10 @@ def mustValidMatch(
 
 네 줄의 검사가 각각 다음을 막습니다.
 
-- 같은 이름의 경우가 두 번 나오는 것 (duplicate case)
-- \\(t\\)에 없는 배리언트 이름의 경우 (unknown case)
-- \\(t\\)의 배리언트 중 <a id="g-missing-case"></a>빠진 경우 (missing case)
-- 경우의 매개변수 개수가 배리언트가 담는 값의 개수와 다른 것 (arity mismatch)
+- 같은 이름의 경우가 두 번 나오는 것(duplicate case)
+- \\(t\\)에 없는 배리언트 이름의 경우(unknown case)
+- \\(t\\)의 배리언트 중 <a id="g-missing-case"></a>빠진 경우(missing case)
+- 경우의 매개변수 개수가 배리언트가 담는 값의 개수와 다른 것(arity mismatch)
 
 즉 매치 경우들은 \\(t\\)의 배리언트들과 **정확히** 일대일로 대응해야 하고 인자 개수도 같아야 합니다. 그래서 타입이 맞는 식에서는 매치 경우의 **순서가 상관없습니다**. 같은 이름이 두 번 나올 수 없으니 "먼저 맞는 경우가 이긴다"는 규칙이 결과를 바꿀 일이 없기 때문입니다. 앞에서 본 `// ignored` 경우가 있던 함수 `f`는 이제 duplicate case로 거부됩니다.
 
@@ -1031,7 +1035,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 다음 프로그램의 타입을 유도해 봅시다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum A { case B(Boolean); case C(Number, Number) }
 C(1, 2) match { case B(b) => b; case C(x, y) => x < y }
@@ -1141,11 +1145,11 @@ C(true) match { case C(n) => n }                   // (4)
 
 ### 다시 보기: 타입 안전성
 
-> **정의 (타입 안전성)**: 타입이 맞는 프로그램이 실행 중에 **절대** 타입 오류를 일으키지 않음을 보장하면, 그 타입 시스템은 안전하다(sound)고 합니다.
+> **정의(타입 안전성)**: 타입이 맞는 프로그램이 실행 중에 **절대** 타입 오류를 일으키지 않음을 보장하면, 그 타입 시스템은 안전하다(sound)고 합니다.
 
 앞에서 \\(\tau\texttt{-TypeDef}\\) 규칙이 타입 안전하지 않다고 했습니다. 그 증거를 보겠습니다.
 
-```atfae
+```atfae,run
 /* ATFAE */
 enum A { case X(Number) }                    // X: Number => A
 val f = (a: A) => a match { case X(n) => n } // f: A => Number
@@ -1159,7 +1163,7 @@ f(X(true)) + 1                               // Number
 
 해결책은 간단합니다. **이미 정의된 타입 이름은 그 범위 안에서 다시 정의하지 못하게 합시다!**
 
-### 수정 (1): 같은 타입 이름 다시 정의 금지
+### 수정(1): 같은 타입 이름 다시 정의 금지
 
 타입 환경에 이미 \\(t\\)가 있으면 오류를 냅니다. 규칙에는 \\(t \notin \text{Dom}(\Gamma)\\)라는 전제가 추가됩니다.
 
@@ -1184,7 +1188,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 이제 앞의 예는 두 번째 `enum A`에서 거부됩니다. 이것으로 충분할까요? 아쉽게도 아닙니다. 다음 식을 보세요.
 
-```atfae
+```atfae,run
 /* ATFAE */
 val f = {
   enum A { case X(Number) }                       // X: Number => A
@@ -1194,7 +1198,7 @@ enum A { case X(Boolean) }                        // X: Boolean => A
 f(X(true)) + 1                                    // Number
 ```
 
-첫 번째 `A`는 중괄호 안에서만 정의되어 있으므로, 두 번째 `A`를 정의하는 시점의 타입 환경에는 `A`가 없습니다. 두 번째 `A`가 첫 번째를 가리는 것이 아니므로 수정 (1)의 검사를 통과합니다. 그런데 실행하면 또다시 `true + 1`에서 타입 오류가 납니다.
+첫 번째 `A`는 중괄호 안에서만 정의되어 있으므로, 두 번째 `A`를 정의하는 시점의 타입 환경에는 `A`가 없습니다. 두 번째 `A`가 첫 번째를 가리는 것이 아니므로 수정(1)의 검사를 통과합니다. 그런데 실행하면 또다시 `true + 1`에서 타입 오류가 납니다.
 
 이번에는 무엇이 문제일까요? 첫 번째 `A` 타입이 **자기 범위 밖으로 새어 나갔기** 때문입니다. 중괄호 블록의 타입이 `A => Number`가 되어 `f`의 타입으로 밖에 드러났고, 그 `A`가 두 번째 `A`의 범위 안에서도 여전히 보입니다.
 
@@ -1220,7 +1224,7 @@ f(X(true)) + 1                                    // Number
 
 그러니 이번에는 **대수적 데이터 타입이 자기 범위 밖으로 새어 나가지 못하게 합시다!**
 
-### 수정 (2): 범위 밖으로 새어 나가는 것 금지
+### 수정(2): 범위 밖으로 새어 나가는 것 금지
 
 `enum` 정의 전체의 타입은 본문의 타입 \\(\tau\\)입니다. 이 \\(\tau\\)가 범위 밖으로 나가도 괜찮으려면, \\(t\\)를 더하기 **전의** 타입 환경 \\(\Gamma\\)에서 잘 형성된 타입이어야 합니다. 즉 \\(\Gamma \vdash \tau\\)를 확인합니다. 위 예에서 블록 본문의 타입 `A => Number`는 바깥 환경에 `A`가 없으므로 잘 형성된 타입이 아니고, 따라서 거부됩니다.
 
@@ -1245,7 +1249,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 \end{prooftree}
 \\]
 
-> **생각해 보기**: 수정 (2)만 있으면 수정 (1)은 필요 없을까요? 첫 번째 예에서 두 번째 `enum A`의 본문 `f(X(true)) + 1`의 타입은 `Number`라서 수정 (2)의 검사는 통과합니다. 문제는 본문 **안에서** 두 `A`가 섞인다는 것이므로, 두 수정이 모두 필요합니다.
+> **생각해 보기**: 수정(2)만 있으면 수정(1)은 필요 없을까요? 첫 번째 예에서 두 번째 `enum A`의 본문 `f(X(true)) + 1`의 타입은 `Number`라서 수정(2)의 검사는 통과합니다. 문제는 본문 **안에서** 두 `A`가 섞인다는 것이므로, 두 수정이 모두 필요합니다.
 
 ## 정리
 
@@ -1273,5 +1277,5 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
    - `enum A { case B(C) }; 1`
 4. 예제 4의 `mkRec` 프로그램 전체의 타입이 `Number`임을 확인해 보세요. 특히 `fY match { case T(fZ) => fZ(fY)(x) }`에서 `fZ`의 타입은 무엇인가요?
 5. \\(\tau\texttt{-TypeDef}\\)에서 배리언트 타입의 올바른 형태를 \\(\Gamma^{\prime}\\) 대신 \\(\Gamma\\)에서 검사한다면 어떤 프로그램이 거부될까요?
-6. 수정 (2)의 \\(\Gamma \vdash \tau\\) 검사가 없을 때 타입 안전성이 깨지는 예를 이 장에 나온 것과 다르게 하나 더 만들어 보세요.
+6. 수정(2)의 \\(\Gamma \vdash \tau\\) 검사가 없을 때 타입 안전성이 깨지는 예를 이 장에 나온 것과 다르게 하나 더 만들어 보세요.
 7. 과제 [`atfae`](https://github.com/ku-plrg-classroom/docs/tree/main/cose212/atfae)의 `typeCheck`와 `interp` 함수를 구현해 보세요. 제출할 필요는 없지만, 시험 문제와 관련 있을 수 있으니 꼭 직접 풀어 보기를 권합니다.

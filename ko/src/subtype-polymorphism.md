@@ -1,12 +1,16 @@
 # 서브타입 다형성
 
-[매개변수 다형성](./parametric-polymorphism.md)에서는 타입 변수를 두고 쓸 때 채워 넣는 방식으로 하나의 함수를 여러 타입에 쓸 수 있게 했습니다. 이 장에서는 다형성의 또 다른 큰 갈래인 서브타입 다형성(subtype polymorphism)을 배웁니다. "필드 `a`만 있으면 어떤 레코드든 받는 함수"처럼, 더 많은 정보를 가진 값을 더 적은 정보를 요구하는 자리에 쓰게 해 주는 방식입니다. 객체 지향 언어에서 하위 클래스의 객체를 상위 클래스 자리에 넘기는 것이 바로 이 다형성입니다. [타입 있는 언어](./typed-languages.md)의 \\(\mathsf{TFAE}\\)에 레코드와 서브타입 다형성을 더한 \\(\mathsf{STFAE}\\)를 정의하고, 인터프리터와 자연 의미(natural semantics)을 만든 뒤, <a id="g-subtype-relation"></a>서브타입 관계(subtype relation)를 정의하고 이를 타입 규칙에 녹여 넣는 두 가지 방법을 비교해 봅니다.
+[매개변수 다형성](./parametric-polymorphism.md)에서는 타입 변수를 두고 쓸 때 채워 넣는 방식으로 하나의 함수를 여러 타입에 쓸 수 있게 했습니다. 이 장에서는 다형성의 또 다른 큰 갈래인 서브타입 다형성(subtype polymorphism)을 배웁니다. "필드 `a`만 있으면 어떤 레코드든 받는 함수"처럼, 더 많은 정보를 가진 값을 더 적은 정보를 요구하는 자리에 쓰게 해 주는 방식입니다. 객체 지향 언어에서 서브클래스의 객체를 슈퍼클래스 자리에 넘기는 것이 바로 이 다형성입니다. [타입 있는 언어](./typed-languages.md)의 \\(\mathsf{TFAE}\\)에 레코드와 서브타입 다형성을 더한 \\(\mathsf{STFAE}\\)를 정의하고, 인터프리터와 자연 의미(natural semantics)을 만든 뒤, <a id="g-subtype-relation"></a>서브타입 관계(subtype relation)를 정의하고 이를 타입 규칙에 녹여 넣는 두 가지 방법을 비교해 봅니다.
+
+이 장에서 만들 `STFAE` 인터프리터를 먼저 돌려 봅시다. 프로그램을 고쳐 가며 실행해 보세요.
+
+<div class="playground" data-lang="STFAE"></div>
 
 ## 서브타입 다형성
 
 서브타입 다형성을 쉽게 설명하기 위해 \\(\mathsf{TFAE}\\)에 <a id="g-record"></a>레코드(record)와 <a id="g-record-type"></a>레코드 타입(record type)을 더해 봅시다. (`val`에 타입을 적을 수 있게도 합니다.)
 
-```stfae
+```stfae,run
 /* STFAE */
 // A record with two fields `a` and `b` whose types are `Number`
 val x: {a: Number, b: Number} = {a=1, b=2}
@@ -27,9 +31,9 @@ f({a=1}) + f({a=2, b=3}) + f({c=4, a=5})
 
 이 문제를 어떻게 해결할까요? 바로 서브타입 다형성입니다.
 
-> **정의 (서브타입 다형성)** 서브타입 다형성은 타입 사이에 **서브타입 관계**(subtype relation)를 도입하는 방식의 다형성입니다.
+> **정의(서브타입 다형성)** 서브타입 다형성은 타입 사이에 **서브타입 관계**(subtype relation)를 도입하는 방식의 다형성입니다.
 
-```stfae
+```stfae,run
 /* STFAE */
 val f = (x: {a: Number}) => x.a     // Allow subtypes of `{a: Number}`
 f({a=1}) + f({a=2, b=3}) + f({c=4, a=5})
@@ -190,13 +194,13 @@ def interp(expr: Expr, env: Env): Value = expr match
 
 규칙이 없으니 다음 식의 유도 트리(derivation tree)는 그릴 수 없습니다.
 
-```stfae
+```stfae,run
 /* STFAE */ 1 + exit
 ```
 
 하지만 다음 식의 유도 트리는 그릴 수 있습니다.
 
-```stfae
+```stfae,run
 /* STFAE */ (x: Number) => 1 + exit
 ```
 
@@ -354,7 +358,7 @@ def typeCheck(expr: Expr, tenv: TypeEnv): Type = expr match
 
 그런데 다음 예제를 봅시다.
 
-```stfae
+```stfae,run
 /* STFAE */
 val x: {a: Number} = {a=2, b=3}; x.a
 ```
@@ -430,7 +434,7 @@ val x: {a: Number} = {a=2, b=3}; x.a
 <text x="40" y="30" font-family="'Times New Roman', Times, serif" font-style="italic" font-size="20" fill="currentColor" text-anchor="middle">⊥</text><text x="110" y="30" font-family="'Times New Roman', Times, serif" font-style="italic" font-size="20" fill="currentColor" text-anchor="middle">&lt;:</text><text x="190" y="30" font-family="'Times New Roman', Times, serif" font-style="italic" font-size="20" fill="currentColor" text-anchor="middle">τ</text><text x="270" y="30" font-family="'Times New Roman', Times, serif" font-style="italic" font-size="20" fill="currentColor" text-anchor="middle">&lt;:</text><text x="370" y="30" font-family="'Times New Roman', Times, serif" font-style="italic" font-size="20" fill="currentColor" text-anchor="middle">⊤</text>
 <text x="40" y="112" font-family="'Times New Roman', Times, serif" font-size="22" fill="currentColor" text-anchor="middle">∅</text><text x="110" y="112" font-family="'Times New Roman', Times, serif" font-style="italic" font-size="20" fill="currentColor" text-anchor="middle">⊆</text>
 <circle cx="190" cy="105" r="45" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="270" y="112" font-family="'Times New Roman', Times, serif" font-style="italic" font-size="20" fill="currentColor" text-anchor="middle">⊆</text>
-<rect x="305" y="45" width="130" height="120" rx="16" fill="none" stroke="currentColor" stroke-width="2.5"/>
+<rect x="305" y="45" width="130" height="120" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/>
 <text x="370" y="190" font-family="sans-serif" font-size="15" fill="currentColor" text-anchor="middle">Value Set 𝕍</text>
 </svg>
 </div>
@@ -445,7 +449,7 @@ val x: {a: Number} = {a=2, b=3}; x.a
 
 **필드 추가.** 다음 프로그램을 봅시다.
 
-```stfae
+```stfae,run
 /* STFAE */
 val f = (x: {a: Number}) => x.a
 val y: {a: Number, b: Number} = {a=1, b=2}
@@ -463,7 +467,7 @@ f(y)
 
 **필드 타입.** 다음 프로그램을 봅시다.
 
-```stfae
+```stfae,run
 /* STFAE */
 val f = (x: {a: Top, b: Top}) => x
 val x: {a: Number, b: Number} = {a=1, b=2}
@@ -481,7 +485,7 @@ f(x)
 
 **필드 순서.** 다음 프로그램을 봅시다.
 
-```stfae
+```stfae,run
 /* STFAE */
 val f = (x: {a: Number, b: Number}) => x
 val x: {b: Number, a: Number} = {a=1, b=2}
@@ -621,7 +625,7 @@ f(h)
 
 "\\(e\\)의 타입이 \\(\tau\\)이고 \\(\tau\\)가 \\(\tau'\\)의 서브타입이면, \\(e\\)의 타입을 \\(\tau'\\)이라고 해도 된다"라는 뜻입니다. 이 규칙이 있으면 앞에서 거부되었던 다음 식도 타입 검사를 통과합니다.
 
-```stfae
+```stfae,run
 /* STFAE */
 val x: {a: Number} = {a=2, b=3}; x.a
 ```
@@ -641,7 +645,7 @@ val x: {a: Number} = {a=2, b=3}; x.a
 
 포섭 규칙으로 레코드 \\(\\{a\enspace \mathtt{=}\enspace 2, b\enspace \mathtt{=}\enspace 3\\}\\)의 타입을 \\(\\{a : \mathtt{num}\\}\\)으로 바꾼 뒤, 표시된 타입과 같으므로 \\(\tau\texttt{-Val}\_{\tau}\\)을 쓸 수 있습니다.
 
-하지만 이 방법은 <a id="g-algorithmic"></a>**알고리즘적이지 않습니다**(not algorithmic). 포섭 규칙은 어떤 식에든, 언제든 쓸 수 있고, 결과 타입 \\(\tau'\\)은 \\(\tau\\)의 슈퍼타입이기만 하면 무엇이든 됩니다. 타입 검사기를 구현하려면 "언제 포섭 규칙을 쓰고, 그때 \\(\tau'\\)으로 어떤 타입을 골라야 하는가"를 정해야 하는데, 규칙 자체는 이에 대해 아무것도 알려 주지 않습니다. 위의 예에서도 \\(\\{a : \mathtt{num}\\}\\)을 고른 것은 사람이 결론을 보고 거꾸로 맞춘 것입니다.
+하지만 이 방법은 **알고리즘적이지 않습니다**(not algorithmic). 포섭 규칙은 어떤 식에든, 언제든 쓸 수 있고, 결과 타입 \\(\tau'\\)은 \\(\tau\\)의 슈퍼타입이기만 하면 무엇이든 됩니다. 타입 검사기를 구현하려면 "언제 포섭 규칙을 쓰고, 그때 \\(\tau'\\)으로 어떤 타입을 골라야 하는가"를 정해야 하는데, 규칙 자체는 이에 대해 아무것도 알려 주지 않습니다. 위의 예에서도 \\(\\{a : \mathtt{num}\\}\\)을 고른 것은 사람이 결론을 보고 거꾸로 맞춘 것입니다.
 
 ### 포섭 규칙 없는 알고리즘적 타입 규칙
 
